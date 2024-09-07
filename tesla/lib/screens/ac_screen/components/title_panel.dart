@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tesla/constant.dart';
-import 'package:tesla/widgets/buttons/toggle_button.dart';
+import 'package:plane_app/constant.dart';
+import 'package:plane_app/widgets/buttons/toggle_button.dart';
 
 class TitlePanel extends StatelessWidget {
   @override
@@ -10,7 +10,7 @@ class TitlePanel extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: Stack(
-        overflow: Overflow.visible,
+        clipBehavior: Clip.none,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -40,6 +40,7 @@ class TitlePanel extends StatelessWidget {
             right: -55.0,
             child: ToggleButton(
               child: SvgPicture.asset("assets/svgs/power.svg"),
+              isOn: true,
             ),
           ),
         ],

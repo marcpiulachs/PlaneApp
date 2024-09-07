@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tesla/screens/lock_screen/lock_screen_page.dart';
+import 'package:plane_app/screens/lock_screen/lock_screen_page.dart';
 
 void main() {
   runApp(App());

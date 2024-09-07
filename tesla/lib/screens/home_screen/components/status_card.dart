@@ -7,11 +7,10 @@ class StatusCard extends StatelessWidget {
   final String title, icon, value;
 
   const StatusCard({
-    Key key,
-    this.title,
-    this.icon,
-    this.value,
-  }) : super(key: key);
+    required this.title,
+    required this.icon,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {

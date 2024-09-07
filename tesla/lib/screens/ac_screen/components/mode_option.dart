@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tesla/constant.dart';
-import 'package:tesla/widgets/buttons/toggle_button.dart';
+import 'package:plane_app/constant.dart';
+import 'package:plane_app/widgets/buttons/toggle_button.dart';
 
 class ModeOption extends StatelessWidget {
   final String name;
   final Widget icon;
 
-  const ModeOption({Key key, this.name, this.icon}) : super(key: key);
+  const ModeOption({required this.name, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class ModeOption extends StatelessWidget {
           height: 85.0,
           margin: EdgeInsets.only(top: 5.0),
           child: Stack(
-            overflow: Overflow.visible,
+            clipBehavior: Clip.none,
             children: [
               Positioned(
                 top: -30.0,

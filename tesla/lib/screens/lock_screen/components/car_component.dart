@@ -6,10 +6,7 @@ import '../../../constant.dart';
 class CarComponent extends StatelessWidget {
   final String carSpeed;
 
-  const CarComponent({
-    Key key,
-    this.carSpeed,
-  }) : super(key: key);
+  const CarComponent({required this.carSpeed});
 
   @override
   Widget build(BuildContext context) {

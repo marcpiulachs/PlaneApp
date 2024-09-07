@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tesla/constant.dart';
+import 'package:plane_app/constant.dart';
 
 class SliderPanel extends StatefulWidget {
   @override
@@ -71,7 +71,7 @@ class _SliderPanelState extends State<SliderPanel> {
                       height: 30.0,
                       width: 30.0,
                       child: Stack(
-                        overflow: Overflow.visible,
+                        clipBehavior: Clip.none,
                         children: [
                           Positioned(
                             left: -23,
@@ -113,7 +113,7 @@ class _SliderPanelState extends State<SliderPanel> {
 class SliderNumber extends StatelessWidget {
   final int index;
 
-  const SliderNumber({Key key, this.index}) : super(key: key);
+  const SliderNumber({required this.index}); // : super(super.key);
 
   double calculateWidth2(Size size) {
     double base = 62 - ((index - 1) * 4.5);

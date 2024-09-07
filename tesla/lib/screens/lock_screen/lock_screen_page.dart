@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tesla/constant.dart';
-import 'package:tesla/screens/home_screen/home_screen_page.dart';
-import 'package:tesla/screens/lock_screen/components/car_component.dart';
-import 'package:tesla/screens/lock_screen/components/title.dart';
-import 'package:tesla/widgets/buttons/lock_button.dart';
-import 'package:tesla/widgets/buttons/nav_button.dart';
-import 'package:tesla/widgets/scaffolds/base_scaffold.dart';
+import 'package:plane_app/constant.dart';
+import 'package:plane_app/screens/home_screen/home_screen_page.dart';
+import 'package:plane_app/screens/lock_screen/components/car_component.dart';
+import 'package:plane_app/screens/lock_screen/components/title.dart';
+import 'package:plane_app/widgets/buttons/lock_button.dart';
+import 'package:plane_app/widgets/buttons/nav_button.dart';
+import 'package:plane_app/widgets/scaffolds/base_scaffold.dart';
 
 class LockScreen extends StatelessWidget {
   @override
@@ -27,7 +27,7 @@ class LockScreen extends StatelessWidget {
       body: Column(
         children: [
           LockScreenTitle(
-            upperTitle: "Tesla",
+            upperTitle: "plane_app",
             title: "Cybertruck",
           ),
           Expanded(

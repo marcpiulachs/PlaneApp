@@ -5,10 +5,9 @@ class LockButton extends StatelessWidget {
   final Function onTap;
 
   const LockButton({
-    Key key,
-    this.child,
-    this.onTap,
-  }) : super(key: key);
+    required this.child,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,7 @@ class LockButton extends StatelessWidget {
         ),
       ),
       child: InkWell(
-        onTap: this.onTap,
+        //onTap: this.onTap,
         child: Align(
           alignment: Alignment.center,
           child: this.child,

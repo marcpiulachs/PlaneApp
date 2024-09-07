@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tesla/screens/home_screen/components/status_card.dart';
+import 'package:plane_app/screens/home_screen/components/status_card.dart';
 
 import '../../../constant.dart';
 
 class StatusPanel extends StatelessWidget {
-  const StatusPanel({
-    Key key,
-  }) : super(key: key);
-
+  const StatusPanel();
   @override
   Widget build(BuildContext context) {
     return Container(

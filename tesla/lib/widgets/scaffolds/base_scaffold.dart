@@ -6,7 +6,7 @@ class BaseScaffold extends StatelessWidget {
   final Widget body;
   List<Widget> appBarContent;
 
-  BaseScaffold({Key key, this.body, this.appBarContent}) : super(key: key) {
+  BaseScaffold({required this.body, required this.appBarContent}) {
     if (this.appBarContent == null) {
       this.appBarContent = [];
     }
@@ -27,7 +27,7 @@ class BaseScaffold extends StatelessWidget {
         ),
         child: SafeArea(
           child: Stack(
-            overflow: Overflow.visible,
+            clipBehavior: Clip.none,
             children: [
               this.appBarContent.length > 0
                   ? Positioned(

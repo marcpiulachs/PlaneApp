@@ -4,9 +4,7 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import '../../../constant.dart';
 
 class TemperatureSlider extends StatefulWidget {
-  const TemperatureSlider({
-    Key key,
-  }) : super(key: key);
+  const TemperatureSlider();
 
   @override
   _TemperatureSliderState createState() => _TemperatureSliderState();

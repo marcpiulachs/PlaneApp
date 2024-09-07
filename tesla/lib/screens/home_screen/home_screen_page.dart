@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:tesla/constant.dart';
-import 'package:tesla/screens/ac_screen/ac_screen_page.dart';
-import 'package:tesla/screens/home_screen/components/information_panel.dart';
-import 'package:tesla/screens/home_screen/components/navigation_history.dart';
-import 'package:tesla/screens/home_screen/components/status_panel.dart';
-import 'package:tesla/screens/home_screen/components/title.dart';
-import 'package:tesla/widgets/buttons/nav_button.dart';
-import 'package:tesla/widgets/scaffolds/base_scaffold.dart';
+import 'package:plane_app/constant.dart';
+import 'package:plane_app/screens/ac_screen/ac_screen_page.dart';
+import 'package:plane_app/screens/home_screen/components/information_panel.dart';
+import 'package:plane_app/screens/home_screen/components/navigation_history.dart';
+import 'package:plane_app/screens/home_screen/components/status_panel.dart';
+import 'package:plane_app/screens/home_screen/components/title.dart';
+import 'package:plane_app/widgets/buttons/nav_button.dart';
+import 'package:plane_app/widgets/scaffolds/base_scaffold.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Expanded(
           child: HomeScreenTitle(
-            upperTitle: "Tesla",
+            upperTitle: "plane_app",
             title: "Cybertruck",
           ),
         ),

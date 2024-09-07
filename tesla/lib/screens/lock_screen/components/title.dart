@@ -7,10 +7,9 @@ class LockScreenTitle extends StatelessWidget {
   final String title;
 
   const LockScreenTitle({
-    Key key,
-    this.upperTitle,
-    this.title,
-  }) : super(key: key);
+    required this.upperTitle,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {

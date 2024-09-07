@@ -8,10 +8,9 @@ class HomeScreenTitle extends StatelessWidget {
   final String title;
 
   const HomeScreenTitle({
-    Key key,
-    this.upperTitle,
-    this.title,
-  }) : super(key: key);
+    required this.upperTitle,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {

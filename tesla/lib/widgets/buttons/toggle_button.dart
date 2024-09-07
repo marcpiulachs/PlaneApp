@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 
 class ToggleButton extends StatefulWidget {
   final Widget child;
-  final Function(bool) onTab;
-  final double width;
-  final double height;
-  bool isOn;
+  Function(bool) onTab;
+  double? width;
+  double? height;
+  final bool isOn;
 
-  ToggleButton({
-    Key key,
-    this.isOn,
-    this.child,
+  ToggleButton(
     this.onTab,
     this.width,
-    this.height,
-  }) : super(key: key);
+    this.height, {
+    Key? key,
+    required this.isOn,
+    required this.child,
+  });
 
   @override
   _ToggleButtonState createState() => _ToggleButtonState();

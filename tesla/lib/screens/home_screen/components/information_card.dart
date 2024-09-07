@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tesla/models/info.dart';
+import 'package:plane_app/models/info.dart';
 
 import '../../../constant.dart';
 
@@ -20,7 +20,7 @@ class InformationCard extends StatelessWidget {
       height: boxSize.height,
       margin: EdgeInsets.only(left: 25.0),
       child: Stack(
-        overflow: Overflow.visible,
+        clipBehavior: Clip.none,
         children: [
           Positioned(
             top: factorsReduce,

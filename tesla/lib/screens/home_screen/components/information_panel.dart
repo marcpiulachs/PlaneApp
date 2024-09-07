@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tesla/constant.dart';
-import 'package:tesla/models/info.dart';
-import 'package:tesla/screens/home_screen/components/information_card.dart';
+import 'package:plane_app/constant.dart';
+import 'package:plane_app/models/info.dart';
+import 'package:plane_app/screens/home_screen/components/information_card.dart';
 
 class InformationPanel extends StatelessWidget {
   @override

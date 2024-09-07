@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tesla/screens/ac_screen/components/mode_option.dart';
+import 'package:plane_app/screens/ac_screen/components/mode_option.dart';
 
 import '../../../constant.dart';
 
 class ModePanel extends StatelessWidget {
-  const ModePanel({
-    Key key,
-  }) : super(key: key);
+  const ModePanel({super.key});
 
   @override
   Widget build(BuildContext context) {
