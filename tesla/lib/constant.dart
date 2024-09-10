@@ -22,3 +22,4 @@ final Color darkColor = Color(0xFF17181C);
 final Color progressShadowColor = Color(0xFF141415);
 final Color progressShadowColor2 = Color(0xFF485057);
 final Color progressBarTrackColor = Color(0xff1F2124);
+final Color buttonBakColor = Color(0xff11A8FD);

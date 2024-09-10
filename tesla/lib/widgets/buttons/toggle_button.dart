@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 
 class ToggleButton extends StatefulWidget {
   final Widget child;
-  Function(bool) onTab;
+  final Function(bool) onTab;
   double? width;
   double? height;
   final bool isOn;
 
-  ToggleButton(
-    this.onTab,
+  ToggleButton({
     this.width,
-    this.height, {
-    Key? key,
+    this.height,
+    required this.onTab,
     required this.isOn,
     required this.child,
   });
@@ -25,7 +24,7 @@ class _ToggleButtonState extends State<ToggleButton> {
 
   @override
   void initState() {
-    this.isOn = this.widget.isOn ?? true;
+    //this.isOn = this.widget.isOn ?? true;
     super.initState();
   }
 

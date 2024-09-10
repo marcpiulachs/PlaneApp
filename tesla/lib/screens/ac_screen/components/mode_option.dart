@@ -37,6 +37,7 @@ class ModeOption extends StatelessWidget {
                 child: ToggleButton(
                   child: this.icon,
                   isOn: false,
+                  onTab: (p0) => {},
                 ),
               ),
             ],

@@ -24,7 +24,7 @@ class StatusCard extends StatelessWidget {
               padding: EdgeInsets.only(top: 3.5, right: 6.0),
               child: SvgPicture.asset(
                 icon,
-                color: lightTextColor,
+                //color: lightTextColor,
                 width: 11.0,
                 height: 11.0,
               ),

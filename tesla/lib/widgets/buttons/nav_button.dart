@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 
 class NavButton extends StatefulWidget {
   final Widget child;
-  Function(bool)? onTab;
-  final double width;
-  final double height;
-  bool? isOn;
+  final Function(bool)? onTab;
+  final double? width;
+  final double? height;
+  final bool? isOn;
 
-  NavButton(this.onTab, this.isOn,
-      {required this.width, required this.height, required this.child});
+  NavButton({
+    required this.width,
+    required this.height,
+    required this.child,
+    this.onTab,
+    this.isOn,
+  });
 
   @override
   _NavButtonState createState() => _NavButtonState();

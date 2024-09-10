@@ -5,7 +5,7 @@ import 'package:plane_app/models/info.dart';
 import '../../../constant.dart';
 
 class InformationCard extends StatelessWidget {
-  Size boxSize = Size(120.0, 120.0);
+  final Size boxSize = Size(120.0, 120.0);
   final Info info;
   double factorsReduce = 0;
 

@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:plane_app/constant.dart';
-import 'package:plane_app/screens/ac_screen/components/mode_option.dart';
 import 'package:plane_app/screens/ac_screen/components/mode_panel.dart';
 import 'package:plane_app/screens/ac_screen/components/slider_panel.dart';
 import 'package:plane_app/screens/ac_screen/components/temperature_slider.dart';

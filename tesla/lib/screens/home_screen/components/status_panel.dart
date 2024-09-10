@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:plane_app/screens/home_screen/components/status_card.dart';
 
 import '../../../constant.dart';
@@ -29,21 +28,21 @@ class StatusPanel extends StatelessWidget {
             children: [
               Expanded(
                 child: StatusCard(
-                  title: "Battery",
+                  title: "MANEUVER",
                   value: "54%",
                   icon: "assets/svgs/battery.svg",
                 ),
               ),
               Expanded(
                 child: StatusCard(
-                  title: "Range",
+                  title: "SPEED",
                   value: "297km",
                   icon: "assets/svgs/range.svg",
                 ),
               ),
               Expanded(
                 child: StatusCard(
-                  title: "Temperature",
+                  title: "ENDURANCE",
                   value: "27°C",
                   icon: "assets/svgs/temperature.svg",
                 ),

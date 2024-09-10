@@ -41,6 +41,7 @@ class TitlePanel extends StatelessWidget {
             child: ToggleButton(
               child: SvgPicture.asset("assets/svgs/power.svg"),
               isOn: true,
+              onTab: (p0) => {},
             ),
           ),
         ],
