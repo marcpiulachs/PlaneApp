@@ -2,10 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_event.dart';
 import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_state.dart';
+import 'package:object_3d/clients/tcp_client_interface.dart';
 import 'package:object_3d/models/plane_item.dart';
 
 class PlaneCarouselBloc extends Bloc<PlaneCarouselEvent, PlaneCarouselState> {
-  PlaneCarouselBloc() : super(PlaneCarouselInitial()) {
+  final ITcpClient client;
+
+  PlaneCarouselBloc({required this.client}) : super(PlaneCarouselInitial()) {
+    // Suscripción a los callbacks del cliente
+    client.onConnect = () {
+      add(TcpClientConnected());
+    };
+    client.onDisconnect = () {
+      add(TcpClientDisconnected());
+    };
+
+    on<TcpClientConnected>((event, emit) {
+      if (state is PlaneCarouselLoaded) {
+        final loadedState = state as PlaneCarouselLoaded;
+        emit(loadedState.copyWith(isConnected: true));
+      }
+    });
+
+    on<TcpClientDisconnected>((event, emit) {
+      if (state is PlaneCarouselLoaded) {
+        final loadedState = state as PlaneCarouselLoaded;
+        emit(loadedState.copyWith(isConnected: false));
+      }
+    });
+
     on<LoadPlanesEvent>((event, emit) {
       final planeItems = [
         PlaneItem(
@@ -41,7 +66,10 @@ class PlaneCarouselBloc extends Bloc<PlaneCarouselEvent, PlaneCarouselState> {
         planeItems: planeItems,
         selectedPlane: planeItems[0],
         currentIndex: 0,
+        isConnected: client.isConnected,
       ));
+
+      //client.connect();
     });
 
     on<PlaneSelectedEvent>((event, emit) {
@@ -51,6 +79,7 @@ class PlaneCarouselBloc extends Bloc<PlaneCarouselEvent, PlaneCarouselState> {
           planeItems: loadedState.planeItems,
           selectedPlane: loadedState.planeItems[event.selectedIndex],
           currentIndex: event.selectedIndex,
+          isConnected: client.isConnected,
         ));
       }
     });

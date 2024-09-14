@@ -7,3 +7,7 @@ class PlaneSelectedEvent extends PlaneCarouselEvent {
   final int selectedIndex;
   PlaneSelectedEvent(this.selectedIndex);
 }
+
+class TcpClientConnected extends PlaneCarouselEvent {}
+
+class TcpClientDisconnected extends PlaneCarouselEvent {}

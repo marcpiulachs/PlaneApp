@@ -8,16 +8,24 @@ import 'package:object_3d/widgets/circular.dart';
 import 'package:object_3d/widgets/plane_carousel.dart';
 
 // Define the ImageCarousel widget
-class PlaneCarousel extends StatelessWidget {
-  final PageController _pageController = PageController();
-
+class PlaneCarousel extends StatefulWidget {
   PlaneCarousel({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // Recuperar el Bloc desde el contexto
-    final planeCarouselBloc = BlocProvider.of<PlaneCarouselBloc>(context);
+  State<PlaneCarousel> createState() => _PlaneCarouselState();
+}
 
+class _PlaneCarouselState extends State<PlaneCarousel> {
+  final PageController _pageController = PageController();
+  late PlaneCarouselBloc planeCarouselBloc;
+  @override
+  void initState() {
+    super.initState(); // Recuperar el Bloc desde el contexto
+    planeCarouselBloc = BlocProvider.of<PlaneCarouselBloc>(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<PlaneCarouselBloc, PlaneCarouselState>(
       bloc: planeCarouselBloc,
       builder: (context, state) {
@@ -52,6 +60,8 @@ class PlaneCarousel extends StatelessWidget {
                   currentIndex: state.currentIndex,
                 ),
               ),
+              _buildConnectionStatus(state),
+              const SizedBox(height: 10),
               _buildIndicators(state),
               const SizedBox(height: 10),
               _buildGoFlyButton(),
@@ -90,6 +100,46 @@ class PlaneCarousel extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildConnectionStatus(PlaneCarouselLoaded state) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 4,
+              offset: const Offset(0, 2), // Sombra hacia abajo
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              state.isConnected ? Icons.public : Icons.public_off,
+              size: 18,
+              color: Colors.black,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              state.isConnected ? 'Connected' : 'Disconnected',
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
     );
