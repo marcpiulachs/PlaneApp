@@ -42,7 +42,7 @@ class RecordedFlightsList extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -82,17 +82,17 @@ class RecordedFlightsList extends StatelessWidget {
                       onPressed: () {
                         // Manejar la acción del botón aquí
                       },
-                      child: Text(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        minimumSize: Size(double.infinity, 50),
+                      ),
+                      child: const Text(
                         'SHOW MORE',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        minimumSize: Size(double.infinity, 50),
                       ),
                     ),
                   ),

@@ -165,7 +165,7 @@ class _PlaneCarouselState extends State<PlaneCarousel> {
                 icon: Icons.support,
                 text: "Easy",
                 backgroundColor: Colors.white,
-                size: 100.0,
+                size: 90.0,
               ),
               const SizedBox(width: 16),
               CircularProgressBar(
@@ -173,7 +173,7 @@ class _PlaneCarouselState extends State<PlaneCarousel> {
                 icon: Icons.airplane_ticket,
                 text: "Expertise",
                 backgroundColor: Colors.white,
-                size: 100.0,
+                size: 90.0,
               ),
               const SizedBox(width: 16),
               CircularProgressBar(
@@ -181,7 +181,7 @@ class _PlaneCarouselState extends State<PlaneCarousel> {
                 icon: Icons.timer,
                 text: "Range",
                 backgroundColor: Colors.white,
-                size: 100.0,
+                size: 90.0,
               ),
             ],
           ),

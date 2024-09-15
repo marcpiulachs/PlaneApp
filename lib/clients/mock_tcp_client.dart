@@ -33,12 +33,13 @@ class MockTcpClient implements ITcpClient {
 
   @override
   Future<void> connect() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     _isConnected = true;
     onConnect?.call();
 
     // Iniciar simulación de datos
-    _simulationTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _simulationTimer =
+        Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (_armed) {
         _simulateGyroData();
         _simulateMagnetometerData();
@@ -53,7 +54,7 @@ class MockTcpClient implements ITcpClient {
     _isConnected = false;
     _simulationTimer?.cancel();
     onDisconnect?.call();
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
   }
 
   @override

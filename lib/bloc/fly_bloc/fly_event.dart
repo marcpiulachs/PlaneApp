@@ -63,3 +63,12 @@ class SendThrottle extends FlyEvent {
 
   SendThrottle(this.throttleValue);
 }
+
+class TimerUpdated extends FlyEvent {
+  final int seconds;
+
+  TimerUpdated(this.seconds);
+
+  @override
+  List<Object?> get props => [seconds];
+}

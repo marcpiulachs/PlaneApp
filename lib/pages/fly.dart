@@ -94,19 +94,41 @@ class Fly extends StatelessWidget {
               children: [
                 Center(
                   child: Container(
-                    child: Center(
-                      child: const Text(
-                        "00:00",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Círculo que indica si está grabando
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                state.duration > 0 ? Colors.red : Colors.grey,
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 8),
+                        Text(
+                          Duration(seconds: state.duration)
+                              .toString()
+                              .substring(
+                                  2, 7), // Formatear el texto de duración
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -127,7 +149,7 @@ class Fly extends StatelessWidget {
                         CircularProgressBar(
                           progress: 0.7,
                           icon: Icons.height,
-                          text: '16 m.',
+                          text: "${state.telemetry.altitude} m.",
                           backgroundColor: Colors.white,
                         ),
                       ],
@@ -148,8 +170,8 @@ class Fly extends StatelessWidget {
                 Expanded(
                   child: Center(
                     child: CompassWidget(
-                      degrees: 20,
-                      size: Size(250, 250),
+                      degrees: state.telemetry.degrees,
+                      size: const Size(250, 250),
                       textColor: Colors.white,
                       barsColor: Colors.white,
                       showDegrees: false,
@@ -166,7 +188,7 @@ class Fly extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: CircularProgressBar(
-                              progress: state.motor1Speed / 100.0,
+                              progress: state.telemetry.motor1Speed / 100.0,
                               icon: Icons.rotate_right,
                               text: 'Engine',
                               backgroundColor: Colors.white,
@@ -198,7 +220,7 @@ class Fly extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: CircularProgressBar(
-                              progress: state.motor2Speed / 100.0,
+                              progress: state.telemetry.motor2Speed / 100.0,
                               icon: Icons.rotate_left,
                               text: 'Engine',
                               backgroundColor: Colors.white,

@@ -1,14 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_event.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_state.dart';
-import 'package:object_3d/clients/tcp_client.dart';
 import 'package:object_3d/clients/tcp_client_interface.dart';
-
-import 'package:object_3d/models/plane_item.dart';
+import 'package:object_3d/core/flight_recorder.dart';
 
 class FlyBloc extends Bloc<FlyEvent, FlyState> {
   final ITcpClient client;
+  final FlightRecorder flightRecorder = FlightRecorder();
 
   FlyBloc({required this.client}) : super(FlyInitial()) {
     // Suscripción a los callbacks del cliente
@@ -46,19 +44,40 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       add(Motor2SpeedUpdated(value));
     };
 
+    // Configuración de FlightRecorder
+    flightRecorder.timerUpdated = (int seconds) {
+      if (state is FlyPlaneConnected) {
+        add(TimerUpdated(seconds));
+      }
+    };
+    flightRecorder.started = () {
+      print('FlightRecorder started');
+    };
+    flightRecorder.stopped = () {
+      print('FlightRecorder stopped');
+    };
+    flightRecorder.captureData = () {
+      if (state is FlyPlaneConnected) {
+        final loadedState = state as FlyPlaneConnected;
+        print('Telemetry Data:');
+        print('GyroX: ${loadedState.telemetry.gyroX}');
+        print('GyroY: ${loadedState.telemetry.gyroY}');
+        print('GyroZ: ${loadedState.telemetry.gyroZ}');
+        print('MagnetometerX: ${loadedState.telemetry.magnetometerX}');
+        print('MagnetometerY: ${loadedState.telemetry.magnetometerY}');
+        print('MagnetometerZ: ${loadedState.telemetry.magnetometerZ}');
+        print('Barometer: ${loadedState.telemetry.barometer}');
+        print('Motor1Speed: ${loadedState.telemetry.motor1Speed}');
+        print('Motor2Speed: ${loadedState.telemetry.motor2Speed}');
+      }
+    };
+
     on<TcpClientConnect>((event, emit) async {
       emit(FlyConnecting());
       await client.connect();
     });
 
     on<TcpClientConnected>((event, emit) {
-      /*
-      if (state is FlyConnecting) {
-        emit(FlyPlaneConnected());
-      } else if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
-        emit(loadedState);
-      }*/
       emit(FlyPlaneConnected());
     });
 
@@ -70,7 +89,12 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       await client.sendArmed(event.isArmed);
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        emit(loadedState);
+        if (event.isArmed) {
+          flightRecorder.start(); // Iniciar contador
+        } else {
+          flightRecorder.stop(); // Detener y reiniciar contador
+        }
+        emit(loadedState.copyWith(duration: flightRecorder.duration));
       }
     });
 
@@ -86,63 +110,88 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     on<GyroXUpdated>((event, emit) {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        emit(loadedState.copyWith(gyroX: event.value));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(gyroX: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 
     on<GyroYUpdated>((event, emit) {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        emit(loadedState.copyWith(gyroY: event.value));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(gyroY: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 
     on<GyroZUpdated>((event, emit) {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        emit(loadedState.copyWith(gyroZ: event.value));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(gyroZ: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 
     on<MagnetometerXUpdated>((event, emit) {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        emit(loadedState.copyWith(magnetometerX: event.value));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(magnetometerX: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 
     on<MagnetometerYUpdated>((event, emit) {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        emit(loadedState.copyWith(magnetometerY: event.value));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(magnetometerY: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 
     on<MagnetometerZUpdated>((event, emit) {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        emit(loadedState.copyWith(magnetometerZ: event.value));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(magnetometerZ: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 
     on<BarometerUpdated>((event, emit) {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        emit(loadedState.copyWith(barometer: event.value));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(barometer: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 
     on<Motor1SpeedUpdated>((event, emit) {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        emit(loadedState.copyWith(motor1Speed: event.value));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(motor1Speed: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 
     on<Motor2SpeedUpdated>((event, emit) {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        emit(loadedState.copyWith(motor2Speed: event.value));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(motor2Speed: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
+      }
+    });
+
+    on<TimerUpdated>((event, emit) {
+      if (state is FlyPlaneConnected) {
+        final loadedState = state as FlyPlaneConnected;
+        emit(loadedState.copyWith(duration: event.seconds));
       }
     });
 
@@ -152,5 +201,11 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     } else {
       add(TcpClientDisconnected());
     }
+  }
+
+  @override
+  Future<void> close() {
+    flightRecorder.dispose(); // Liberar recursos del FlightRecorder
+    return super.close();
   }
 }
