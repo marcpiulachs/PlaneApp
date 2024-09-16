@@ -176,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage>
                     PlaneCarousel(),
                     Fly(),
                     RecordedFlightsWidget(),
-                    Mechanics(),
+                    const Mechanics(),
                     Settings(),
                   ],
                 ),

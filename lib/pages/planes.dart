@@ -9,7 +9,7 @@ import 'package:object_3d/widgets/plane_carousel.dart';
 
 // Define the ImageCarousel widget
 class PlaneCarousel extends StatefulWidget {
-  PlaneCarousel({Key? key}) : super(key: key);
+  const PlaneCarousel({super.key});
 
   @override
   State<PlaneCarousel> createState() => _PlaneCarouselState();
@@ -30,22 +30,19 @@ class _PlaneCarouselState extends State<PlaneCarousel> {
       bloc: planeCarouselBloc,
       builder: (context, state) {
         if (state is PlaneCarouselInitial) {
-          // Al cargar el widget, llamar al evento para cargar los aviones
           planeCarouselBloc.add(LoadPlanesEvent());
           return const Center(child: CircularProgressIndicator());
         } else if (state is PlaneCarouselLoaded) {
           return Column(
             children: [
-              Center(
-                child: Container(
-                  child: Center(
-                    child: const Text(
-                      "Choose your aircraft",
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+              const Center(
+                child: Center(
+                  child: Text(
+                    "Choose your aircraft",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                 ),

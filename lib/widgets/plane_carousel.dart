@@ -1,30 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:object_3d/models/plane_item.dart';
 
-class PlaneCarouselWidget extends StatelessWidget {
+class PlaneCarouselWidget extends StatefulWidget {
   final List<PlaneItem> planeItems;
   final PageController pageController;
   final ValueChanged<int> onPageChanged;
   final int currentIndex;
 
   const PlaneCarouselWidget({
-    Key? key,
+    super.key,
     required this.planeItems,
     required this.pageController,
     required this.onPageChanged,
     required this.currentIndex,
-  }) : super(key: key);
+  });
+
+  @override
+  State<PlaneCarouselWidget> createState() => _PlaneCarouselWidgetState();
+}
+
+class _PlaneCarouselWidgetState extends State<PlaneCarouselWidget> {
+  @override
+  void initState() {
+    super.initState();
+    // Mover la página del PageController al currentIndex si es necesario
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.pageController.hasClients &&
+          widget.pageController.initialPage != widget.currentIndex) {
+        widget.pageController.jumpToPage(widget.currentIndex);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         PageView.builder(
-          controller: pageController,
-          itemCount: planeItems.length,
-          onPageChanged: onPageChanged,
+          controller: widget.pageController,
+          itemCount: widget.planeItems.length,
+          onPageChanged: widget.onPageChanged,
           itemBuilder: (context, index) {
-            final item = planeItems[index];
+            final item = widget.planeItems[index];
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -69,12 +86,12 @@ class PlaneCarouselWidget extends StatelessWidget {
           bottom: 0,
           child: Center(
             child: Visibility(
-              visible: currentIndex > 0,
+              visible: widget.currentIndex > 0,
               child: IconButton(
                 icon:
                     const Icon(Icons.arrow_left, color: Colors.white, size: 40),
                 onPressed: () {
-                  pageController.previousPage(
+                  widget.pageController.previousPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
@@ -89,12 +106,12 @@ class PlaneCarouselWidget extends StatelessWidget {
           bottom: 0,
           child: Center(
             child: Visibility(
-              visible: currentIndex < planeItems.length - 1,
+              visible: widget.currentIndex < widget.planeItems.length - 1,
               child: IconButton(
                 icon: const Icon(Icons.arrow_right,
                     color: Colors.white, size: 40),
                 onPressed: () {
-                  pageController.nextPage(
+                  widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
