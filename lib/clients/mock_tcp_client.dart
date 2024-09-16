@@ -3,7 +3,7 @@ import 'tcp_client_interface.dart';
 
 class MockTcpClient implements ITcpClient {
   bool _isConnected = false;
-  Timer? _simulationTimer;
+  Timer? _timer;
   bool _armed = false;
   int _throttle = 0;
 
@@ -37,6 +37,13 @@ class MockTcpClient implements ITcpClient {
   @override
   void Function(int)? onSignal;
 
+  // Controlador del stream para la propiedad booleana
+  final _connectedStreamController = StreamController<bool>.broadcast();
+
+  // Exponer el Stream público
+  @override
+  Stream<bool> get connectedStream => _connectedStreamController.stream;
+
   @override
   Future<void> connect() async {
     await Future.delayed(const Duration(seconds: 1));
@@ -44,8 +51,7 @@ class MockTcpClient implements ITcpClient {
     onConnect?.call();
 
     // Iniciar simulación de datos
-    _simulationTimer =
-        Timer.periodic(const Duration(milliseconds: 100), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (_armed) {
         _simulateGyroData();
         _simulateMagnetometerData();
@@ -55,14 +61,16 @@ class MockTcpClient implements ITcpClient {
         _simulateSignal();
       }
     });
+    setConnected(true);
   }
 
   @override
   Future<void> disconnect() async {
     _isConnected = false;
-    _simulationTimer?.cancel();
+    _timer?.cancel();
     onDisconnect?.call();
     await Future.delayed(const Duration(milliseconds: 500));
+    setConnected(false);
   }
 
   @override
@@ -118,5 +126,18 @@ class MockTcpClient implements ITcpClient {
   int _generateRandomInt(int min, int max) {
     return min +
         (max - min) * (DateTime.now().millisecondsSinceEpoch % 100) ~/ 100;
+  }
+
+  // Método para actualizar la propiedad y emitir el cambio
+  void setConnected(bool value) {
+    if (_isConnected != value) {
+      _isConnected = value;
+      _connectedStreamController.add(value); // Emitir el nuevo valor
+    }
+  }
+
+  // Método de limpieza para cerrar el StreamController cuando no se use
+  void dispose() {
+    _connectedStreamController.close();
   }
 }

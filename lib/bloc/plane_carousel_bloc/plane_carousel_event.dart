@@ -8,6 +8,8 @@ class PlaneSelectedEvent extends PlaneCarouselEvent {
   PlaneSelectedEvent(this.selectedIndex);
 }
 
-class TcpClientConnected extends PlaneCarouselEvent {}
+class FlyConnectionChanged extends PlaneCarouselEvent {
+  final bool isConnected;
 
-class TcpClientDisconnected extends PlaneCarouselEvent {}
+  FlyConnectionChanged(this.isConnected);
+}

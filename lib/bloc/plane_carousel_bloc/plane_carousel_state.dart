@@ -13,13 +13,13 @@ class PlaneCarouselLoaded extends PlaneCarouselState {
   final List<PlaneItem> planeItems;
   final PlaneItem selectedPlane;
   final int currentIndex;
-  final bool isConnected; // Nueva propiedad para el estado de conexión
+  final bool isConnected;
 
   PlaneCarouselLoaded({
     required this.planeItems,
     required this.selectedPlane,
     required this.currentIndex,
-    required this.isConnected, // Asegúrate de inicializar esta propiedad en el constructor
+    required this.isConnected,
   });
 
   // Método copyWith

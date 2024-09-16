@@ -9,25 +9,15 @@ class PlaneCarouselBloc extends Bloc<PlaneCarouselEvent, PlaneCarouselState> {
   final ITcpClient client;
 
   PlaneCarouselBloc({required this.client}) : super(PlaneCarouselInitial()) {
-    // Suscripción a los callbacks del cliente
-    client.onConnect = () {
-      add(TcpClientConnected());
-    };
-    client.onDisconnect = () {
-      add(TcpClientDisconnected());
-    };
-
-    on<TcpClientConnected>((event, emit) {
-      if (state is PlaneCarouselLoaded) {
-        final loadedState = state as PlaneCarouselLoaded;
-        emit(loadedState.copyWith(isConnected: true));
-      }
+    // Suscripción al Stream de cambios de la propiedad isConnected
+    client.connectedStream.listen((isConnected) {
+      add(FlyConnectionChanged(isConnected));
     });
 
-    on<TcpClientDisconnected>((event, emit) {
+    on<FlyConnectionChanged>((event, emit) {
       if (state is PlaneCarouselLoaded) {
         final loadedState = state as PlaneCarouselLoaded;
-        emit(loadedState.copyWith(isConnected: false));
+        emit(loadedState.copyWith(isConnected: event.isConnected));
       }
     });
 

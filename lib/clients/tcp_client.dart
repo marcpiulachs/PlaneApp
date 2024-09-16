@@ -56,6 +56,13 @@ class TcpClient implements ITcpClient {
   @override
   void Function(int)? onSignal;
 
+  // Controlador del stream para la propiedad booleana
+  final _connectedStreamController = StreamController<bool>.broadcast();
+
+  // Exponer el Stream público
+  @override
+  Stream<bool> get connectedStream => _connectedStreamController.stream;
+
   TcpClient({required this.host, required this.port});
 
   @override
@@ -65,7 +72,7 @@ class TcpClient implements ITcpClient {
   Future<void> connect() async {
     try {
       _socket = await Socket.connect(host, port);
-      _isConnected = true;
+      setConnected(true);
       if (onConnect != null) onConnect!(); // Emitir evento de conexión
       _listenToServer();
     } catch (e) {
@@ -99,7 +106,7 @@ class TcpClient implements ITcpClient {
   }
 
   void _handleDisconnection() {
-    _isConnected = false;
+    setConnected(false);
     _socket.close(); // Cerrar el socket
     if (onDisconnect != null) {
       onDisconnect!(); // Emitir evento de desconexión
@@ -245,7 +252,7 @@ class TcpClient implements ITcpClient {
   Future<void> disconnect() async {
     if (_isConnected) {
       _socket.close();
-      _isConnected = false;
+      setConnected(false);
       if (onDisconnect != null) {
         onDisconnect!();
       }
@@ -262,5 +269,18 @@ class TcpClient implements ITcpClient {
   @override
   Future<void> sendThrottle(int throttle) async {
     await sendPacket(THROTTLE, 0x01, throttle);
+  }
+
+  // Método para actualizar la propiedad y emitir el cambio
+  void setConnected(bool value) {
+    if (_isConnected != value) {
+      _isConnected = value;
+      _connectedStreamController.add(value); // Emitir el nuevo valor
+    }
+  }
+
+  // Método de limpieza para cerrar el StreamController cuando no se use
+  void dispose() {
+    _connectedStreamController.close();
   }
 }

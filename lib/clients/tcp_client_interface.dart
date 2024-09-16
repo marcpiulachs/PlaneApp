@@ -23,4 +23,7 @@ abstract class ITcpClient {
   void Function(int)? onMotor2Speed;
   void Function(int)? onBattery;
   void Function(int)? onSignal;
+
+  // Stream que emite los cambios de conexión
+  Stream<bool> get connectedStream;
 }
