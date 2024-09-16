@@ -7,9 +7,10 @@ import 'package:object_3d/models/plane_item.dart';
 import 'package:object_3d/widgets/circular.dart';
 import 'package:object_3d/widgets/plane_carousel.dart';
 
-// Define the ImageCarousel widget
 class PlaneCarousel extends StatefulWidget {
-  const PlaneCarousel({super.key});
+  final VoidCallback onGoFlyPressed; // Nuevo callback
+
+  const PlaneCarousel({super.key, required this.onGoFlyPressed});
 
   @override
   State<PlaneCarousel> createState() => _PlaneCarouselState();
@@ -82,9 +83,7 @@ class _PlaneCarouselState extends State<PlaneCarousel> {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: ElevatedButton(
-        onPressed: () {
-          // Add your action here
-        },
+        onPressed: widget.onGoFlyPressed, // Llamada al callback
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.black,
           minimumSize: const Size(double.infinity, 50),
@@ -199,7 +198,12 @@ class MyApp2 extends StatelessWidget {
       ),
       home: Scaffold(
         backgroundColor: Colors.black, // Set background color of the Scaffold
-        body: PlaneCarousel(),
+        body: PlaneCarousel(
+          onGoFlyPressed: () {
+            // Acción a realizar al presionar el botón
+            print("GO FLY button pressed!");
+          },
+        ),
       ),
     );
   }

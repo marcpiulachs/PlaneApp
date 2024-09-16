@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:object_3d/bloc/fly_bloc/fly_bloc.dart';
-import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
-import 'package:object_3d/bloc/recordings_bloc/recordings_bloc.dart';
-import 'package:object_3d/clients/mock_tcp_client.dart';
-import 'package:object_3d/clients/tcp_client_interface.dart';
 import 'package:object_3d/models/menu_item.dart';
 import 'package:object_3d/pages/mechanics.dart';
 import 'package:object_3d/pages/planes.dart';
@@ -12,44 +6,12 @@ import 'package:object_3d/pages/fly.dart';
 import 'package:object_3d/pages/recorder.dart';
 import 'package:object_3d/pages/settings.dart';
 import 'package:object_3d/widgets/tabbar.dart';
-import 'package:provider/provider.dart';
-import '../clients/tcp_client.dart';
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<ITcpClient>(
-          //create: (context) => MockTcpClient(),
-          create: (context) => TcpClient(host: '192.168.4.1', port: 3333),
-        ),
-        BlocProvider<PlaneCarouselBloc>(
-          create: (context) => PlaneCarouselBloc(
-            client: context.read<ITcpClient>(),
-          ),
-        ),
-        BlocProvider<FlyBloc>(
-          create: (context) => FlyBloc(
-            client: context.read<ITcpClient>(),
-          ),
-        ),
-        BlocProvider<RecordedFlightsBloc>(
-          create: (context) => RecordedFlightsBloc(),
-        ),
-      ],
-      child: MaterialApp(
-        home: MyHomePage(),
-      ),
-    );
-  }
-}
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage>
@@ -173,8 +135,14 @@ class _MyHomePageState extends State<MyHomePage>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    PlaneCarousel(),
-                    Fly(),
+                    PlaneCarousel(
+                      onGoFlyPressed: () {
+                        setState(() {
+                          _tabController.animateTo(1);
+                        });
+                      },
+                    ),
+                    const Fly(),
                     RecordedFlightsWidget(),
                     const Mechanics(),
                     Settings(),

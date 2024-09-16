@@ -11,6 +11,8 @@ import 'package:sensors_plus/sensors_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Fly extends StatelessWidget {
+  const Fly({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FlyBloc, FlyState>(
