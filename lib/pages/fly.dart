@@ -57,8 +57,7 @@ class Fly extends StatelessWidget {
                         Text(
                           Duration(seconds: state.duration)
                               .toString()
-                              .substring(
-                                  2, 7), // Formatear el texto de duración
+                              .substring(2, 7),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

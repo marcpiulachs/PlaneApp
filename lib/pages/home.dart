@@ -160,8 +160,7 @@ class _MyHomePageState extends State<MyHomePage>
           // Contenido del TabBarView
           Column(
             children: [
-              const SizedBox(
-                  height: 125), // Ajustar espacio para el AppBar invisible
+              const SizedBox(height: 125),
               Text(
                 menuItems[_tabController.index].title,
                 style: const TextStyle(
