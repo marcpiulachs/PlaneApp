@@ -25,8 +25,10 @@ class CircularProgressBar extends StatelessWidget {
         Container(
           width: size,
           height: size,
-          decoration:
-              BoxDecoration(shape: BoxShape.circle, color: backgroundColor),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: backgroundColor,
+          ),
           child: TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: progress),
             duration: const Duration(milliseconds: 500),

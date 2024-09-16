@@ -17,6 +17,8 @@ const int MOTOR_1_SPEED = 0x50;
 const int MOTOR_2_SPEED = 0x51;
 const int ARMED = 0x60;
 const int THROTTLE = 0x61;
+const int BATTERY = 0x70;
+const int SIGNAL = 0x71;
 
 class TcpClient implements ITcpClient {
   final String host;
@@ -25,22 +27,41 @@ class TcpClient implements ITcpClient {
   bool _isConnected = false;
 
   // Callbacks para eventos
+  @override
   void Function()? onConnect;
+  @override
   void Function()? onDisconnect;
+  @override
+  void Function()? onConnectionFailed;
+  @override
   void Function(int)? onGyroX;
+  @override
   void Function(int)? onGyroY;
+  @override
   void Function(int)? onGyroZ;
+  @override
   void Function(int)? onMagnetometerX;
+  @override
   void Function(int)? onMagnetometerY;
+  @override
   void Function(int)? onMagnetometerZ;
+  @override
   void Function(int)? onBarometer;
+  @override
   void Function(int)? onMotor1Speed;
+  @override
   void Function(int)? onMotor2Speed;
+  @override
+  void Function(int)? onBattery;
+  @override
+  void Function(int)? onSignal;
 
   TcpClient({required this.host, required this.port});
 
+  @override
   bool get isConnected => _isConnected;
 
+  @override
   Future<void> connect() async {
     try {
       _socket = await Socket.connect(host, port);
@@ -50,27 +71,39 @@ class TcpClient implements ITcpClient {
     } catch (e) {
       print('Error connecting to the server: $e');
       _isConnected = false;
+      if (onConnectionFailed != null) {
+        onConnectionFailed!(); // Emitir evento de desconexión por error
+      }
     }
   }
 
   void _listenToServer() {
     _socket.listen(
       (Uint8List data) {
-        _processReceivedData(data);
+        try {
+          _processReceivedData(data);
+        } catch (e) {
+          print('Error processing received data: $e');
+          _handleDisconnection();
+        }
       },
       onError: (error) {
         print('Error receiving data: $error');
-        _isConnected = false;
-        if (onDisconnect != null)
-          onDisconnect!(); // Emitir evento de desconexión por error
+        _handleDisconnection();
       },
       onDone: () {
         print('Connection closed by the server');
-        _isConnected = false;
-        if (onDisconnect != null)
-          onDisconnect!(); // Emitir evento de desconexión por cierre
+        _handleDisconnection();
       },
     );
+  }
+
+  void _handleDisconnection() {
+    _isConnected = false;
+    _socket.close(); // Cerrar el socket
+    if (onDisconnect != null) {
+      onDisconnect!(); // Emitir evento de desconexión
+    }
   }
 
   void _processReceivedData(Uint8List data) {
@@ -143,6 +176,12 @@ class TcpClient implements ITcpClient {
       case MOTOR_2_SPEED:
         if (onMotor2Speed != null) onMotor2Speed!(value);
         break;
+      case BATTERY:
+        if (onBattery != null) onBattery!(value);
+        break;
+      case SIGNAL:
+        if (onSignal != null) onSignal!(value);
+        break;
       default:
         print('Unknown function: $function');
         break;
@@ -177,11 +216,11 @@ class TcpClient implements ITcpClient {
 
     // Datos
     if (dataType == 0x01) {
-      // Integer
+      // Integer (convertir a 2 bytes)
       packet.addAll(_intToBytes(value));
     } else if (dataType == 0x03) {
-      // Boolean
-      packet.add(value ? 0x01 : 0x00);
+      // Boolean (convertir a 2 bytes)
+      packet.addAll(_boolToBytes(value));
     }
 
     // Carácter de fin de paquete
@@ -196,20 +235,31 @@ class TcpClient implements ITcpClient {
     return byteData.buffer.asUint8List();
   }
 
+  List<int> _boolToBytes(bool value) {
+    ByteData byteData = ByteData(2);
+    byteData.setUint16(0, value ? 0x01 : 0x00, Endian.big);
+    return byteData.buffer.asUint8List();
+  }
+
+  @override
   Future<void> disconnect() async {
     if (_isConnected) {
       _socket.close();
       _isConnected = false;
-      if (onDisconnect != null) onDisconnect!(); // Emitir evento de desconexión
+      if (onDisconnect != null) {
+        onDisconnect!();
+      }
     }
   }
 
   // Método para armar o desarmar el sistema
+  @override
   Future<void> sendArmed(bool armed) async {
     await sendPacket(ARMED, 0x03, armed);
   }
 
   // Método para ajustar el throttle
+  @override
   Future<void> sendThrottle(int throttle) async {
     await sendPacket(THROTTLE, 0x01, throttle);
   }

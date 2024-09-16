@@ -4,10 +4,10 @@ import 'package:object_3d/bloc/fly_bloc/fly_event.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_state.dart';
 import 'package:object_3d/widgets/circular.dart';
 import 'package:object_3d/widgets/compass.dart';
+import 'package:object_3d/widgets/connecting.dart';
+import 'package:object_3d/widgets/disconected.dart';
 import 'package:object_3d/widgets/throttle.dart';
 import 'package:sensors_plus/sensors_plus.dart';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Fly extends StatelessWidget {
@@ -17,71 +17,12 @@ class Fly extends StatelessWidget {
       builder: (context, state) {
         // Verifica el estado y muestra el widget adecuado
         if (state is FlyConnecting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Connecting();
         } else if (state is FlyPlaneDisconnected) {
-          return Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.airplanemode_active,
-                    size: 100.0,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Disconnected',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Suggestions:',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Text('- Check your network connection.'),
-                        Text('- Ensure the server is online.'),
-                        Text('- Verify the server address and port.'),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<FlyBloc>().add(TcpClientConnect());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                    ),
-                    child: const Text(
-                      'Connect',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          return Disconnected(
+            onConnect: () {
+              context.read<FlyBloc>().add(TcpClientConnect());
+            },
           );
         } else if (state is FlyInitial) {
           return const Center(
@@ -138,7 +79,7 @@ class Fly extends StatelessWidget {
                         CircularProgressBar(
                           progress: 0.7,
                           icon: Icons.radar,
-                          text: '-23dbi',
+                          text: '${state.telemetry.battery}dBI',
                           backgroundColor: Colors.white,
                         ),
                       ],
@@ -149,7 +90,8 @@ class Fly extends StatelessWidget {
                         CircularProgressBar(
                           progress: 0.7,
                           icon: Icons.height,
-                          text: "${state.telemetry.altitude} m.",
+                          text:
+                              "${(state.telemetry.barometer / 100).toStringAsFixed(2)} m.",
                           backgroundColor: Colors.white,
                         ),
                       ],
@@ -160,7 +102,7 @@ class Fly extends StatelessWidget {
                         CircularProgressBar(
                           progress: 0.7,
                           icon: Icons.local_gas_station,
-                          text: '70%',
+                          text: '${state.telemetry.battery}%',
                           backgroundColor: Colors.white,
                         ),
                       ],

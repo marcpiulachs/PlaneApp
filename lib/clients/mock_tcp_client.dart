@@ -13,6 +13,8 @@ class MockTcpClient implements ITcpClient {
   @override
   void Function()? onDisconnect;
   @override
+  void Function()? onConnectionFailed;
+  @override
   void Function(int)? onGyroX;
   @override
   void Function(int)? onGyroY;
@@ -30,6 +32,10 @@ class MockTcpClient implements ITcpClient {
   void Function(int)? onMotor1Speed;
   @override
   void Function(int)? onMotor2Speed;
+  @override
+  void Function(int)? onBattery;
+  @override
+  void Function(int)? onSignal;
 
   @override
   Future<void> connect() async {
@@ -45,6 +51,8 @@ class MockTcpClient implements ITcpClient {
         _simulateMagnetometerData();
         _simulateBarometerData();
         _simulateMotorData();
+        _simulateBattery();
+        _simulateSignal();
       }
     });
   }
@@ -97,6 +105,14 @@ class MockTcpClient implements ITcpClient {
     int motorSpeed2 = (_throttle * 2).clamp(0, 100);
     onMotor1Speed?.call(motorSpeed1);
     onMotor2Speed?.call(motorSpeed2);
+  }
+
+  void _simulateBattery() {
+    onBarometer?.call(_generateRandomInt(0, 100)); // hPa
+  }
+
+  void _simulateSignal() {
+    onBarometer?.call(_generateRandomInt(12, 60)); // hPa
   }
 
   int _generateRandomInt(int min, int max) {

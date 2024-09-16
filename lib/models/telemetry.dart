@@ -10,6 +10,8 @@ class Telemetry {
   final int barometer;
   final int motor1Speed;
   final int motor2Speed;
+  final int battery;
+  final int signal;
 
   Telemetry({
     this.gyroX = 0,
@@ -21,6 +23,8 @@ class Telemetry {
     this.barometer = 0,
     this.motor1Speed = 0,
     this.motor2Speed = 0,
+    this.battery = 0,
+    this.signal = 0,
   });
 
   double get degrees {
@@ -28,17 +32,6 @@ class Telemetry {
     // La fórmula real puede variar según el tipo de magnetómetro y los datos.
     double angle = atan2(magnetometerY.toDouble(), magnetometerX.toDouble());
     return angle * (180 / pi);
-  }
-
-  double get altitude {
-    // Constante para la presión atmosférica a nivel del mar en hPa
-    const double seaLevelPressure = 1013.25;
-
-    // Calcula la altitud en metros utilizando la fórmula barométrica
-    if (barometer <= 0) {
-      return 0.0; // Evitar valores negativos o cero en caso de lectura incorrecta
-    }
-    return (seaLevelPressure - barometer) * 44330 / seaLevelPressure;
   }
 
   Telemetry copyWith({
@@ -51,6 +44,8 @@ class Telemetry {
     int? barometer,
     int? motor1Speed,
     int? motor2Speed,
+    int? battery,
+    int? signal,
   }) {
     return Telemetry(
       gyroX: gyroX ?? this.gyroX,
@@ -62,6 +57,8 @@ class Telemetry {
       barometer: barometer ?? this.barometer,
       motor1Speed: motor1Speed ?? this.motor1Speed,
       motor2Speed: motor2Speed ?? this.motor2Speed,
+      battery: battery ?? this.battery,
+      signal: signal ?? this.signal,
     );
   }
 }

@@ -11,6 +11,7 @@ abstract class ITcpClient {
   // Callbacks
   void Function()? onConnect;
   void Function()? onDisconnect;
+  void Function()? onConnectionFailed;
   void Function(int)? onGyroX;
   void Function(int)? onGyroY;
   void Function(int)? onGyroZ;
@@ -20,4 +21,6 @@ abstract class ITcpClient {
   void Function(int)? onBarometer;
   void Function(int)? onMotor1Speed;
   void Function(int)? onMotor2Speed;
+  void Function(int)? onBattery;
+  void Function(int)? onSignal;
 }

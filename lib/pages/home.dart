@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<ITcpClient>(
-          create: (context) => MockTcpClient(),
-          //create: (context) =>TcpClient(host: 'localhost', port: 12345),
+          //create: (context) => MockTcpClient(),
+          create: (context) => TcpClient(host: '192.168.4.1', port: 3333),
         ),
         BlocProvider<PlaneCarouselBloc>(
           create: (context) => PlaneCarouselBloc(
