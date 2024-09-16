@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_event.dart';
 import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_state.dart';
-import 'package:object_3d/clients/tcp_client_interface.dart';
+import 'package:object_3d/clients/plane_client_interface.dart';
 import 'package:object_3d/models/plane_item.dart';
 
 class PlaneCarouselBloc extends Bloc<PlaneCarouselEvent, PlaneCarouselState> {
-  final ITcpClient client;
+  final IPlaneClient client;
 
   PlaneCarouselBloc({required this.client}) : super(PlaneCarouselInitial()) {
     // Suscripción al Stream de cambios de la propiedad isConnected

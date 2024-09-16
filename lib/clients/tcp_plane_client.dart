@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:object_3d/clients/tcp_client_interface.dart';
+import 'package:object_3d/clients/plane_client_interface.dart';
 
 // Constantes para las funciones del protocolo
 const int GYRO_X = 0x20;
@@ -19,7 +19,7 @@ const int THROTTLE = 0x61;
 const int BATTERY = 0x70;
 const int SIGNAL = 0x71;
 
-class TcpClient implements ITcpClient {
+class TcpPlaneClient implements IPlaneClient {
   final String host;
   final int port;
   late Socket _socket;
@@ -62,7 +62,7 @@ class TcpClient implements ITcpClient {
   @override
   Stream<bool> get connectedStream => _connectedStreamController.stream;
 
-  TcpClient({required this.host, required this.port});
+  TcpPlaneClient({required this.host, required this.port});
 
   @override
   bool get isConnected => _isConnected;

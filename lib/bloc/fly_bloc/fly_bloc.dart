@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_event.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_state.dart';
-import 'package:object_3d/clients/tcp_client_interface.dart';
+import 'package:object_3d/clients/plane_client_interface.dart';
 import 'package:object_3d/core/flight_recorder.dart';
 
 class FlyBloc extends Bloc<FlyEvent, FlyState> {
-  final ITcpClient client;
+  final IPlaneClient client;
   final FlightRecorder flightRecorder = FlightRecorder();
 
   FlyBloc({required this.client}) : super(FlyInitial()) {

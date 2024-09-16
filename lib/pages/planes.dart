@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
 import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_event.dart';
 import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_state.dart';
-import 'package:object_3d/models/plane_item.dart';
 import 'package:object_3d/widgets/circular.dart';
 import 'package:object_3d/widgets/plane_carousel.dart';
 

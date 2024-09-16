@@ -1,6 +1,6 @@
 typedef TcpCallback = void Function(int value);
 
-abstract class ITcpClient {
+abstract class IPlaneClient {
   Future<void> connect();
   Future<void> disconnect();
   Future<void> sendArmed(bool armed);

@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'tcp_client_interface.dart';
+import 'plane_client_interface.dart';
 
-class MockTcpClient implements ITcpClient {
+class MockPlaneClient implements IPlaneClient {
   bool _isConnected = false;
   Timer? _timer;
   bool _armed = false;
