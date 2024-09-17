@@ -7,7 +7,8 @@ class EngineSettingsBottomSheet extends StatefulWidget {
   final VoidCallback onFactorySettings;
   final VoidCallback onDone;
 
-  EngineSettingsBottomSheet({
+  const EngineSettingsBottomSheet({
+    super.key,
     required this.settings,
     required this.onSettingsChanged,
     required this.onFactorySettings,
@@ -15,7 +16,7 @@ class EngineSettingsBottomSheet extends StatefulWidget {
   });
 
   @override
-  _EngineSettingsBottomSheetState createState() =>
+  State<EngineSettingsBottomSheet> createState() =>
       _EngineSettingsBottomSheetState();
 }
 
@@ -51,7 +52,7 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "ENGINE SETTINGS",
+                "AIRCRAFT SETTINGS",
                 style: TextStyle(color: Colors.white, fontSize: 18.0),
               ),
               const SizedBox(height: 30.0),
@@ -91,11 +92,16 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
                   Icons.accessibility, (value) {
                 _updateSetting(value, _settings.updateAngleOfAttack);
               }),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Column(children: [
                 ElevatedButton(
                   onPressed: widget.onFactorySettings,
-                  child: Text(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  child: const Text(
                     'FACTORY SETTINGS',
                     style: TextStyle(
                       fontSize: 18,
@@ -103,27 +109,22 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
                       color: Colors.black,
                     ),
                   ),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: widget.onDone,
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.black,
                     backgroundColor: Colors.white,
-                    minimumSize: Size(double.infinity, 50),
+                    minimumSize: const Size(double.infinity, 50),
                   ),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: widget.onDone,
-                  child: Text(
+                  child: const Text(
                     'DONE',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.white,
-                    minimumSize: Size(double.infinity, 50),
                   ),
                 )
               ]),
@@ -141,7 +142,7 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
       children: [
         Text(
           label,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         Row(
           children: [
@@ -163,18 +164,18 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
               alignment: Alignment.center,
               width: 40,
               height: 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.blue,
                 shape: BoxShape.circle,
               ),
               child: Text(
                 value.toStringAsFixed(1),
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ],
         ),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
       ],
     );
   }

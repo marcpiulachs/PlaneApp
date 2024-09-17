@@ -59,23 +59,3 @@ class CircularProgressBar extends StatelessWidget {
     );
   }
 }
-
-class MyApp5 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Circular Progress Bar'),
-        ),
-        body: const Center(
-          child: CircularProgressBar(
-            progress: 0.7, // Puedes cambiar el valor del progreso
-            icon: Icons.fence_outlined, // Ícono a mostrar
-            text: '70%', // Texto a mostrar
-          ),
-        ),
-      ),
-    );
-  }
-}

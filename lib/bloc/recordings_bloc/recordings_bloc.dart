@@ -22,9 +22,9 @@ class RecordedFlightsBloc
               const Icon(Icons.flight),
               '0${index + 1}:00 min',
               [
-                Icon(Icons.car_crash_sharp),
-                Icon(Icons.star_border),
-                Icon(Icons.star_half)
+                const Icon(Icons.car_crash_sharp),
+                const Icon(Icons.star_border),
+                const Icon(Icons.star_half)
               ],
             ),
           );

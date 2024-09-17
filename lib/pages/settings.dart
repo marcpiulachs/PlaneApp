@@ -5,6 +5,8 @@ class Settings extends StatelessWidget {
   final String appVersion = "1.0.0";
   final String firmwareVersion = "2.1.0";
 
+  const Settings({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -13,8 +15,8 @@ class Settings extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: 50),
-          Text(
+          const SizedBox(height: 50),
+          const Text(
             'Versión de la Aplicación:',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -22,16 +24,16 @@ class Settings extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             appVersion,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 16),
-          Text(
+          const SizedBox(height: 16),
+          const Text(
             'Versión del Firmware:',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -39,20 +41,20 @@ class Settings extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             firmwareVersion,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
               // Aquí puedes agregar la lógica para actualizar la app
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Actualización iniciada...'),
                 ),
               );
@@ -61,7 +63,7 @@ class Settings extends StatelessWidget {
               backgroundColor: Colors.black,
               padding: const EdgeInsets.symmetric(horizontal: 16),
             ),
-            child: Text(
+            child: const Text(
               'UPDATE',
               style: TextStyle(
                 fontSize: 18,
@@ -70,8 +72,8 @@ class Settings extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 24),
-          Text(
+          const SizedBox(height: 24),
+          const Text(
             'Información Genérica:',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -79,8 +81,8 @@ class Settings extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 8),
-          Text(
+          const SizedBox(height: 8),
+          const Text(
             'www.pagina.com',
             style: TextStyle(fontSize: 16),
           ),

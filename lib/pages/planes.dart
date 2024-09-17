@@ -185,25 +185,3 @@ class _PlaneCarouselState extends State<PlaneCarousel> {
     );
   }
 }
-
-// Define the MyApp widget
-class MyApp2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Image Carousel App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        backgroundColor: Colors.black, // Set background color of the Scaffold
-        body: PlaneCarousel(
-          onGoFlyPressed: () {
-            // Acción a realizar al presionar el botón
-            print("GO FLY button pressed!");
-          },
-        ),
-      ),
-    );
-  }
-}
