@@ -49,9 +49,10 @@ class AerobaticManeuversBottomSheet extends StatelessWidget {
                   final maneuver = maneuvers[index];
                   return GestureDetector(
                     onTap: () {
-                      onManeuverSelected(
-                          index); // Llamar al callback con el índice
-                      Navigator.of(context).pop(); // Cerrar el BottomSheet
+                      // Llamar al callback con el índice
+                      onManeuverSelected(index);
+                      // Cerrar el BottomSheet
+                      Navigator.of(context).pop();
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8.0),

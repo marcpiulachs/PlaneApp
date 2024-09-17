@@ -95,7 +95,9 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
               const SizedBox(height: 20.0),
               Column(children: [
                 ElevatedButton(
-                  onPressed: widget.onFactorySettings,
+                  onPressed: () {
+                    widget.onFactorySettings();
+                  },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.black,
                     backgroundColor: Colors.white,
@@ -112,7 +114,12 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: widget.onDone,
+                  onPressed: () {
+                    // Llamar al callback
+                    widget.onDone();
+                    // Cerrar el BottomSheet
+                    Navigator.of(context).pop();
+                  },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.black,
                     backgroundColor: Colors.white,
