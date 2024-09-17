@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_bloc.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_event.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_state.dart';
+import 'package:object_3d/core/flight_settings.dart';
+import 'package:object_3d/pages/widgets/aerobatic_maneuvers_bottom_sheet.dart';
+import 'package:object_3d/pages/widgets/engine_settings_bottom_sheet.dart';
 import 'package:object_3d/widgets/circular.dart';
 import 'package:object_3d/widgets/compass.dart';
 import 'package:object_3d/widgets/connecting.dart';
@@ -10,9 +13,14 @@ import 'package:object_3d/widgets/throttle.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Fly extends StatelessWidget {
+class Fly extends StatefulWidget {
   const Fly({super.key});
 
+  @override
+  State<Fly> createState() => _FlyState();
+}
+
+class _FlyState extends State<Fly> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FlyBloc, FlyState>(
@@ -138,6 +146,20 @@ class Fly extends StatelessWidget {
                               size: 100.0,
                             ),
                           ),
+                          IconButton(
+                            icon: const Icon(Icons.settings),
+                            color: Colors.white,
+                            iconSize: 40,
+                            padding: const EdgeInsets.all(10.0),
+                            onPressed: () =>
+                                _showEngineSettingsBottomSheet(context),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStateProperty.all(Colors.black),
+                              shape:
+                                  WidgetStateProperty.all(const CircleBorder()),
+                            ),
+                          ),
                         ],
                       ),
                       Expanded(
@@ -170,6 +192,20 @@ class Fly extends StatelessWidget {
                               size: 100,
                             ),
                           ),
+                          IconButton(
+                            icon: const Icon(Icons.loop),
+                            color: Colors.white,
+                            iconSize: 40,
+                            padding: const EdgeInsets.all(10.0),
+                            onPressed: () =>
+                                _showAerobaticManeuversBottomSheet(context),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStateProperty.all(Colors.black),
+                              shape:
+                                  WidgetStateProperty.all(const CircleBorder()),
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -184,6 +220,47 @@ class Fly extends StatelessWidget {
           );
         }
       },
+    );
+  }
+
+  void _showEngineSettingsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) => EngineSettingsBottomSheet(
+        settings: FlightSettings(
+          steeringAngle: 30.0,
+          pitchKp: 0.9,
+          pitchRateKp: 1.1,
+          rollKp: 1.3,
+          rollRateKp: 1.2,
+          yawKp: 1.8,
+          yawRateKp: 1.0,
+          angleOfAttack: 7.5,
+        ), // Puedes pasar la configuración actual aquí
+        onSettingsChanged: (FlightSettings updatedSettings) {
+          // Manejar los ajustes actualizados
+          print(
+              'Updated Settings: ${updatedSettings.steeringAngle}, ${updatedSettings.pitchKp}');
+          // Aquí puedes guardar o aplicar los ajustes actualizados
+        },
+        onFactorySettings: () {},
+        onDone: () {},
+      ),
+      backgroundColor: Colors.transparent,
+    );
+  }
+
+  void _showAerobaticManeuversBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) => AerobaticManeuversBottomSheet(
+        onManeuverSelected: (int index) {
+          // Manejar el índice del botón seleccionado
+          print('Selected maneuver index: $index');
+          // Aquí puedes realizar cualquier acción adicional que necesites
+        },
+      ),
+      backgroundColor: Colors.transparent,
     );
   }
 }
