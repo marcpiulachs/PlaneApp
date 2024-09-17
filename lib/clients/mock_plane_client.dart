@@ -47,7 +47,7 @@ class MockPlaneClient implements IPlaneClient {
   @override
   Future<void> connect() async {
     await Future.delayed(const Duration(seconds: 1));
-    _isConnected = true;
+    setConnected(true);
     onConnect?.call();
 
     // Iniciar simulación de datos
@@ -61,12 +61,10 @@ class MockPlaneClient implements IPlaneClient {
         _simulateSignal();
       }
     });
-    setConnected(true);
   }
 
   @override
   Future<void> disconnect() async {
-    _isConnected = false;
     _timer?.cancel();
     onDisconnect?.call();
     await Future.delayed(const Duration(milliseconds: 500));
