@@ -4,20 +4,74 @@ import 'dart:typed_data';
 
 import 'package:object_3d/clients/plane_client_interface.dart';
 
-// Constantes para las funciones del protocolo
-const int GYRO_X = 0x20;
-const int GYRO_Y = 0x21;
-const int GYRO_Z = 0x22;
-const int MAGNETOMETER_X = 0x30;
-const int MAGNETOMETER_Y = 0x31;
-const int MAGNETOMETER_Z = 0x32;
-const int BAROMETER = 0x40;
-const int MOTOR_1_SPEED = 0x50;
-const int MOTOR_2_SPEED = 0x51;
-const int ARMED = 0x60;
-const int THROTTLE = 0x61;
-const int BATTERY = 0x70;
-const int SIGNAL = 0x71;
+// Definición de la clase Packet con el método toBytes()
+class Packet {
+  static const int startByte = 0x02;
+  static const int endByte = 0x03;
+
+  static const int GYRO_X = 0x20;
+  static const int GYRO_Y = 0x21;
+  static const int GYRO_Z = 0x22;
+  static const int MAGNETOMETER_X = 0x30;
+  static const int MAGNETOMETER_Y = 0x31;
+  static const int MAGNETOMETER_Z = 0x32;
+  static const int BAROMETER = 0x40;
+  static const int MOTOR_1_SPEED = 0x50;
+  static const int MOTOR_2_SPEED = 0x51;
+  static const int ARMED = 0x60;
+  static const int THROTTLE = 0x61;
+  static const int BATTERY = 0x70;
+  static const int SIGNAL = 0x71;
+
+  static const int dataTypeInt = 0x01;
+  static const int dataTypeBool = 0x03;
+
+  final int function;
+  final int dataType;
+  final dynamic value;
+
+  Packet(this.function, this.dataType, this.value);
+
+  // Método que convierte el paquete a bytes, según el tipo de dato
+  Uint8List toBytes() {
+    List<int> packet = [];
+
+    // Byte de inicio
+    packet.add(startByte);
+
+    // Función
+    packet.add(function);
+
+    // Tipo de dato
+    packet.add(dataType);
+
+    // Valor convertido según el tipo de dato
+    if (dataType == dataTypeInt) {
+      packet.addAll(intToBytes(value));
+    } else if (dataType == dataTypeBool) {
+      packet.addAll(boolToBytes(value));
+    }
+
+    // Byte de fin
+    packet.add(endByte);
+
+    return Uint8List.fromList(packet);
+  }
+
+  // Conversión de int a bytes
+  static List<int> intToBytes(int value) {
+    ByteData byteData = ByteData(2);
+    byteData.setInt16(0, value, Endian.big);
+    return byteData.buffer.asUint8List();
+  }
+
+  // Conversión de bool a bytes
+  static List<int> boolToBytes(bool value) {
+    ByteData byteData = ByteData(2);
+    byteData.setUint16(0, value ? 0x01 : 0x00, Endian.big);
+    return byteData.buffer.asUint8List();
+  }
+}
 
 class TcpPlaneClient implements IPlaneClient {
   final String host;
@@ -76,7 +130,7 @@ class TcpPlaneClient implements IPlaneClient {
       _listenToServer();
     } catch (e) {
       print('Error connecting to the server: $e');
-      _isConnected = false;
+      setConnected(false);
       if (onConnectionFailed != null) {
         onConnectionFailed!(); // Emitir evento de desconexión por error
       }
@@ -113,144 +167,133 @@ class TcpPlaneClient implements IPlaneClient {
   }
 
   void _processReceivedData(Uint8List data) {
-    // Aquí procesamos los datos recibidos según el protocolo
-    print('Received data: $data');
-
-    // Simular el procesamiento de paquetes recibidos
+    // Máquina de estados para manejar el parsing del paquete
     int index = 0;
+    bool startDetected = false;
+    List<int> packetBuffer = [];
+
     while (index < data.length) {
-      if (data[index] == 0x02) {
-        // Start of packet
-        // Buscar el final del paquete
-        int endIndex = data.indexOf(0x03, index);
-        if (endIndex == -1) break; // No se encontró el final del paquete
+      int byte = data[index];
 
-        // Extraer el paquete
-        Uint8List packet = data.sublist(index, endIndex + 1);
-
-        if (packet.length >= 4) {
-          int function = packet[1];
-          int dataType = packet[2];
-
-          // Extraer el valor de acuerdo al tipo de dato
-          dynamic value;
-          if (dataType == 0x01) {
-            // Integer
-            value = ByteData.sublistView(packet.buffer.asUint8List(), 3, 5)
-                .getInt16(0, Endian.big);
-          } else if (dataType == 0x03) {
-            // Boolean
-            value = packet[3] == 0x01;
-          }
-
-          _handleReceivedFunction(function, value);
+      if (!startDetected) {
+        // Esperamos el byte de inicio
+        if (byte == Packet.startByte) {
+          startDetected = true;
+          packetBuffer.clear();
+          packetBuffer.add(byte);
         }
-
-        index = endIndex + 1; // Continuar con el siguiente paquete
       } else {
-        index++;
+        packetBuffer.add(byte);
+
+        if (byte == Packet.endByte) {
+          // Fin de paquete detectado, procesar paquete
+          Packet? packet = _parsePacket(Uint8List.fromList(packetBuffer));
+          if (packet != null) {
+            _handleReceivedPacket(packet);
+          } else {
+            print('Invalid packet received');
+          }
+          startDetected = false;
+          packetBuffer.clear();
+        }
       }
+
+      index++;
     }
   }
 
-  void _handleReceivedFunction(int function, dynamic value) {
-    switch (function) {
-      case GYRO_X:
-        if (onGyroX != null) onGyroX!(value);
+  Packet? _parsePacket(Uint8List data) {
+    // Verificar si el paquete tiene al menos la longitud mínima
+    if (data.length >= 5 &&
+        data.first == Packet.startByte &&
+        data.last == Packet.endByte) {
+      int function = data[1];
+      int dataType = data[2];
+      dynamic value;
+
+      if (dataType == Packet.dataTypeInt) {
+        // Verificar que hay suficientes bytes para un int (2 bytes)
+        if (data.length >= 5) {
+          value = ByteData.sublistView(data, 3, 5).getInt16(0, Endian.big);
+        } else {
+          return null; // Paquete inválido
+        }
+      } else if (dataType == Packet.dataTypeBool) {
+        // Verificar que hay suficientes bytes para un bool (1 byte)
+        if (data.length >= 4) {
+          value = data[3] == 0x01;
+        } else {
+          return null; // Paquete inválido
+        }
+      } else {
+        return null; // Tipo de dato desconocido
+      }
+
+      return Packet(function, dataType, value);
+    } else {
+      return null; // Paquete inválido
+    }
+  }
+
+  void _handleReceivedPacket(Packet packet) {
+    switch (packet.function) {
+      case Packet.GYRO_X:
+        if (onGyroX != null) onGyroX!(packet.value);
         break;
-      case GYRO_Y:
-        if (onGyroY != null) onGyroY!(value);
+      case Packet.GYRO_Y:
+        if (onGyroY != null) onGyroY!(packet.value);
         break;
-      case GYRO_Z:
-        if (onGyroZ != null) onGyroZ!(value);
+      case Packet.GYRO_Z:
+        if (onGyroZ != null) onGyroZ!(packet.value);
         break;
-      case MAGNETOMETER_X:
-        if (onMagnetometerX != null) onMagnetometerX!(value);
+      case Packet.MAGNETOMETER_X:
+        if (onMagnetometerX != null) onMagnetometerX!(packet.value);
         break;
-      case MAGNETOMETER_Y:
-        if (onMagnetometerY != null) onMagnetometerY!(value);
+      case Packet.MAGNETOMETER_Y:
+        if (onMagnetometerY != null) onMagnetometerY!(packet.value);
         break;
-      case MAGNETOMETER_Z:
-        if (onMagnetometerZ != null) onMagnetometerZ!(value);
+      case Packet.MAGNETOMETER_Z:
+        if (onMagnetometerZ != null) onMagnetometerZ!(packet.value);
         break;
-      case BAROMETER:
-        if (onBarometer != null) onBarometer!(value);
+      case Packet.BAROMETER:
+        if (onBarometer != null) onBarometer!(packet.value);
         break;
-      case MOTOR_1_SPEED:
-        if (onMotor1Speed != null) onMotor1Speed!(value);
+      case Packet.MOTOR_1_SPEED:
+        if (onMotor1Speed != null) onMotor1Speed!(packet.value);
         break;
-      case MOTOR_2_SPEED:
-        if (onMotor2Speed != null) onMotor2Speed!(value);
+      case Packet.MOTOR_2_SPEED:
+        if (onMotor2Speed != null) onMotor2Speed!(packet.value);
         break;
-      case BATTERY:
-        if (onBattery != null) onBattery!(value);
+      case Packet.BATTERY:
+        if (onBattery != null) onBattery!(packet.value);
         break;
-      case SIGNAL:
-        if (onSignal != null) onSignal!(value);
+      case Packet.SIGNAL:
+        if (onSignal != null) onSignal!(packet.value);
         break;
       default:
-        print('Unknown function: $function');
+        print('Unknown function: ${packet.function}');
         break;
     }
   }
 
-  Future<void> sendPacket(int function, int dataType, dynamic value) async {
+  Future<void> sendPacket(Packet packet) async {
     if (!_isConnected) {
       print('Not connected to the server');
       return;
     }
 
     try {
-      List<int> packet = _createPacket(function, dataType, value);
-      _socket.add(Uint8List.fromList(packet));
+      Uint8List packetBytes = packet.toBytes();
+      _socket.add(packetBytes);
     } catch (e) {
       print('Error sending data: $e');
     }
   }
 
-  List<int> _createPacket(int function, int dataType, dynamic value) {
-    List<int> packet = [];
-
-    // Carácter de inicio de paquete
-    packet.add(0x02);
-
-    // Función
-    packet.add(function);
-
-    // Tipo de dato
-    packet.add(dataType);
-
-    // Datos
-    if (dataType == 0x01) {
-      // Integer (convertir a 2 bytes)
-      packet.addAll(_intToBytes(value));
-    } else if (dataType == 0x03) {
-      // Boolean (convertir a 2 bytes)
-      packet.addAll(_boolToBytes(value));
-    }
-
-    // Carácter de fin de paquete
-    packet.add(0x03);
-
-    return packet;
-  }
-
-  List<int> _intToBytes(int value) {
-    ByteData byteData = ByteData(2);
-    byteData.setInt16(0, value, Endian.big);
-    return byteData.buffer.asUint8List();
-  }
-
-  List<int> _boolToBytes(bool value) {
-    ByteData byteData = ByteData(2);
-    byteData.setUint16(0, value ? 0x01 : 0x00, Endian.big);
-    return byteData.buffer.asUint8List();
-  }
-
   @override
   Future<void> disconnect() async {
     if (_isConnected) {
-      _socket.close();
+      await _socket.close();
       setConnected(false);
       if (onDisconnect != null) {
         onDisconnect!();
@@ -261,13 +304,15 @@ class TcpPlaneClient implements IPlaneClient {
   // Método para armar o desarmar el sistema
   @override
   Future<void> sendArmed(bool armed) async {
-    await sendPacket(ARMED, 0x03, armed);
+    Packet packet = Packet(Packet.ARMED, Packet.dataTypeBool, armed);
+    await sendPacket(packet);
   }
 
   // Método para ajustar el throttle
   @override
   Future<void> sendThrottle(int throttle) async {
-    await sendPacket(THROTTLE, 0x01, throttle);
+    Packet packet = Packet(Packet.THROTTLE, Packet.dataTypeInt, throttle);
+    await sendPacket(packet);
   }
 
   // Método para actualizar la propiedad y emitir el cambio

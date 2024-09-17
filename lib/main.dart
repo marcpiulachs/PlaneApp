@@ -5,10 +5,7 @@ import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
 import 'package:object_3d/bloc/recordings_bloc/recordings_bloc.dart';
 import 'package:object_3d/clients/tcp_plane_client.dart';
 import 'package:object_3d/clients/plane_client_interface.dart';
-import 'package:object_3d/widgets/circular.dart';
-import 'package:object_3d/widgets/compass.dart';
 import 'package:object_3d/pages/home.dart';
-import 'package:object_3d/widgets/throttle.dart';
 import 'package:provider/provider.dart';
 
 void main() {
