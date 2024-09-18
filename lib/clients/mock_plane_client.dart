@@ -6,6 +6,9 @@ class MockPlaneClient implements IPlaneClient {
   Timer? _timer;
   bool _armed = false;
   int _throttle = 0;
+  int _yaw = 0;
+  int _roll = 0;
+  int _pitch = 0;
 
   // Callbacks
   @override
@@ -15,27 +18,27 @@ class MockPlaneClient implements IPlaneClient {
   @override
   void Function()? onConnectionFailed;
   @override
-  void Function(int)? onGyroX;
+  TelemetryCallback? onGyroX;
   @override
-  void Function(int)? onGyroY;
+  TelemetryCallback? onGyroY;
   @override
-  void Function(int)? onGyroZ;
+  TelemetryCallback? onGyroZ;
   @override
-  void Function(int)? onMagnetometerX;
+  TelemetryCallback? onMagnetometerX;
   @override
-  void Function(int)? onMagnetometerY;
+  TelemetryCallback? onMagnetometerY;
   @override
-  void Function(int)? onMagnetometerZ;
+  TelemetryCallback? onMagnetometerZ;
   @override
-  void Function(int)? onBarometer;
+  TelemetryCallback? onBarometer;
   @override
-  void Function(int)? onMotor1Speed;
+  TelemetryCallback? onMotor1Speed;
   @override
-  void Function(int)? onMotor2Speed;
+  TelemetryCallback? onMotor2Speed;
   @override
-  void Function(int)? onBattery;
+  TelemetryCallback? onBattery;
   @override
-  void Function(int)? onSignal;
+  TelemetryCallback? onSignal;
 
   // Controlador del stream para la propiedad booleana
   final _connectedStreamController = StreamController<bool>.broadcast();
@@ -84,6 +87,21 @@ class MockPlaneClient implements IPlaneClient {
   @override
   Future<void> sendThrottle(int throttle) async {
     _throttle = throttle;
+  }
+
+  @override
+  Future<void> sendPitch(int pitch) async {
+    _pitch = pitch;
+  }
+
+  @override
+  Future<void> sendYaw(int yaw) async {
+    _yaw = yaw;
+  }
+
+  @override
+  Future<void> sendRoll(int roll) async {
+    _roll = roll;
   }
 
   @override

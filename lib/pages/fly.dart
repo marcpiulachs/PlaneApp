@@ -9,6 +9,7 @@ import 'package:object_3d/widgets/circular.dart';
 import 'package:object_3d/widgets/compass.dart';
 import 'package:object_3d/widgets/connecting.dart';
 import 'package:object_3d/widgets/disconected.dart';
+import 'package:object_3d/widgets/plane_direction.dart';
 import 'package:object_3d/widgets/throttle.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -120,13 +121,17 @@ class _FlyState extends State<Fly> {
                 ),
                 Expanded(
                   child: Center(
+                    child: PlaneDirection(
+                      direction: state.direction,
+                      telemetry: state.telemetry,
+                    ), /*
                     child: CompassWidget(
                       degrees: state.telemetry.degrees,
                       size: const Size(250, 250),
                       textColor: Colors.white,
                       barsColor: Colors.white,
                       showDegrees: false,
-                    ),
+                    ),*/
                   ),
                 ),
                 Expanded(

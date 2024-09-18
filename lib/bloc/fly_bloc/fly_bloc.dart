@@ -2,13 +2,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_event.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_state.dart';
 import 'package:object_3d/clients/plane_client_interface.dart';
+import 'package:object_3d/core/flight_orientation.dart';
 import 'package:object_3d/core/flight_recorder.dart';
 
 class FlyBloc extends Bloc<FlyEvent, FlyState> {
   final IPlaneClient client;
   final FlightRecorder flightRecorder = FlightRecorder();
+  late FlightOrientation flightOrientation;
 
   FlyBloc({required this.client}) : super(FlyInitial()) {
+    flightOrientation = FlightOrientation(
+      onPitchChanged: (pitch) => add(PitchUpdated(pitch)),
+      onRollChanged: (roll) => add(RollUpdated(roll)),
+      onYawChanged: (yaw) => add(YawUpdated(yaw)),
+    );
+
     // Suscripción a los callbacks del cliente
     client.onConnect = () {
       add(TcpClientConnected());
@@ -98,21 +106,23 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<SendArmed>((event, emit) async {
-      await client.sendArmed(event.isArmed);
       if (state is FlyPlaneConnected) {
+        await client.sendArmed(event.isArmed);
         final loadedState = state as FlyPlaneConnected;
         if (event.isArmed) {
           flightRecorder.start(); // Iniciar contador
+          flightOrientation.start();
         } else {
           flightRecorder.stop(); // Detener y reiniciar contador
+          flightOrientation.stop();
         }
         emit(loadedState.copyWith(duration: flightRecorder.duration));
       }
     });
 
     on<SendThrottle>((event, emit) async {
-      await client.sendThrottle(event.throttleValue);
       if (state is FlyPlaneConnected) {
+        await client.sendThrottle(event.throttleValue);
         final loadedState = state as FlyPlaneConnected;
         emit(loadedState);
       }
@@ -222,6 +232,36 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
         emit(loadedState.copyWith(duration: event.seconds));
+      }
+    });
+
+    on<YawUpdated>((event, emit) async {
+      if (state is FlyPlaneConnected) {
+        await client.sendYaw(event.value);
+        final loadedState = state as FlyPlaneConnected;
+        final updatedDirection =
+            loadedState.direction.copyWith(yaw: event.value);
+        emit(loadedState.copyWith(direction: updatedDirection));
+      }
+    });
+
+    on<PitchUpdated>((event, emit) async {
+      if (state is FlyPlaneConnected) {
+        await client.sendPitch(event.value);
+        final loadedState = state as FlyPlaneConnected;
+        final updatedDirection =
+            loadedState.direction.copyWith(pitch: event.value);
+        emit(loadedState.copyWith(direction: updatedDirection));
+      }
+    });
+
+    on<RollUpdated>((event, emit) async {
+      if (state is FlyPlaneConnected) {
+        await client.sendRoll(event.value);
+        final loadedState = state as FlyPlaneConnected;
+        final updatedDirection =
+            loadedState.direction.copyWith(roll: event.value);
+        emit(loadedState.copyWith(direction: updatedDirection));
       }
     });
 

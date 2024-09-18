@@ -23,6 +23,10 @@ class Packet {
   static const int BATTERY = 0x70;
   static const int SIGNAL = 0x71;
 
+  static const int PITCH = 0x62;
+  static const int ROLL = 0x63;
+  static const int YAW = 0x64;
+
   static const int dataTypeInt = 0x01;
   static const int dataTypeBool = 0x03;
 
@@ -87,27 +91,27 @@ class TcpPlaneClient implements IPlaneClient {
   @override
   void Function()? onConnectionFailed;
   @override
-  void Function(int)? onGyroX;
+  TelemetryCallback? onGyroX;
   @override
-  void Function(int)? onGyroY;
+  TelemetryCallback? onGyroY;
   @override
-  void Function(int)? onGyroZ;
+  TelemetryCallback? onGyroZ;
   @override
-  void Function(int)? onMagnetometerX;
+  TelemetryCallback? onMagnetometerX;
   @override
-  void Function(int)? onMagnetometerY;
+  TelemetryCallback? onMagnetometerY;
   @override
-  void Function(int)? onMagnetometerZ;
+  TelemetryCallback? onMagnetometerZ;
   @override
-  void Function(int)? onBarometer;
+  TelemetryCallback? onBarometer;
   @override
-  void Function(int)? onMotor1Speed;
+  TelemetryCallback? onMotor1Speed;
   @override
-  void Function(int)? onMotor2Speed;
+  TelemetryCallback? onMotor2Speed;
   @override
-  void Function(int)? onBattery;
+  TelemetryCallback? onBattery;
   @override
-  void Function(int)? onSignal;
+  TelemetryCallback? onSignal;
 
   // Controlador del stream para la propiedad booleana
   final _connectedStreamController = StreamController<bool>.broadcast();
@@ -312,6 +316,24 @@ class TcpPlaneClient implements IPlaneClient {
   @override
   Future<void> sendThrottle(int throttle) async {
     Packet packet = Packet(Packet.THROTTLE, Packet.dataTypeInt, throttle);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendYaw(int yaw) async {
+    Packet packet = Packet(Packet.YAW, Packet.dataTypeInt, yaw);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendRoll(int roll) async {
+    Packet packet = Packet(Packet.ROLL, Packet.dataTypeInt, roll);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendPitch(int pitch) async {
+    Packet packet = Packet(Packet.PITCH, Packet.dataTypeInt, pitch);
     await sendPacket(packet);
   }
 

@@ -82,3 +82,18 @@ class TimerUpdated extends FlyEvent {
   @override
   List<Object?> get props => [seconds];
 }
+
+class YawUpdated extends FlyEvent {
+  final int value;
+  YawUpdated(this.value);
+}
+
+class RollUpdated extends FlyEvent {
+  final int value;
+  RollUpdated(this.value);
+}
+
+class PitchUpdated extends FlyEvent {
+  final int value;
+  PitchUpdated(this.value);
+}

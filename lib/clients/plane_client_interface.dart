@@ -1,10 +1,14 @@
-typedef TcpCallback = void Function(int value);
+typedef TelemetryCallback = void Function(int value);
 
 abstract class IPlaneClient {
   Future<void> connect();
   Future<void> disconnect();
+
   Future<void> sendArmed(bool armed);
   Future<void> sendThrottle(int throttle);
+  Future<void> sendYaw(int yaw);
+  Future<void> sendRoll(int roll);
+  Future<void> sendPitch(int pitch);
 
   bool get isConnected;
 
@@ -12,17 +16,17 @@ abstract class IPlaneClient {
   void Function()? onConnect;
   void Function()? onDisconnect;
   void Function()? onConnectionFailed;
-  void Function(int)? onGyroX;
-  void Function(int)? onGyroY;
-  void Function(int)? onGyroZ;
-  void Function(int)? onMagnetometerX;
-  void Function(int)? onMagnetometerY;
-  void Function(int)? onMagnetometerZ;
-  void Function(int)? onBarometer;
-  void Function(int)? onMotor1Speed;
-  void Function(int)? onMotor2Speed;
-  void Function(int)? onBattery;
-  void Function(int)? onSignal;
+  TelemetryCallback? onGyroX;
+  TelemetryCallback? onGyroY;
+  TelemetryCallback? onGyroZ;
+  TelemetryCallback? onMagnetometerX;
+  TelemetryCallback? onMagnetometerY;
+  TelemetryCallback? onMagnetometerZ;
+  TelemetryCallback? onBarometer;
+  TelemetryCallback? onMotor1Speed;
+  TelemetryCallback? onMotor2Speed;
+  TelemetryCallback? onBattery;
+  TelemetryCallback? onSignal;
 
   // Stream que emite los cambios de conexión
   Stream<bool> get connectedStream;
