@@ -18,11 +18,12 @@ class Packet {
   static const int BAROMETER = 0x40;
   static const int MOTOR_1_SPEED = 0x50;
   static const int MOTOR_2_SPEED = 0x51;
-  static const int ARMED = 0x60;
-  static const int THROTTLE = 0x61;
+
   static const int BATTERY = 0x70;
   static const int SIGNAL = 0x71;
 
+  static const int ARMED = 0x60;
+  static const int THROTTLE = 0x61;
   static const int PITCH = 0x62;
   static const int ROLL = 0x63;
   static const int YAW = 0x64;
