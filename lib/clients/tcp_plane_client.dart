@@ -128,7 +128,13 @@ class TcpPlaneClient implements IPlaneClient {
   @override
   Future<void> connect() async {
     try {
-      _socket = await Socket.connect(host, port);
+      _socket = await Socket.connect(
+        host,
+        port,
+        timeout: const Duration(
+          seconds: 5,
+        ),
+      );
       setConnected(true);
       if (onConnect != null) onConnect!(); // Emitir evento de conexión
       _listenToServer();
