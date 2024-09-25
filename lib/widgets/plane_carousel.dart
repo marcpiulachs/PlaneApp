@@ -88,8 +88,11 @@ class _PlaneCarouselWidgetState extends State<PlaneCarouselWidget> {
             child: Visibility(
               visible: widget.currentIndex > 0,
               child: IconButton(
-                icon:
-                    const Icon(Icons.arrow_left, color: Colors.white, size: 40),
+                icon: const Icon(
+                  Icons.arrow_left,
+                  color: Colors.white,
+                  size: 40,
+                ),
                 onPressed: () {
                   widget.pageController.previousPage(
                     duration: const Duration(milliseconds: 300),
@@ -108,8 +111,11 @@ class _PlaneCarouselWidgetState extends State<PlaneCarouselWidget> {
             child: Visibility(
               visible: widget.currentIndex < widget.planeItems.length - 1,
               child: IconButton(
-                icon: const Icon(Icons.arrow_right,
-                    color: Colors.white, size: 40),
+                icon: const Icon(
+                  Icons.arrow_right,
+                  color: Colors.white,
+                  size: 40,
+                ),
                 onPressed: () {
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),

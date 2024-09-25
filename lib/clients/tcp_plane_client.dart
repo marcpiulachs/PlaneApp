@@ -344,6 +344,9 @@ class TcpPlaneClient implements IPlaneClient {
     await sendPacket(packet);
   }
 
+  @override
+  Future<void> sendManeuver(int maneuver) async {}
+
   // Método para actualizar la propiedad y emitir el cambio
   void setConnected(bool value) {
     if (_isConnected != value) {

@@ -9,13 +9,18 @@ import 'ota_state.dart';
 
 class OtaBloc extends Bloc<OtaEvent, OtaState> {
   final IPlaneClient client;
-  String appFirmware = "1.2.0"; // Versión actual del firmware de la app
+  // Versión actual del firmware de la app
+  final String appFirmware = "1.2.0";
+  // Urls from device services
+  final verUrl = Uri.parse('http://192.168.4.1/version');
+  final otaUrl = Uri.parse('http://192.168.4.1/ota');
 
   OtaBloc({required this.client}) : super(OtaInitialState()) {
     // Suscripción al Stream de cambios de la propiedad isConnected
     client.connectedStream.listen((isConnected) {
       add(CheckVersionEvent());
     });
+
     on<CheckVersionEvent>(_onCheckVersion);
     on<StartUpdateEvent>(_onStartUpdate);
 
@@ -27,10 +32,11 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
     CheckVersionEvent event,
     Emitter<OtaState> emit,
   ) async {
-    if (client.isConnected) {
-      final url = Uri.parse('http://192.168.4.1/version');
-      try {
-        final response = await http.get(url).timeout(
+    try {
+      emit(OtaGettingVersionState());
+      await Future.delayed(const Duration(seconds: 1));
+      if (client.isConnected) {
+        final response = await http.get(verUrl).timeout(
               const Duration(seconds: 2),
             );
 
@@ -41,17 +47,17 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
           emit(VersionCheckedState(devFirmware, appFirmware, updateAvailable));
         } else {
           // Manejar error
-          emit(VersionErrorState("Error"));
+          emit(VersionErrorState("N/A"));
         }
-      } on TimeoutException {
-        // Manejar excepción
-        emit(VersionErrorState("Plane cannot be contacted"));
-      } on Exception catch (e) {
-        // Manejar excepción
-        emit(VersionErrorState(e.toString()));
+      } else {
+        emit(VersionErrorState("N/A"));
       }
-    } else {
-      emit(VersionErrorState("Plane not connected"));
+    } on TimeoutException {
+      // Manejar excepción
+      emit(VersionErrorState("N/A"));
+    } on Exception catch (e) {
+      // Manejar excepción
+      emit(VersionErrorState(e.toString()));
     }
   }
 
@@ -62,8 +68,6 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
   ) async {
     emit(UpdatingState(0.0));
 
-    final url = Uri.parse('http://192.168.4.1/ota');
-
     // Carga el firmware desde assets
     var firmware = await rootBundle.load('assets/fw/PlaneFirmware.bin');
     var firmwareFile = firmware.buffer.asUint8List();
@@ -73,7 +77,7 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
     }
     try {
       // Configura la solicitud con headers para una carga binaria
-      var request = http.Request('POST', url)
+      var request = http.Request('POST', otaUrl)
         ..bodyBytes = firmwareFile
         ..headers.addAll({
           'Content-Type': 'application/octet-stream',

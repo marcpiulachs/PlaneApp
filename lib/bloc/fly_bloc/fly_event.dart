@@ -1,10 +1,10 @@
 abstract class FlyEvent {}
 
-class TcpClientConnect extends FlyEvent {}
+class PlaneClientConnect extends FlyEvent {}
 
-class TcpClientConnected extends FlyEvent {}
+class PlaneClientConnected extends FlyEvent {}
 
-class TcpClientDisconnected extends FlyEvent {}
+class PlaneClientDisconnected extends FlyEvent {}
 
 class GyroXUpdated extends FlyEvent {
   final int value;
@@ -71,6 +71,12 @@ class SendThrottle extends FlyEvent {
   final int throttleValue;
 
   SendThrottle(this.throttleValue);
+}
+
+class SendManeuver extends FlyEvent {
+  final int maneuver;
+
+  SendManeuver(this.maneuver);
 }
 
 class TimerUpdated extends FlyEvent {

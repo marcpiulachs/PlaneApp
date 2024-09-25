@@ -20,13 +20,13 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
 
     // Suscripción a los callbacks del cliente
     client.onConnect = () {
-      add(TcpClientConnected());
+      add(PlaneClientConnected());
     };
     client.onDisconnect = () {
-      add(TcpClientDisconnected());
+      add(PlaneClientDisconnected());
     };
     client.onConnectionFailed = () {
-      add(TcpClientDisconnected());
+      add(PlaneClientDisconnected());
     };
     client.onGyroX = (value) {
       add(GyroXUpdated(value));
@@ -95,17 +95,17 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       }
     };
 
-    on<TcpClientConnect>((event, emit) async {
-      emit(FlyConnecting());
+    on<PlaneClientConnect>((event, emit) async {
+      emit(FlyPlaneConnecting());
       await Future.delayed(const Duration(seconds: 1));
       await client.connect();
     });
 
-    on<TcpClientConnected>((event, emit) {
+    on<PlaneClientConnected>((event, emit) {
       emit(FlyPlaneConnected());
     });
 
-    on<TcpClientDisconnected>((event, emit) {
+    on<PlaneClientDisconnected>((event, emit) {
       emit(FlyPlaneDisconnected());
     });
 
@@ -114,10 +114,12 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         await client.sendArmed(event.isArmed);
         final loadedState = state as FlyPlaneConnected;
         if (event.isArmed) {
-          flightRecorder.start(); // Iniciar contador
+          // flight started
+          flightRecorder.start();
           flightOrientation.start();
         } else {
-          flightRecorder.stop(); // Detener y reiniciar contador
+          // flight completed
+          flightRecorder.stop();
           flightOrientation.stop();
         }
         emit(loadedState.copyWith(duration: flightRecorder.duration));
@@ -269,11 +271,19 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       }
     });
 
+    on<SendManeuver>((event, emit) async {
+      if (state is FlyPlaneConnected) {
+        await client.sendManeuver(event.maneuver);
+        final loadedState = state as FlyPlaneConnected;
+        emit(loadedState);
+      }
+    });
+
     if (client.isConnected) {
       // Emitir FlyLoaded después de que el Bloc ha sido creado
-      add(TcpClientConnected());
+      add(PlaneClientConnected());
     } else {
-      add(TcpClientDisconnected());
+      add(PlaneClientDisconnected());
     }
   }
 

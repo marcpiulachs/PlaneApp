@@ -9,6 +9,7 @@ abstract class IPlaneClient {
   Future<void> sendYaw(int yaw);
   Future<void> sendRoll(int roll);
   Future<void> sendPitch(int pitch);
+  Future<void> sendManeuver(int maneuver);
 
   bool get isConnected;
 

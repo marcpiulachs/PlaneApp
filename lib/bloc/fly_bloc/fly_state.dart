@@ -22,9 +22,6 @@ class FlyPlaneConnected extends FlyState with EquatableMixin {
   })  : telemetry = telemetry ?? Telemetry(),
         direction = direction ?? Direction();
 
-  @override
-  List<Object?> get props => [telemetry, duration, direction];
-
   FlyPlaneConnected copyWith({
     Telemetry? telemetry,
     Direction? direction,
@@ -36,16 +33,20 @@ class FlyPlaneConnected extends FlyState with EquatableMixin {
       direction: direction ?? this.direction,
     );
   }
+
+  @override
+  List<Object?> get props => [telemetry, duration, direction];
 }
 
+/*
 class FlyLoadedLoadFailed extends FlyState {
   final String errorMessage;
   FlyLoadedLoadFailed(this.errorMessage);
   @override
   List<Object> get props => [];
-}
+}*/
 
-class FlyConnecting extends FlyState {
+class FlyPlaneConnecting extends FlyState {
   @override
   List<Object> get props => [];
 }

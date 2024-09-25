@@ -42,9 +42,7 @@ class CompassWidget extends StatelessWidget {
           alignment: Alignment.center, // Centra los elementos
           children: [
             Transform.rotate(
-              angle: (degrees - 90) *
-                  pi /
-                  180, // Ajuste para que 0 grados apunte hacia arriba
+              angle: (degrees - 90) * pi / 180,
               child: CustomPaint(
                 //size: Size(size * visibility, size * visibility),
                 size: this.size,
@@ -139,8 +137,7 @@ class CompassPainter extends CustomPainter {
     // Dibujar grados/puntos cardinales cada 10 grados
     for (int i = 0; i < 360; i += 10) {
       double angle = i * pi / 180;
-      double x = center.dx +
-          (radius - 20) * cos(angle); // Mover los números hacia dentro
+      double x = center.dx + (radius - 20) * cos(angle);
       double y = center.dy + (radius - 20) * sin(angle);
 
       String label;
@@ -196,82 +193,10 @@ class CompassPainter extends CustomPainter {
         canvas.restore();
       }
     }
-
-    // Texto superior derecho (grados)
-    TextPainter textPainterDegrees = TextPainter(
-      text: TextSpan(
-        text: '${degrees.toStringAsFixed(0)}°',
-        style: TextStyle(color: textColor, fontSize: 16),
-      ),
-      textDirection: TextDirection.ltr,
-    );
-    textPainterDegrees.layout();
-    textPainterDegrees.paint(canvas, Offset(size.width - 40, 10));
-
-    // Texto superior izquierdo (dirección cardinal)
-    TextPainter textPainterCardinal = TextPainter(
-      text: TextSpan(
-        text: cardinalDirection,
-        style: TextStyle(color: textColor, fontSize: 16),
-      ),
-      textDirection: TextDirection.ltr,
-    );
-    textPainterCardinal.layout();
-    textPainterCardinal.paint(canvas, Offset(10, 10));
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
-  }
-}
-
-class CompassDemo extends StatefulWidget {
-  @override
-  _CompassDemoState createState() => _CompassDemoState();
-}
-
-class _CompassDemoState extends State<CompassDemo> {
-  double _currentDegrees = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Compass Widget Demo'),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: CompassWidget(
-                degrees: _currentDegrees,
-                size: Size(300, 300),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Text('Degrees: ${_currentDegrees.toStringAsFixed(0)}°'),
-                Slider(
-                  value: _currentDegrees,
-                  min: 0,
-                  max: 360,
-                  divisions: 360,
-                  label: _currentDegrees.toStringAsFixed(0),
-                  onChanged: (value) {
-                    setState(() {
-                      _currentDegrees = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

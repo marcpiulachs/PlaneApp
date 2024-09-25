@@ -105,6 +105,9 @@ class MockPlaneClient implements IPlaneClient {
   }
 
   @override
+  Future<void> sendManeuver(int maneuver) async {}
+
+  @override
   bool get isConnected => _isConnected;
 
   // Simulaciones de datos

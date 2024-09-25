@@ -8,6 +8,8 @@ abstract class OtaState extends Equatable {
 // Estado inicial: esperando
 class OtaInitialState extends OtaState {}
 
+class OtaGettingVersionState extends OtaState {}
+
 // Estado cuando la versión del ESP32 ha sido cargada
 class VersionCheckedState extends OtaState {
   final String devFirmware;

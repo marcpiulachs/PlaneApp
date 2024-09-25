@@ -11,7 +11,6 @@ import 'package:object_3d/widgets/connecting.dart';
 import 'package:object_3d/widgets/disconected.dart';
 import 'package:object_3d/widgets/plane_direction.dart';
 import 'package:object_3d/widgets/throttle.dart';
-import 'package:sensors_plus/sensors_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 
@@ -28,12 +27,12 @@ class _FlyState extends State<Fly> {
     return BlocBuilder<FlyBloc, FlyState>(
       builder: (context, state) {
         // Verifica el estado y muestra el widget adecuado
-        if (state is FlyConnecting) {
+        if (state is FlyPlaneConnecting) {
           return const Connecting();
         } else if (state is FlyPlaneDisconnected) {
           return Disconnected(
             onConnect: () {
-              context.read<FlyBloc>().add(TcpClientConnect());
+              context.read<FlyBloc>().add(PlaneClientConnect());
             },
           );
         } else if (state is FlyInitial) {
@@ -133,9 +132,9 @@ class _FlyState extends State<Fly> {
                     textColor: Colors.white,
                     barsColor: Colors.white,
                     showDegrees: false,
-                    child: Icon(
+                    child: const Icon(
                       Icons.flight,
-                      size: 120,
+                      size: 150,
                       color: Colors.white,
                     ),
                   )),
@@ -254,8 +253,12 @@ class _FlyState extends State<Fly> {
               'Updated Settings: ${updatedSettings.steeringAngle}, ${updatedSettings.pitchKp}');
           // Aquí puedes guardar o aplicar los ajustes actualizados
         },
-        onFactorySettings: () {},
-        onDone: () {},
+        onFactorySettings: () {
+          developer.log('Factory settings');
+        },
+        onDone: () {
+          developer.log('Done');
+        },
       ),
       backgroundColor: Colors.transparent,
     );
@@ -266,9 +269,7 @@ class _FlyState extends State<Fly> {
       context: context,
       builder: (BuildContext context) => AerobaticManeuversBottomSheet(
         onManeuverSelected: (int index) {
-          // Manejar el índice del botón seleccionado
-          developer.log('Selected maneuver index: $index');
-          // Aquí puedes realizar cualquier acción adicional que necesites
+          context.read<FlyBloc>().add(SendManeuver(index));
         },
       ),
       backgroundColor: Colors.transparent,

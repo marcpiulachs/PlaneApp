@@ -132,6 +132,29 @@ class Settings extends StatelessWidget {
                         ],
                       ),
                     );
+                  } else if (state is OtaGettingVersionState) {
+                    return const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 20),
+                          CircularProgressIndicator(
+                            strokeWidth: 6,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'Getting version...',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   } else if (state is UpdatingState) {
                     return const Center(
                       child: Column(
@@ -145,7 +168,7 @@ class Settings extends StatelessWidget {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'Updating...',
+                            'Updating firmware...',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -206,12 +229,13 @@ class Settings extends StatelessWidget {
                           child: Text(
                             state.error,
                             style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: 25,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
                           ),
                         ),
+                        const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () {
                             context.read<OtaBloc>().add(CheckVersionEvent());

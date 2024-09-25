@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:sensors_plus/sensors_plus.dart'; // Asegúrate de tener esta dependencia
+import 'package:sensors_plus/sensors_plus.dart';
 
 class FlightOrientation {
   final Function(int pitch) onPitchChanged; // Cambiado a int
