@@ -10,46 +10,48 @@ class OtaInitialState extends OtaState {}
 
 class OtaGettingVersionState extends OtaState {}
 
+class OtaPlaneDisconectedState extends OtaState {}
+
 // Estado cuando la versión del ESP32 ha sido cargada
-class VersionCheckedState extends OtaState {
+class OtaVersionState extends OtaState {
   final String devFirmware;
   final String appFirmware;
   final bool updateAvailable;
 
-  VersionCheckedState(
+  OtaVersionState(
     this.devFirmware,
     this.appFirmware,
     this.updateAvailable,
   );
 
   @override
-  List<Object?> get props => [devFirmware, updateAvailable];
+  List<Object?> get props => [devFirmware, appFirmware, updateAvailable];
 }
 
-class VersionErrorState extends OtaState {
+class OtaErrorState extends OtaState {
   final String error;
 
-  VersionErrorState(this.error);
+  OtaErrorState(this.error);
 
   @override
   List<Object?> get props => [error];
 }
 
 // Estado durante la actualización
-class UpdatingState extends OtaState {
+class OtaUpdatingState extends OtaState {
   final double progress;
 
-  UpdatingState(this.progress);
+  OtaUpdatingState(this.progress);
 
   @override
   List<Object?> get props => [progress];
 }
 
 // Estado final: actualización completada
-class UpdateCompletedState extends OtaState {
+class OtaUpdateCompletedState extends OtaState {
   final bool success;
 
-  UpdateCompletedState(this.success);
+  OtaUpdateCompletedState(this.success);
 
   @override
   List<Object?> get props => [success];

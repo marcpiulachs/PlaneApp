@@ -4,12 +4,19 @@ import 'package:object_3d/bloc/ota_bloc/ota_bloc.dart';
 import 'package:object_3d/bloc/ota_bloc/ota_event.dart';
 import 'package:object_3d/bloc/ota_bloc/ota_state.dart';
 
-class Settings extends StatelessWidget {
-  // Simula la versión de la aplicación y del firmware del dispositivo
-  final String appVersion = "1.0.0";
-  final String firmwareVersion = "2.1.0";
+class Settings extends StatefulWidget {
+  final VoidCallback onConnectPressed;
+  const Settings({super.key, required this.onConnectPressed});
 
-  const Settings({super.key});
+  @override
+  State<Settings> createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+  // Nuevo callback
+  final String appVersion = "1.0.0";
+
+  final String firmwareVersion = "2.1.0";
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +79,7 @@ class Settings extends StatelessWidget {
                         ),
                       ),
                     );
-                  } else if (state is VersionCheckedState) {
+                  } else if (state is OtaVersionState) {
                     return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -155,7 +162,7 @@ class Settings extends StatelessWidget {
                         ],
                       ),
                     );
-                  } else if (state is UpdatingState) {
+                  } else if (state is OtaUpdatingState) {
                     return const Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -178,7 +185,7 @@ class Settings extends StatelessWidget {
                         ],
                       ),
                     );
-                  } else if (state is UpdateCompletedState) {
+                  } else if (state is OtaUpdateCompletedState) {
                     return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +229,40 @@ class Settings extends StatelessWidget {
                         ],
                       ),
                     );
-                  } else if (state is VersionErrorState) {
+                  } else if (state is OtaPlaneDisconectedState) {
+                    return Column(
+                      children: [
+                        const Center(
+                          child: Text(
+                            "N/A",
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            widget.onConnectPressed();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                          ),
+                          child: const Text(
+                            'Connect',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  } else if (state is OtaErrorState) {
                     return Column(
                       children: [
                         Center(

@@ -12,3 +12,5 @@ class CheckVersionEvent extends OtaEvent {
 
 // Evento para iniciar la actualización del firmware
 class StartUpdateEvent extends OtaEvent {}
+
+class ConnectEvent extends OtaEvent {}

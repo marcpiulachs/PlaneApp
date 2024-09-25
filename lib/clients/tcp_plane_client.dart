@@ -27,6 +27,7 @@ class Packet {
   static const int PITCH = 0x62;
   static const int ROLL = 0x63;
   static const int YAW = 0x64;
+  static const int MANEUVER = 0x65;
 
   static const int dataTypeInt = 0x01;
   static const int dataTypeBool = 0x03;
@@ -345,7 +346,10 @@ class TcpPlaneClient implements IPlaneClient {
   }
 
   @override
-  Future<void> sendManeuver(int maneuver) async {}
+  Future<void> sendManeuver(int maneuver) async {
+    Packet packet = Packet(Packet.MANEUVER, Packet.dataTypeInt, maneuver);
+    await sendPacket(packet);
+  }
 
   // Método para actualizar la propiedad y emitir el cambio
   void setConnected(bool value) {

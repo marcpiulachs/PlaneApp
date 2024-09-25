@@ -44,20 +44,20 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
           String devFirmware = response.body.trim();
           bool updateAvailable = isVersionLower(devFirmware, appFirmware);
 
-          emit(VersionCheckedState(devFirmware, appFirmware, updateAvailable));
+          emit(OtaVersionState(devFirmware, appFirmware, updateAvailable));
         } else {
           // Manejar error
-          emit(VersionErrorState("N/A"));
+          emit(OtaErrorState("N/A"));
         }
       } else {
-        emit(VersionErrorState("N/A"));
+        emit(OtaPlaneDisconectedState());
       }
     } on TimeoutException {
       // Manejar excepción
-      emit(VersionErrorState("N/A"));
+      emit(OtaErrorState("N/A"));
     } on Exception catch (e) {
       // Manejar excepción
-      emit(VersionErrorState(e.toString()));
+      emit(OtaErrorState(e.toString()));
     }
   }
 
@@ -66,14 +66,14 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
     StartUpdateEvent event,
     Emitter<OtaState> emit,
   ) async {
-    emit(UpdatingState(0.0));
+    emit(OtaUpdatingState(0.0));
 
     // Carga el firmware desde assets
     var firmware = await rootBundle.load('assets/fw/PlaneFirmware.bin');
     var firmwareFile = firmware.buffer.asUint8List();
 
     if (firmwareFile.isEmpty || firmwareFile[0] != 0xE9) {
-      emit(UpdateCompletedState(false));
+      emit(OtaUpdateCompletedState(false));
     }
     try {
       // Configura la solicitud con headers para una carga binaria
@@ -91,14 +91,14 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
 
       if (streamedResponse.statusCode == 200) {
         // Actualización completada con éxito
-        emit(UpdateCompletedState(true));
+        emit(OtaUpdateCompletedState(true));
       } else {
         // Fallo en la actualización
-        emit(UpdateCompletedState(false));
+        emit(OtaUpdateCompletedState(false));
       }
     } catch (e) {
       // Fallo en la actualización
-      emit(UpdateCompletedState(false));
+      emit(OtaUpdateCompletedState(false));
     }
   }
 

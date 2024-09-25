@@ -145,7 +145,13 @@ class _MyHomePageState extends State<MyHomePage>
                     const Fly(),
                     const RecordedFlights(),
                     const Mechanics(),
-                    const Settings(),
+                    Settings(
+                      onConnectPressed: () {
+                        setState(() {
+                          _tabController.animateTo(1);
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),
