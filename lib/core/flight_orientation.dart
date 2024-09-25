@@ -65,4 +65,9 @@ class FlightOrientation {
     _accelerometerSubscription?.cancel();
     _gyroscopeSubscription?.cancel();
   }
+
+  // Libera recursos del timer cuando ya no se necesita
+  void dispose() {
+    stop();
+  }
 }

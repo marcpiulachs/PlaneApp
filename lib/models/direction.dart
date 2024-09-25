@@ -1,5 +1,3 @@
-import 'dart:math';
-
 class Direction {
   final int pitch;
   final int yaw;

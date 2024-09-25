@@ -1,4 +1,3 @@
-// Definir los eventos del PlaneCarouselBloc
 abstract class FlyEvent {}
 
 class TcpClientConnect extends FlyEvent {}

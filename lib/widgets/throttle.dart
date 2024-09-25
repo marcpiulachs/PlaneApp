@@ -1,19 +1,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'dart:developer' as developer;
 
 class MyApp4 extends StatelessWidget {
+  const MyApp4({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text('Vertical Slider')),
+        appBar: AppBar(title: const Text('Vertical Slider')),
         body: Center(
           child: Throttle(
             onStateChanged: (ThrottleState state) {
-              print('Throttle state: ${state.toString()}');
+              developer.log('Throttle state: ${state.toString()}');
             },
             onThrottleUpdated: (double value) {
-              print('Armed throttle value: ${value.toInt()}');
+              developer.log('Armed throttle value: ${value.toInt()}');
             },
           ),
         ),
@@ -26,10 +29,8 @@ enum ThrottleState { locked, unlocked, armed }
 
 class Throttle extends StatefulWidget {
   final double iconSize; // Tamaño del icono
-  final void Function(ThrottleState)
-      onStateChanged; // Callback para cambios de estado
-  final void Function(double)
-      onThrottleUpdated; // Callback para actualización del throttle
+  final void Function(ThrottleState) onStateChanged;
+  final void Function(double) onThrottleUpdated;
 
   const Throttle({
     super.key,
@@ -39,7 +40,7 @@ class Throttle extends StatefulWidget {
   });
 
   @override
-  _ThrottleState createState() => _ThrottleState();
+  State<Throttle> createState() => _ThrottleState();
 }
 
 class _ThrottleState extends State<Throttle>

@@ -6,7 +6,8 @@ class PlaneDirection extends StatelessWidget {
   final Telemetry telemetry;
   final Direction direction;
 
-  PlaneDirection({
+  const PlaneDirection({
+    super.key,
     required this.telemetry,
     required this.direction,
   });
@@ -38,21 +39,21 @@ class PlaneDirection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Primera columna con Yaw y Punto Cardinal
-          Container(
+          SizedBox(
             width: 100, // Ancho fijo para la primera columna
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   '$yawDegrees°',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 40, // Grado en grande
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   cardinalDirection,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 60, // Punto cardinal en grande
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -61,30 +62,31 @@ class PlaneDirection extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 20), // Separación entre las columnas
+          const SizedBox(width: 20), // Separación entre las columnas
 
           // Segunda columna con los valores de pitch, roll y yaw
-          Container(
+          SizedBox(
             width: 100, // Ancho fijo para la segunda columna
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Direction:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10), // Espacio entre 'Direction' y los valores
+                const SizedBox(
+                    height: 10), // Espacio entre 'Direction' y los valores
                 Text(
                   'Pitch: ${direction.pitch.round()}°', // Convierte a entero si es necesario
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
                 Text(
                   'Roll: ${direction.roll.round()}°',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
                 Text(
                   'Yaw: ${direction.yaw.round()}°',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ],
             ),

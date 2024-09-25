@@ -8,6 +8,7 @@ class CompassWidget extends StatelessWidget {
   final Color barsColor;
   final Size size;
   final bool showDegrees;
+  final Widget? child; // Nuevo child opcional
 
   const CompassWidget({
     super.key,
@@ -17,6 +18,7 @@ class CompassWidget extends StatelessWidget {
     this.barsColor = Colors.black,
     required this.size,
     this.showDegrees = true,
+    this.child, // Añadido el parámetro child
   });
 
   String getCardinalDirection(double degrees) {
@@ -36,22 +38,29 @@ class CompassWidget extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         //double size = min(constraints.maxWidth, constraints.maxHeight);
-        return Transform.rotate(
-          angle: (degrees - 90) *
-              pi /
-              180, // Ajuste para que 0 grados apunte hacia arriba
-          child: CustomPaint(
-            //size: Size(size * visibility, size * visibility),
-            size: this.size,
-            painter: CompassPainter(
-              degrees: degrees,
-              cardinalDirection: getCardinalDirection(degrees),
-              backgroundColor: backgroundColor,
-              textColor: textColor,
-              barsColor: barsColor,
-              showDegrees: showDegrees,
+        return Stack(
+          alignment: Alignment.center, // Centra los elementos
+          children: [
+            Transform.rotate(
+              angle: (degrees - 90) *
+                  pi /
+                  180, // Ajuste para que 0 grados apunte hacia arriba
+              child: CustomPaint(
+                //size: Size(size * visibility, size * visibility),
+                size: this.size,
+                painter: CompassPainter(
+                  degrees: degrees,
+                  cardinalDirection: getCardinalDirection(degrees),
+                  backgroundColor: backgroundColor,
+                  textColor: textColor,
+                  barsColor: barsColor,
+                  showDegrees: showDegrees,
+                ),
+              ),
             ),
-          ),
+            if (child != null)
+              child!, // Dibuja el widget en el centro si se pasa un child
+          ],
         );
       },
     );

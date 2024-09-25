@@ -4,6 +4,7 @@ import 'package:object_3d/bloc/fly_bloc/fly_state.dart';
 import 'package:object_3d/clients/plane_client_interface.dart';
 import 'package:object_3d/core/flight_orientation.dart';
 import 'package:object_3d/core/flight_recorder.dart';
+import 'dart:developer' as developer;
 
 class FlyBloc extends Bloc<FlyEvent, FlyState> {
   final IPlaneClient client;
@@ -67,27 +68,30 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         add(TimerUpdated(seconds));
       }
     };
+
     flightRecorder.started = () {
-      print('FlightRecorder started');
+      developer.log('FlightRecorder started');
     };
+
     flightRecorder.stopped = () {
-      print('FlightRecorder stopped');
+      developer.log('FlightRecorder stopped');
     };
+
     flightRecorder.captureData = () {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        print('Telemetry Data:');
-        print('GyroX: ${loadedState.telemetry.gyroX}');
-        print('GyroY: ${loadedState.telemetry.gyroY}');
-        print('GyroZ: ${loadedState.telemetry.gyroZ}');
-        print('MagnetometerX: ${loadedState.telemetry.magnetometerX}');
-        print('MagnetometerY: ${loadedState.telemetry.magnetometerY}');
-        print('MagnetometerZ: ${loadedState.telemetry.magnetometerZ}');
-        print('Barometer: ${loadedState.telemetry.barometer}');
-        print('Motor1Speed: ${loadedState.telemetry.motor1Speed}');
-        print('Motor2Speed: ${loadedState.telemetry.motor2Speed}');
-        print('Motor1Speed: ${loadedState.telemetry.motor1Speed}');
-        print('Motor2Speed: ${loadedState.telemetry.motor2Speed}');
+        developer.log('Telemetry Data:');
+        developer.log('GyroX: ${loadedState.telemetry.gyroX}');
+        developer.log('GyroY: ${loadedState.telemetry.gyroY}');
+        developer.log('GyroZ: ${loadedState.telemetry.gyroZ}');
+        developer.log('MagnetometerX: ${loadedState.telemetry.magnetometerX}');
+        developer.log('MagnetometerY: ${loadedState.telemetry.magnetometerY}');
+        developer.log('MagnetometerZ: ${loadedState.telemetry.magnetometerZ}');
+        developer.log('Barometer: ${loadedState.telemetry.barometer}');
+        developer.log('Motor1Speed: ${loadedState.telemetry.motor1Speed}');
+        developer.log('Motor2Speed: ${loadedState.telemetry.motor2Speed}');
+        developer.log('Motor1Speed: ${loadedState.telemetry.motor1Speed}');
+        developer.log('Motor2Speed: ${loadedState.telemetry.motor2Speed}');
       }
     };
 
@@ -275,7 +279,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
 
   @override
   Future<void> close() {
-    flightRecorder.dispose(); // Liberar recursos del FlightRecorder
+    flightRecorder.dispose();
+    flightOrientation.dispose();
     return super.close();
   }
 }

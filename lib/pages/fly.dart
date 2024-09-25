@@ -13,6 +13,7 @@ import 'package:object_3d/widgets/plane_direction.dart';
 import 'package:object_3d/widgets/throttle.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:developer' as developer;
 
 class Fly extends StatefulWidget {
   const Fly({super.key});
@@ -121,18 +122,23 @@ class _FlyState extends State<Fly> {
                 ),
                 Expanded(
                   child: Center(
+                      /*
                     child: PlaneDirection(
                       direction: state.direction,
                       telemetry: state.telemetry,
-                    ), /*
-                    child: CompassWidget(
-                      degrees: state.telemetry.degrees,
-                      size: const Size(250, 250),
-                      textColor: Colors.white,
-                      barsColor: Colors.white,
-                      showDegrees: false,
-                    ),*/
-                  ),
+                    ), ,*/
+                      child: CompassWidget(
+                    degrees: state.telemetry.degrees,
+                    size: const Size(250, 250),
+                    textColor: Colors.white,
+                    barsColor: Colors.white,
+                    showDegrees: false,
+                    child: Icon(
+                      Icons.flight,
+                      size: 120,
+                      color: Colors.white,
+                    ),
+                  )),
                 ),
                 Expanded(
                   child: Row(
@@ -244,7 +250,7 @@ class _FlyState extends State<Fly> {
         ), // Puedes pasar la configuración actual aquí
         onSettingsChanged: (FlightSettings updatedSettings) {
           // Manejar los ajustes actualizados
-          print(
+          developer.log(
               'Updated Settings: ${updatedSettings.steeringAngle}, ${updatedSettings.pitchKp}');
           // Aquí puedes guardar o aplicar los ajustes actualizados
         },
@@ -261,7 +267,7 @@ class _FlyState extends State<Fly> {
       builder: (BuildContext context) => AerobaticManeuversBottomSheet(
         onManeuverSelected: (int index) {
           // Manejar el índice del botón seleccionado
-          print('Selected maneuver index: $index');
+          developer.log('Selected maneuver index: $index');
           // Aquí puedes realizar cualquier acción adicional que necesites
         },
       ),

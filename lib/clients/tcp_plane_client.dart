@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'dart:developer' as developer;
 import 'package:object_3d/clients/plane_client_interface.dart';
 
 // Definición de la clase Packet con el método toBytes()
@@ -140,7 +140,7 @@ class TcpPlaneClient implements IPlaneClient {
       if (onConnect != null) onConnect!(); // Emitir evento de conexión
       _listenToServer();
     } catch (e) {
-      print('Error connecting to the server: $e');
+      developer.log('Error connecting to the server: $e');
       setConnected(false);
       if (onConnectionFailed != null) {
         onConnectionFailed!(); // Emitir evento de desconexión por error
@@ -154,16 +154,16 @@ class TcpPlaneClient implements IPlaneClient {
         try {
           _processReceivedData(data);
         } catch (e) {
-          print('Error processing received data: $e');
+          developer.log('Error processing received data: $e');
           _handleDisconnection();
         }
       },
       onError: (error) {
-        print('Error receiving data: $error');
+        developer.log('Error receiving data: $error');
         _handleDisconnection();
       },
       onDone: () {
-        print('Connection closed by the server');
+        developer.log('Connection closed by the server');
         _handleDisconnection();
       },
     );
@@ -202,7 +202,7 @@ class TcpPlaneClient implements IPlaneClient {
           if (packet != null) {
             _handleReceivedPacket(packet);
           } else {
-            print('Invalid packet received');
+            developer.log('Invalid packet received');
           }
           startDetected = false;
           packetBuffer.clear();
@@ -282,14 +282,14 @@ class TcpPlaneClient implements IPlaneClient {
         if (onSignal != null) onSignal!(packet.value);
         break;
       default:
-        print('Unknown function: ${packet.function}');
+        developer.log('Unknown function: ${packet.function}');
         break;
     }
   }
 
   Future<void> sendPacket(Packet packet) async {
     if (!_isConnected) {
-      print('Not connected to the server');
+      developer.log('Not connected to the server');
       return;
     }
 
@@ -297,7 +297,7 @@ class TcpPlaneClient implements IPlaneClient {
       Uint8List packetBytes = packet.toBytes();
       _socket.add(packetBytes);
     } catch (e) {
-      print('Error sending data: $e');
+      developer.log('Error sending data: $e');
     }
   }
 

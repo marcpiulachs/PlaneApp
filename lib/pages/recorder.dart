@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:object_3d/bloc/recordings_bloc/recordings_bloc.dart';
+import 'package:object_3d/bloc/recordings_bloc/recordings_events.dart';
 import 'package:object_3d/bloc/recordings_bloc/recordings_states.dart';
 
-import '../bloc/recordings_bloc/recordings_events.dart';
-
-class RecordedFlightsWidget extends StatelessWidget {
-  const RecordedFlightsWidget({super.key});
+class RecordedFlights extends StatelessWidget {
+  const RecordedFlights({super.key});
 
   @override
   Widget build(BuildContext context) {
