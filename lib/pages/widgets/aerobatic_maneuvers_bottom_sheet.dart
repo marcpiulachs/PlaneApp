@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:object_3d/models/maneuver.dart';
 
 class AerobaticManeuversBottomSheet extends StatelessWidget {
   final Function(int) onManeuverSelected;
 
   AerobaticManeuversBottomSheet({super.key, required this.onManeuverSelected});
 
-  final List<Map<String, dynamic>> maneuvers = [
-    {"icon": Icons.loop, "text": "Barrel Roll"},
-    {"icon": Icons.ac_unit, "text": "Immelmann"},
-    {"icon": Icons.rotate_90_degrees_ccw, "text": "Cuban Eight"},
-    {"icon": Icons.sync_alt, "text": "Split S"},
-    {"icon": Icons.u_turn_left, "text": "Loop"},
-    {"icon": Icons.u_turn_right, "text": "Loop2"},
-    {"icon": Icons.flight_takeoff, "text": "Wingover"},
-    {"icon": Icons.flight_land, "text": "Snap Roll"},
-    {"icon": Icons.star, "text": "Vertical"},
+  final List<Maneuver> maneuvers = [
+    Maneuver(icon: Icons.loop, text: "Barrel Roll"),
+    Maneuver(icon: Icons.ac_unit, text: "Immelmann"),
+    Maneuver(icon: Icons.rotate_90_degrees_ccw, text: "Cuban Eight"),
+    Maneuver(icon: Icons.sync_alt, text: "Split S"),
+    Maneuver(icon: Icons.u_turn_left, text: "Loop"),
+    Maneuver(icon: Icons.u_turn_right, text: "Loop2"),
+    Maneuver(icon: Icons.flight_takeoff, text: "Wingover"),
+    Maneuver(icon: Icons.flight_land, text: "Snap Roll"),
+    Maneuver(icon: Icons.star, text: "Vertical"),
   ];
 
   @override
@@ -64,13 +65,13 @@ class AerobaticManeuversBottomSheet extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            maneuver['icon'],
-                            color: Colors.red,
+                            maneuver.icon,
+                            color: Colors.blue,
                             size: 40.0, // Icono grande
                           ),
                           const SizedBox(height: 8.0),
                           Text(
-                            maneuver['text'],
+                            maneuver.text,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 14.0,
