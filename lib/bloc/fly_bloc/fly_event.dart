@@ -1,4 +1,9 @@
-abstract class FlyEvent {}
+import 'package:equatable/equatable.dart';
+
+abstract class FlyEvent extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
 class PlaneClientConnect extends FlyEvent {}
 
