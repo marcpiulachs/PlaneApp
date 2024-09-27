@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:object_3d/models/telemetry.dart';
 
 abstract class FlyEvent extends Equatable {
   @override
@@ -73,9 +74,9 @@ class SendArmed extends FlyEvent {
 }
 
 class SendThrottle extends FlyEvent {
-  final int throttleValue;
+  final int value;
 
-  SendThrottle(this.throttleValue);
+  SendThrottle(this.value);
 }
 
 class SendManeuver extends FlyEvent {
@@ -84,13 +85,8 @@ class SendManeuver extends FlyEvent {
   SendManeuver(this.maneuver);
 }
 
-class TimerUpdated extends FlyEvent {
-  final int seconds;
-
-  TimerUpdated(this.seconds);
-
-  @override
-  List<Object?> get props => [seconds];
+class FlightRecorderUpdated extends FlyEvent {
+  FlightRecorderUpdated();
 }
 
 class YawUpdated extends FlyEvent {
@@ -106,4 +102,9 @@ class RollUpdated extends FlyEvent {
 class PitchUpdated extends FlyEvent {
   final int value;
   PitchUpdated(this.value);
+}
+
+class CaptureData extends FlyEvent {
+  final Telemetry telemetry;
+  CaptureData(this.telemetry);
 }

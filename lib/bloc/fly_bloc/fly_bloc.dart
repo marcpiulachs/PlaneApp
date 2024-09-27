@@ -8,7 +8,7 @@ import 'dart:developer' as developer;
 
 class FlyBloc extends Bloc<FlyEvent, FlyState> {
   final IPlaneClient client;
-  final FlightRecorder flightRecorder = FlightRecorder();
+  late FlightRecorder flightRecorder;
   late FlightOrientation flightOrientation;
 
   FlyBloc({required this.client}) : super(FlyInitial()) {
@@ -16,6 +16,24 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       onPitchChanged: (pitch) => add(PitchUpdated(pitch)),
       onRollChanged: (roll) => add(RollUpdated(roll)),
       onYawChanged: (yaw) => add(YawUpdated(yaw)),
+      onLeftChanged: (degrees) {
+        //developer.log('Inclinado hacia la izquierda: $degrees°');
+      },
+      onRightChanged: (degrees) {
+        //developer.log('Inclinado hacia la derecha: $degrees°');
+      },
+      onUpChanged: (degrees) {
+        //developer.log('Inclinado hacia arriba: $degrees°');
+      },
+      onDownChanged: (degrees) {
+        //developer.log('Inclinado hacia abajo: $degrees°');
+      },
+      onRotateLeftChanged: (degrees) {
+        //developer.log('Rotado hacia la izquierda: $degrees°');
+      },
+      onRotateRightChanged: (degrees) {
+        //developer.log('Rotado hacia la derecha: $degrees°');
+      },
     );
 
     // Suscripción a los callbacks del cliente
@@ -63,37 +81,46 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     };
 
     // Configuración de FlightRecorder
-    flightRecorder.timerUpdated = (int seconds) {
-      if (state is FlyPlaneConnected) {
-        add(TimerUpdated(seconds));
-      }
-    };
+    flightRecorder = FlightRecorder(
+      timerUpdated: (int seconds) {
+        if (state is FlyPlaneConnected) {
+          add(FlightRecorderUpdated());
+        }
+      },
+      started: () {
+        developer.log('FlightRecorder started');
+        if (state is FlyPlaneConnected) {
+          add(FlightRecorderUpdated());
+        }
+      },
+      stopped: () {
+        developer.log('FlightRecorder stopped');
+        if (state is FlyPlaneConnected) {
+          add(FlightRecorderUpdated());
+        }
+      },
+      captureData: () {
+        if (state is FlyPlaneConnected) {
+          final loadedState = state as FlyPlaneConnected;
+          add(CaptureData(loadedState.telemetry));
+        }
+      },
+    );
 
-    flightRecorder.started = () {
-      developer.log('FlightRecorder started');
-    };
-
-    flightRecorder.stopped = () {
-      developer.log('FlightRecorder stopped');
-    };
-
-    flightRecorder.captureData = () {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
-        developer.log('Telemetry Data:');
-        developer.log('GyroX: ${loadedState.telemetry.gyroX}');
-        developer.log('GyroY: ${loadedState.telemetry.gyroY}');
-        developer.log('GyroZ: ${loadedState.telemetry.gyroZ}');
-        developer.log('MagnetometerX: ${loadedState.telemetry.magnetometerX}');
-        developer.log('MagnetometerY: ${loadedState.telemetry.magnetometerY}');
-        developer.log('MagnetometerZ: ${loadedState.telemetry.magnetometerZ}');
-        developer.log('Barometer: ${loadedState.telemetry.barometer}');
-        developer.log('Motor1Speed: ${loadedState.telemetry.motor1Speed}');
-        developer.log('Motor2Speed: ${loadedState.telemetry.motor2Speed}');
-        developer.log('Motor1Speed: ${loadedState.telemetry.motor1Speed}');
-        developer.log('Motor2Speed: ${loadedState.telemetry.motor2Speed}');
-      }
-    };
+    on<CaptureData>((event, emit) async {
+      developer.log('Telemetry Data:');
+      developer.log('GyroX: ${event.telemetry.gyroX}');
+      developer.log('GyroY: ${event.telemetry.gyroY}');
+      developer.log('GyroZ: ${event.telemetry.gyroZ}');
+      developer.log('MagneX: ${event.telemetry.magnetometerX}');
+      developer.log('MagneY: ${event.telemetry.magnetometerY}');
+      developer.log('MagneZ: ${event.telemetry.magnetometerZ}');
+      developer.log('Barometer: ${event.telemetry.barometer}');
+      developer.log('Motor1Speed: ${event.telemetry.motor1Speed}');
+      developer.log('Motor2Speed: ${event.telemetry.motor2Speed}');
+      // store telemetry data
+      flightRecorder.data.add(event.telemetry);
+    });
 
     on<PlaneClientConnect>((event, emit) async {
       emit(FlyPlaneConnecting());
@@ -122,13 +149,13 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
           flightRecorder.stop();
           flightOrientation.stop();
         }
-        emit(loadedState.copyWith(duration: flightRecorder.duration));
+        emit(loadedState.copyWith(isArmed: event.isArmed));
       }
     });
 
     on<SendThrottle>((event, emit) async {
       if (state is FlyPlaneConnected) {
-        await client.sendThrottle(event.throttleValue);
+        await client.sendThrottle(event.value);
         final loadedState = state as FlyPlaneConnected;
         emit(loadedState);
       }
@@ -234,10 +261,13 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       }
     });
 
-    on<TimerUpdated>((event, emit) {
+    on<FlightRecorderUpdated>((event, emit) {
       if (state is FlyPlaneConnected) {
         final loadedState = state as FlyPlaneConnected;
-        emit(loadedState.copyWith(duration: event.seconds));
+        emit(loadedState.copyWith(
+          duration: flightRecorder.duration,
+          isRecording: flightRecorder.isRecording,
+        ));
       }
     });
 
@@ -248,6 +278,9 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         final updatedDirection =
             loadedState.direction.copyWith(yaw: event.value);
         emit(loadedState.copyWith(direction: updatedDirection));
+        developer.log('Pitch: ${loadedState.direction.pitch}');
+        developer.log('Roll:  ${loadedState.direction.roll}');
+        developer.log('Yaw:   ${loadedState.direction.yaw}');
       }
     });
 
@@ -258,6 +291,9 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         final updatedDirection =
             loadedState.direction.copyWith(pitch: event.value);
         emit(loadedState.copyWith(direction: updatedDirection));
+        developer.log('Pitch: ${loadedState.direction.pitch}');
+        developer.log('Roll:  ${loadedState.direction.roll}');
+        developer.log('Yaw:   ${loadedState.direction.yaw}');
       }
     });
 
@@ -268,6 +304,9 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         final updatedDirection =
             loadedState.direction.copyWith(roll: event.value);
         emit(loadedState.copyWith(direction: updatedDirection));
+        developer.log('Pitch: ${loadedState.direction.pitch}');
+        developer.log('Roll:  ${loadedState.direction.roll}');
+        developer.log('Yaw:   ${loadedState.direction.yaw}');
       }
     });
 
@@ -280,7 +319,6 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     if (client.isConnected) {
-      // Emitir FlyLoaded después de que el Bloc ha sido creado
       add(PlaneClientConnected());
     } else {
       add(PlaneClientDisconnected());

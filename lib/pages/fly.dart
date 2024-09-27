@@ -5,6 +5,7 @@ import 'package:object_3d/bloc/fly_bloc/fly_state.dart';
 import 'package:object_3d/core/flight_settings.dart';
 import 'package:object_3d/pages/widgets/aerobatic_maneuvers_bottom_sheet.dart';
 import 'package:object_3d/pages/widgets/engine_settings_bottom_sheet.dart';
+import 'package:object_3d/pages/widgets/record_indicator.dart';
 import 'package:object_3d/widgets/circular.dart';
 import 'package:object_3d/widgets/compass.dart';
 import 'package:object_3d/widgets/connecting.dart';
@@ -44,40 +45,9 @@ class _FlyState extends State<Fly> {
             backgroundColor: Colors.transparent,
             body: Column(
               children: [
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Círculo que indica si está grabando
-                        Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color:
-                                state.duration > 0 ? Colors.red : Colors.grey,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          Duration(seconds: state.duration)
-                              .toString()
-                              .substring(2, 7),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                RecordingIndicator(
+                  isRecording: state.isRecording,
+                  duration: state.duration,
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -249,9 +219,7 @@ class _FlyState extends State<Fly> {
         ), // Puedes pasar la configuración actual aquí
         onSettingsChanged: (FlightSettings updatedSettings) {
           // Manejar los ajustes actualizados
-          developer.log(
-              'Updated Settings: ${updatedSettings.steeringAngle}, ${updatedSettings.pitchKp}');
-          // Aquí puedes guardar o aplicar los ajustes actualizados
+          developer.log('Settings changed');
         },
         onFactorySettings: () {
           developer.log('Factory settings');

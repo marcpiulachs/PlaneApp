@@ -14,11 +14,15 @@ class FlyPlaneConnected extends FlyState with EquatableMixin {
   final Telemetry telemetry;
   final int duration;
   final Direction direction;
+  final bool isArmed;
+  final bool isRecording;
 
   FlyPlaneConnected({
     Telemetry? telemetry,
     Direction? direction,
     this.duration = 0,
+    this.isArmed = false,
+    this.isRecording = false,
   })  : telemetry = telemetry ?? Telemetry(),
         direction = direction ?? Direction();
 
@@ -26,16 +30,21 @@ class FlyPlaneConnected extends FlyState with EquatableMixin {
     Telemetry? telemetry,
     Direction? direction,
     int? duration,
+    bool? isArmed,
+    bool? isRecording,
   }) {
     return FlyPlaneConnected(
       telemetry: telemetry ?? this.telemetry,
       duration: duration ?? this.duration,
       direction: direction ?? this.direction,
+      isArmed: isArmed ?? this.isArmed,
+      isRecording: isRecording ?? this.isRecording,
     );
   }
 
   @override
-  List<Object?> get props => [telemetry, duration, direction];
+  List<Object?> get props =>
+      [telemetry, duration, direction, isArmed, isRecording];
 }
 
 /*

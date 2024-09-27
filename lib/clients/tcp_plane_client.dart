@@ -137,6 +137,7 @@ class TcpPlaneClient implements IPlaneClient {
           seconds: 5,
         ),
       );
+      developer.log('Connection with plane stablished');
       setConnected(true);
       if (onConnect != null) onConnect!(); // Emitir evento de conexión
       _listenToServer();

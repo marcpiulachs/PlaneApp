@@ -57,41 +57,93 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
               ),
               const SizedBox(height: 30.0),
               _buildSlider(
-                  "Steering Angle", _settings.steeringAngle, Icons.set_meal,
-                  (value) {
-                _updateSetting(value, _settings.updateSteeringAngle);
-              }),
-              _buildSlider("Pitch Kp", _settings.pitchKp, Icons.arrow_upward,
-                  (value) {
-                _updateSetting(value, _settings.updatePitchKp);
-              }),
+                "Steering Angle",
+                _settings.steeringAngle,
+                Icons.set_meal,
+                (value) {
+                  _updateSetting(value, _settings.updateSteeringAngle);
+                },
+                min: 5,
+                max: 175,
+                divisions: 35,
+              ),
               _buildSlider(
-                  "Pitch Rate Kp", _settings.pitchRateKp, Icons.arrow_downward,
-                  (value) {
-                _updateSetting(value, _settings.updatePitchRateKp);
-              }),
-              _buildSlider("Roll Kp", _settings.rollKp, Icons.arrow_forward,
-                  (value) {
-                _updateSetting(value, _settings.updateRollKp);
-              }),
+                "Pitch Kp",
+                _settings.pitchKp,
+                Icons.arrow_upward,
+                (value) {
+                  _updateSetting(value, _settings.updatePitchKp);
+                },
+                min: 0,
+                max: 2.540,
+                divisions: 254,
+              ),
               _buildSlider(
-                  "Roll Rate Kp", _settings.rollRateKp, Icons.arrow_back,
-                  (value) {
-                _updateSetting(value, _settings.updateRollRateKp);
-              }),
-              _buildSlider("Yaw Kp", _settings.yawKp, Icons.rotate_left,
-                  (value) {
-                _updateSetting(value, _settings.updateYawKp);
-              }),
+                "Pitch Rate Kp",
+                _settings.pitchRateKp,
+                Icons.arrow_downward,
+                (value) {
+                  _updateSetting(value, _settings.updatePitchRateKp);
+                },
+                min: 0,
+                max: 2.540,
+                divisions: 254,
+              ),
               _buildSlider(
-                  "Yaw Rate Kp", _settings.yawRateKp, Icons.rotate_right,
-                  (value) {
-                _updateSetting(value, _settings.updateYawRateKp);
-              }),
-              _buildSlider("Angle of Attack", _settings.angleOfAttack,
-                  Icons.accessibility, (value) {
-                _updateSetting(value, _settings.updateAngleOfAttack);
-              }),
+                "Roll Kp",
+                _settings.rollKp,
+                Icons.arrow_forward,
+                (value) {
+                  _updateSetting(value, _settings.updateRollKp);
+                },
+                min: 0,
+                max: 2.540,
+                divisions: 254,
+              ),
+              _buildSlider(
+                "Roll Rate Kp",
+                _settings.rollRateKp,
+                Icons.arrow_back,
+                (value) {
+                  _updateSetting(value, _settings.updateRollRateKp);
+                },
+                min: 0,
+                max: 2.540,
+                divisions: 254,
+              ),
+              _buildSlider(
+                "Yaw Kp",
+                _settings.yawKp,
+                Icons.rotate_left,
+                (value) {
+                  _updateSetting(value, _settings.updateYawKp);
+                },
+                min: 0,
+                max: 2.540,
+                divisions: 254,
+              ),
+              _buildSlider(
+                "Yaw Rate Kp",
+                _settings.yawRateKp,
+                Icons.rotate_right,
+                (value) {
+                  _updateSetting(value, _settings.updateYawRateKp);
+                },
+                min: 0,
+                max: 2.540,
+                divisions: 254,
+              ),
+              _buildSlider(
+                "Angle of Attack",
+                _settings.angleOfAttack,
+                Icons.accessibility,
+                (value) {
+                  _updateSetting(value, _settings.updateAngleOfAttack);
+                },
+                min: 0,
+                max: 90,
+                divisions: 90,
+              ),
               const SizedBox(height: 20.0),
               Column(children: [
                 ElevatedButton(
@@ -143,7 +195,14 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
   }
 
   Widget _buildSlider(
-      String label, double value, IconData icon, Function(double) onChanged) {
+    String label,
+    double value,
+    IconData icon,
+    Function(double) onChanged, {
+    double min = 0.0,
+    double max = 100.0,
+    int divisions = 10, // Número de incrementos
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -160,9 +219,10 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
             Expanded(
               child: Slider(
                 value: value,
-                min: 0.0,
-                max: 100.0,
+                min: min,
+                max: max,
                 onChanged: onChanged,
+                divisions: divisions, // Establece los incrementos
                 activeColor: Colors.blue,
                 inactiveColor: Colors.white.withOpacity(0.5),
               ),
@@ -176,7 +236,7 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
                 shape: BoxShape.circle,
               ),
               child: Text(
-                value.toStringAsFixed(1),
+                value.toStringAsFixed(1), // Mantiene el formato decimal
                 style: const TextStyle(color: Colors.white),
               ),
             ),
