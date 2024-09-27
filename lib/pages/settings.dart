@@ -7,8 +7,7 @@ import 'package:object_3d/pages/connect.dart';
 import 'package:object_3d/pages/widgets/version.dart';
 
 class Settings extends StatefulWidget {
-  final VoidCallback onConnectPressed;
-  const Settings({super.key, required this.onConnectPressed});
+  const Settings({super.key});
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -57,6 +56,12 @@ class _SettingsState extends State<Settings> {
                             state.updateAvailable
                                 ? Column(
                                     children: [
+                                      const Icon(
+                                        Icons.system_update,
+                                        color: Colors.white,
+                                        size: 50,
+                                      ),
+                                      const SizedBox(height: 16),
                                       Text(
                                         'New version ${state.appFirmware} available!',
                                         style: const TextStyle(
@@ -79,7 +84,7 @@ class _SettingsState extends State<Settings> {
                                           ),
                                         ),
                                         child: const Text(
-                                          'UPDATE',
+                                          'UPDATE FIRMWARE',
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
@@ -89,13 +94,30 @@ class _SettingsState extends State<Settings> {
                                       ),
                                     ],
                                   )
-                                : const Text(
-                                    'No update available, you are running the lastes version',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                                : const Column(
+                                    children: [
+                                      Icon(
+                                        Icons.check_circle,
+                                        color: Colors.white,
+                                        size: 50,
+                                      ),
+                                      SizedBox(height: 16),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 40,
+                                          right: 40,
+                                        ),
+                                        child: Text(
+                                          'No update available, you are already running the lastest version',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                           ],
                         ),
