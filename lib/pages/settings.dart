@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:object_3d/bloc/ota_bloc/ota_bloc.dart';
 import 'package:object_3d/bloc/ota_bloc/ota_event.dart';
 import 'package:object_3d/bloc/ota_bloc/ota_state.dart';
+import 'package:object_3d/pages/widgets/version.dart';
 
 class Settings extends StatefulWidget {
   final VoidCallback onConnectPressed;
@@ -13,11 +14,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  // Nuevo callback
-  final String appVersion = "1.0.0";
-
-  final String firmwareVersion = "2.1.0";
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,64 +29,27 @@ class _SettingsState extends State<Settings> {
             ),
           ),
         ),
+        const SizedBox(height: 50),
         Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 50),
-              const Text(
-                'App version',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                appVersion,
-                style: const TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Firmware version',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 8),
               BlocBuilder<OtaBloc, OtaState>(
                 builder: (context, state) {
                   if (state is OtaInitialState) {
-                    return const Center(
-                      child: Text(
-                        'N/A',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                    return const Version(
+                      appVersion: "N/A",
+                      firmwareVersion: "N/A",
                     );
-                  } else if (state is OtaVersionState) {
+                  } else if (state is OtaLoadedVersionState) {
                     return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            state.devFirmware,
-                            style: const TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                          Version(
+                            appVersion: state.appVersion,
+                            firmwareVersion: state.devFirmware,
                           ),
                           const SizedBox(height: 20),
                           state.updateAvailable
@@ -232,14 +191,12 @@ class _SettingsState extends State<Settings> {
                   } else if (state is OtaPlaneDisconectedState) {
                     return Column(
                       children: [
-                        const Center(
-                          child: Text(
-                            "N/A",
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                        const Text(
+                          'Plane not connected',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                         const SizedBox(height: 16),

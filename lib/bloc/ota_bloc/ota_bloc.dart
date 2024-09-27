@@ -9,8 +9,13 @@ import 'ota_state.dart';
 
 class OtaBloc extends Bloc<OtaEvent, OtaState> {
   final IPlaneClient client;
+  // App version
+  final String appVersion = "1.0.0";
+  // App firmware version
+  String devFirmwareVersion = "0.0.0";
   // Versión actual del firmware de la app
-  final String appFirmware = "1.2.0";
+  String appFirmwareVersion = "1.2.0";
+
   // Urls from device services
   final verUrl = Uri.parse('http://192.168.4.1/version');
   final otaUrl = Uri.parse('http://192.168.4.1/ota');
@@ -41,20 +46,27 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
             );
 
         if (response.statusCode == 200) {
-          String devFirmware = response.body.trim();
-          bool updateAvailable = isVersionLower(devFirmware, appFirmware);
+          devFirmwareVersion = response.body.trim();
+          bool updateAvailable =
+              isVersionLower(devFirmwareVersion, appFirmwareVersion);
 
-          emit(OtaVersionState(devFirmware, appFirmware, updateAvailable));
+          emit(OtaLoadedVersionState(
+            appVersion,
+            appFirmwareVersion,
+            devFirmwareVersion,
+            updateAvailable,
+          ));
         } else {
           // Manejar error
-          emit(OtaErrorState("N/A"));
+          emit(
+              OtaErrorState("Could not retrieve version from connected plane"));
         }
       } else {
         emit(OtaPlaneDisconectedState());
       }
     } on TimeoutException {
       // Manejar excepción
-      emit(OtaErrorState("N/A"));
+      emit(OtaErrorState("Plane not responding"));
     } on Exception catch (e) {
       // Manejar excepción
       emit(OtaErrorState(e.toString()));

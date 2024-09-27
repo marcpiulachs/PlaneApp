@@ -13,14 +13,16 @@ class OtaGettingVersionState extends OtaState {}
 class OtaPlaneDisconectedState extends OtaState {}
 
 // Estado cuando la versión del ESP32 ha sido cargada
-class OtaVersionState extends OtaState {
-  final String devFirmware;
+class OtaLoadedVersionState extends OtaState {
+  final String appVersion;
   final String appFirmware;
+  final String devFirmware;
   final bool updateAvailable;
 
-  OtaVersionState(
-    this.devFirmware,
+  OtaLoadedVersionState(
+    this.appVersion,
     this.appFirmware,
+    this.devFirmware,
     this.updateAvailable,
   );
 
