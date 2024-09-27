@@ -5,19 +5,19 @@ import 'package:object_3d/models/telemetry.dart';
 
 abstract class FlyState extends Equatable {}
 
-class FlyInitial extends FlyState {
+class FlyInitialState extends FlyState {
   @override
   List<Object> get props => [];
 }
 
-class FlyPlaneConnected extends FlyState with EquatableMixin {
+class FlyLoadedState extends FlyState with EquatableMixin {
   final Telemetry telemetry;
   final int duration;
   final Direction direction;
   final bool isArmed;
   final bool isRecording;
 
-  FlyPlaneConnected({
+  FlyLoadedState({
     Telemetry? telemetry,
     Direction? direction,
     this.duration = 0,
@@ -26,14 +26,14 @@ class FlyPlaneConnected extends FlyState with EquatableMixin {
   })  : telemetry = telemetry ?? Telemetry(),
         direction = direction ?? Direction();
 
-  FlyPlaneConnected copyWith({
+  FlyLoadedState copyWith({
     Telemetry? telemetry,
     Direction? direction,
     int? duration,
     bool? isArmed,
     bool? isRecording,
   }) {
-    return FlyPlaneConnected(
+    return FlyLoadedState(
       telemetry: telemetry ?? this.telemetry,
       duration: duration ?? this.duration,
       direction: direction ?? this.direction,
@@ -47,20 +47,7 @@ class FlyPlaneConnected extends FlyState with EquatableMixin {
       [telemetry, duration, direction, isArmed, isRecording];
 }
 
-/*
-class FlyLoadedLoadFailed extends FlyState {
-  final String errorMessage;
-  FlyLoadedLoadFailed(this.errorMessage);
-  @override
-  List<Object> get props => [];
-}*/
-
-class FlyPlaneConnecting extends FlyState {
-  @override
-  List<Object> get props => [];
-}
-
-class FlyPlaneDisconnected extends FlyState {
+class FlyDisconnectedState extends FlyState {
   @override
   List<Object> get props => [];
 }

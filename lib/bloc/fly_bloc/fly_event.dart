@@ -6,11 +6,7 @@ abstract class FlyEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class PlaneClientConnect extends FlyEvent {}
-
-class PlaneClientConnected extends FlyEvent {}
-
-class PlaneClientDisconnected extends FlyEvent {}
+class FlyCheckConnectionEvent extends FlyEvent {}
 
 class GyroXUpdated extends FlyEvent {
   final int value;

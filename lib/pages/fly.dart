@@ -3,13 +3,12 @@ import 'package:object_3d/bloc/fly_bloc/fly_bloc.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_event.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_state.dart';
 import 'package:object_3d/core/flight_settings.dart';
+import 'package:object_3d/pages/connect.dart';
 import 'package:object_3d/pages/widgets/aerobatic_maneuvers_bottom_sheet.dart';
 import 'package:object_3d/pages/widgets/engine_settings_bottom_sheet.dart';
 import 'package:object_3d/pages/widgets/record_indicator.dart';
 import 'package:object_3d/widgets/circular.dart';
 import 'package:object_3d/widgets/compass.dart';
-import 'package:object_3d/widgets/connecting.dart';
-import 'package:object_3d/widgets/disconected.dart';
 import 'package:object_3d/widgets/plane_direction.dart';
 import 'package:object_3d/widgets/throttle.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,20 +26,13 @@ class _FlyState extends State<Fly> {
   Widget build(BuildContext context) {
     return BlocBuilder<FlyBloc, FlyState>(
       builder: (context, state) {
-        // Verifica el estado y muestra el widget adecuado
-        if (state is FlyPlaneConnecting) {
-          return const Connecting();
-        } else if (state is FlyPlaneDisconnected) {
-          return Disconnected(
-            onConnect: () {
-              context.read<FlyBloc>().add(PlaneClientConnect());
-            },
-          );
-        } else if (state is FlyInitial) {
+        if (state is FlyDisconnectedState) {
+          return const Connect();
+        } else if (state is FlyInitialState) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is FlyPlaneConnected) {
+        } else if (state is FlyLoadedState) {
           return Scaffold(
             backgroundColor: Colors.transparent,
             body: Column(

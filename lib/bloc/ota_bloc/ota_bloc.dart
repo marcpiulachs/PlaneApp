@@ -41,9 +41,11 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
     Emitter<OtaState> emit,
   ) async {
     try {
-      emit(OtaGettingVersionState());
-      await Future.delayed(const Duration(seconds: 1));
       if (client.isConnected) {
+        emit(OtaGettingVersionState());
+        await Future.delayed(const Duration(seconds: 1));
+
+        // Envía la solicitud
         final response = await http.get(verUrl).timeout(
               const Duration(seconds: 2),
             );
@@ -60,7 +62,6 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
             updateAvailable,
           ));
         } else {
-          // Manejar error
           emit(
               OtaErrorState("Could not retrieve version from connected plane"));
         }
@@ -90,6 +91,7 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
     if (firmwareFile.isEmpty || firmwareFile[0] != 0xE9) {
       emit(OtaUpdateCompletedState(false));
     }
+
     try {
       // Configura la solicitud con headers para una carga binaria
       var request = http.Request('POST', otaUrl)

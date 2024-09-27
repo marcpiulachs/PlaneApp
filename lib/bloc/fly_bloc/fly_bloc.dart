@@ -11,7 +11,12 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
   late FlightRecorder flightRecorder;
   late FlightOrientation flightOrientation;
 
-  FlyBloc({required this.client}) : super(FlyInitial()) {
+  FlyBloc({required this.client}) : super(FlyInitialState()) {
+    // Suscripción al Stream de cambios de la propiedad isConnected
+    client.connectedStream.listen((isConnected) {
+      add(FlyCheckConnectionEvent());
+    });
+
     flightOrientation = FlightOrientation(
       onPitchChanged: (pitch) => add(PitchUpdated(pitch)),
       onRollChanged: (roll) => add(RollUpdated(roll)),
@@ -36,16 +41,6 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       },
     );
 
-    // Suscripción a los callbacks del cliente
-    client.onConnect = () {
-      add(PlaneClientConnected());
-    };
-    client.onDisconnect = () {
-      add(PlaneClientDisconnected());
-    };
-    client.onConnectionFailed = () {
-      add(PlaneClientDisconnected());
-    };
     client.onGyroX = (value) {
       add(GyroXUpdated(value));
     };
@@ -83,25 +78,25 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     // Configuración de FlightRecorder
     flightRecorder = FlightRecorder(
       timerUpdated: (int seconds) {
-        if (state is FlyPlaneConnected) {
+        if (state is FlyLoadedState) {
           add(FlightRecorderUpdated());
         }
       },
       started: () {
         developer.log('FlightRecorder started');
-        if (state is FlyPlaneConnected) {
+        if (state is FlyLoadedState) {
           add(FlightRecorderUpdated());
         }
       },
       stopped: () {
         developer.log('FlightRecorder stopped');
-        if (state is FlyPlaneConnected) {
+        if (state is FlyLoadedState) {
           add(FlightRecorderUpdated());
         }
       },
       captureData: () {
-        if (state is FlyPlaneConnected) {
-          final loadedState = state as FlyPlaneConnected;
+        if (state is FlyLoadedState) {
+          final loadedState = state as FlyLoadedState;
           add(CaptureData(loadedState.telemetry));
         }
       },
@@ -122,24 +117,10 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       flightRecorder.data.add(event.telemetry);
     });
 
-    on<PlaneClientConnect>((event, emit) async {
-      emit(FlyPlaneConnecting());
-      await Future.delayed(const Duration(seconds: 1));
-      await client.connect();
-    });
-
-    on<PlaneClientConnected>((event, emit) {
-      emit(FlyPlaneConnected());
-    });
-
-    on<PlaneClientDisconnected>((event, emit) {
-      emit(FlyPlaneDisconnected());
-    });
-
     on<SendArmed>((event, emit) async {
-      if (state is FlyPlaneConnected) {
+      if (state is FlyLoadedState) {
         await client.sendArmed(event.isArmed);
-        final loadedState = state as FlyPlaneConnected;
+        final loadedState = state as FlyLoadedState;
         if (event.isArmed) {
           // flight started
           flightRecorder.start();
@@ -154,17 +135,17 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<SendThrottle>((event, emit) async {
-      if (state is FlyPlaneConnected) {
+      if (state is FlyLoadedState) {
         await client.sendThrottle(event.value);
-        final loadedState = state as FlyPlaneConnected;
+        final loadedState = state as FlyLoadedState;
         emit(loadedState);
       }
     });
 
     // Event handlers for new events
     on<GyroXUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(gyroX: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
@@ -172,8 +153,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<GyroYUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(gyroY: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
@@ -181,8 +162,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<GyroZUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(gyroZ: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
@@ -190,8 +171,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<MagnetometerXUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(magnetometerX: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
@@ -199,8 +180,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<MagnetometerYUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(magnetometerY: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
@@ -208,8 +189,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<MagnetometerZUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(magnetometerZ: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
@@ -217,8 +198,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<BarometerUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(barometer: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
@@ -226,8 +207,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<Motor1SpeedUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(motor1Speed: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
@@ -235,8 +216,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<Motor2SpeedUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(motor2Speed: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
@@ -244,8 +225,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<BatteryUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(battery: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
@@ -253,8 +234,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<SignalUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(signal: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
@@ -262,8 +243,8 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<FlightRecorderUpdated>((event, emit) {
-      if (state is FlyPlaneConnected) {
-        final loadedState = state as FlyPlaneConnected;
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
         emit(loadedState.copyWith(
           duration: flightRecorder.duration,
           isRecording: flightRecorder.isRecording,
@@ -272,9 +253,9 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<YawUpdated>((event, emit) async {
-      if (state is FlyPlaneConnected) {
+      if (state is FlyLoadedState) {
         await client.sendYaw(event.value);
-        final loadedState = state as FlyPlaneConnected;
+        final loadedState = state as FlyLoadedState;
         final updatedDirection =
             loadedState.direction.copyWith(yaw: event.value);
         emit(loadedState.copyWith(direction: updatedDirection));
@@ -285,9 +266,9 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<PitchUpdated>((event, emit) async {
-      if (state is FlyPlaneConnected) {
+      if (state is FlyLoadedState) {
         await client.sendPitch(event.value);
-        final loadedState = state as FlyPlaneConnected;
+        final loadedState = state as FlyLoadedState;
         final updatedDirection =
             loadedState.direction.copyWith(pitch: event.value);
         emit(loadedState.copyWith(direction: updatedDirection));
@@ -298,9 +279,9 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<RollUpdated>((event, emit) async {
-      if (state is FlyPlaneConnected) {
+      if (state is FlyLoadedState) {
         await client.sendRoll(event.value);
-        final loadedState = state as FlyPlaneConnected;
+        final loadedState = state as FlyLoadedState;
         final updatedDirection =
             loadedState.direction.copyWith(roll: event.value);
         emit(loadedState.copyWith(direction: updatedDirection));
@@ -311,18 +292,22 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     on<SendManeuver>((event, emit) async {
-      if (state is FlyPlaneConnected) {
+      if (state is FlyLoadedState) {
         await client.sendManeuver(event.maneuver);
-        final loadedState = state as FlyPlaneConnected;
+        final loadedState = state as FlyLoadedState;
         emit(loadedState);
       }
     });
 
-    if (client.isConnected) {
-      add(PlaneClientConnected());
-    } else {
-      add(PlaneClientDisconnected());
-    }
+    on<FlyCheckConnectionEvent>((event, emit) {
+      if (!client.isConnected) {
+        emit(FlyDisconnectedState());
+      } else {
+        emit(FlyLoadedState());
+      }
+    });
+
+    add(FlyCheckConnectionEvent());
   }
 
   @override
