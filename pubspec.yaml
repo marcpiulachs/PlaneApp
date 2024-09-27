@@ -70,7 +70,7 @@ flutter:
       - assets/planes/black.png
       - assets/planes/blue.png
       - assets/planes/orange.png
-      - assets/fw/PlaneFirmware.bin
+      - assets/firmware/pfw.bin
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

@@ -17,8 +17,11 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
   String appFirmwareVersion = "1.2.0";
 
   // Urls from device services
-  final verUrl = Uri.parse('http://192.168.4.1/version');
+  final verUrl = Uri.parse('http://192.168.4.1/ver');
   final otaUrl = Uri.parse('http://192.168.4.1/ota');
+
+  // Location of firmware in assets
+  final String assetFirmware = "assets/firmware/pfw.bin";
 
   OtaBloc({required this.client}) : super(OtaInitialState()) {
     // Suscripción al Stream de cambios de la propiedad isConnected
@@ -81,7 +84,7 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
     emit(OtaUpdatingState(0.0));
 
     // Carga el firmware desde assets
-    var firmware = await rootBundle.load('assets/fw/PlaneFirmware.bin');
+    var firmware = await rootBundle.load(assetFirmware);
     var firmwareFile = firmware.buffer.asUint8List();
 
     if (firmwareFile.isEmpty || firmwareFile[0] != 0xE9) {
