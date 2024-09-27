@@ -6,9 +6,6 @@ class MockPlaneClient implements IPlaneClient {
   Timer? _timer;
   bool _armed = false;
   int _throttle = 0;
-  int _yaw = 0;
-  int _roll = 0;
-  int _pitch = 0;
 
   // Callbacks
   @override
@@ -90,19 +87,13 @@ class MockPlaneClient implements IPlaneClient {
   }
 
   @override
-  Future<void> sendPitch(int pitch) async {
-    _pitch = pitch;
-  }
+  Future<void> sendPitch(int pitch) async {}
 
   @override
-  Future<void> sendYaw(int yaw) async {
-    _yaw = yaw;
-  }
+  Future<void> sendYaw(int yaw) async {}
 
   @override
-  Future<void> sendRoll(int roll) async {
-    _roll = roll;
-  }
+  Future<void> sendRoll(int roll) async {}
 
   @override
   Future<void> sendManeuver(int maneuver) async {}
