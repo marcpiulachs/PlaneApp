@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:object_3d/bloc/home_bloc/home_bloc.dart';
+import 'package:object_3d/bloc/home_bloc/home_event.dart';
+import 'package:object_3d/bloc/home_bloc/home_state.dart';
 import 'package:object_3d/models/menu_item.dart';
 import 'package:object_3d/pages/mechanics.dart';
 import 'package:object_3d/pages/planes.dart';
@@ -17,7 +21,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  late Color _currentColor;
 
   final List<MenuItem> menuItems = [
     MenuItem(
@@ -51,12 +54,10 @@ class _MyHomePageState extends State<MyHomePage>
   void initState() {
     super.initState();
     _tabController = TabController(length: menuItems.length, vsync: this);
-    _currentColor = menuItems[_tabController.index].color;
 
+    // Usamos BlocListener para escuchar cambios de tab en el Bloc
     _tabController.addListener(() {
-      setState(() {
-        _currentColor = menuItems[_tabController.index].color;
-      });
+      context.read<HomeBloc>().add(HomeTabChangedEvent(_tabController.index));
     });
   }
 
@@ -79,79 +80,86 @@ class _MyHomePageState extends State<MyHomePage>
             tabController: _tabController,
             menuItems: menuItems,
             onTabSelected: (index) {
-              setState(() {
-                _tabController.animateTo(index);
-              });
+              context.read<HomeBloc>().add(HomeTabChangedEvent(index));
+              //setState(() {
+              //  _tabController.animateTo(index);
+              //});
             },
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          // Fondo que cambia y se desplaza con el TabBarView
-          TweenAnimationBuilder<Color?>(
-            tween: ColorTween(
-              begin: menuItems[_tabController.previousIndex].color,
-              end: menuItems[_tabController.index].color,
-            ),
-            duration: const Duration(milliseconds: 300),
-            builder: (context, color, child) {
-              return Container(
-                color: color,
-                child: Center(
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    return Container(
-                      width: constraints.maxWidth,
-                      height: constraints.maxHeight,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: RadialGradient(
-                          colors: [
-                            Colors.white.withOpacity(0.3),
-                            Colors.transparent,
-                          ],
-                          radius: 0.5,
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              );
-            },
-          ),
-          // Contenido del TabBarView
-          Column(
+      body: BlocBuilder<HomeBloc, HomeTabState>(
+        builder: (context, state) {
+          // Asegúrate de ejecutar el cambio después del build
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (_tabController.index != state.currentTabIndex) {
+              _tabController.animateTo(state.currentTabIndex);
+            }
+          });
+          return Stack(
             children: [
-              const SizedBox(height: 125),
-              Text(
-                menuItems[_tabController.index].title,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              // Fondo que cambia y se desplaza con el TabBarView
+              TweenAnimationBuilder<Color?>(
+                tween: ColorTween(
+                  // Usamos el estado anterior
+                  begin: menuItems[state.previousTabIndex].color,
+                  // Usamos el estado actual
+                  end: menuItems[state.currentTabIndex].color,
                 ),
-              ),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    PlaneCarousel(
-                      onGoFlyPressed: () {
-                        setState(() {
-                          _tabController.animateTo(1);
-                        });
-                      },
+                duration: const Duration(milliseconds: 300),
+                builder: (context, color, child) {
+                  return Container(
+                    color: color,
+                    child: Center(
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        return Container(
+                          width: constraints.maxWidth,
+                          height: constraints.maxHeight,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: RadialGradient(
+                              colors: [
+                                Colors.white.withOpacity(0.3),
+                                Colors.transparent,
+                              ],
+                              radius: 0.5,
+                            ),
+                          ),
+                        );
+                      }),
                     ),
-                    const Fly(),
-                    const RecordedFlights(),
-                    const Mechanics(),
-                    const Settings(),
-                  ],
-                ),
+                  );
+                },
+              ),
+              // Contenido del TabBarView
+              Column(
+                children: [
+                  const SizedBox(height: 125),
+                  Text(
+                    menuItems[state.currentTabIndex].title,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: const [
+                        PlaneCarousel(),
+                        Fly(),
+                        RecordedFlights(),
+                        Mechanics(),
+                        Settings(),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }

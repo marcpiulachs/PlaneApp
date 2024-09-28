@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:object_3d/bloc/home_bloc/home_bloc.dart';
+import 'package:object_3d/bloc/home_bloc/home_event.dart';
 import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
 import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_event.dart';
 import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_state.dart';
@@ -7,9 +9,7 @@ import 'package:object_3d/widgets/circular.dart';
 import 'package:object_3d/widgets/plane_carousel.dart';
 
 class PlaneCarousel extends StatefulWidget {
-  final VoidCallback onGoFlyPressed; // Nuevo callback
-
-  const PlaneCarousel({super.key, required this.onGoFlyPressed});
+  const PlaneCarousel({super.key});
 
   @override
   State<PlaneCarousel> createState() => _PlaneCarouselState();
@@ -82,7 +82,10 @@ class _PlaneCarouselState extends State<PlaneCarousel> {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: ElevatedButton(
-        onPressed: widget.onGoFlyPressed, // Llamada al callback
+        onPressed: () {
+          // Envía un evento para cambiar el tab activo a "COPKIT"
+          context.read<HomeBloc>().add(const HomeTabChangedEvent(1));
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.black,
           minimumSize: const Size(double.infinity, 50),

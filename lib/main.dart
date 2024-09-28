@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:object_3d/bloc/connect_bloc/connect_bloc.dart';
 import 'package:object_3d/bloc/fly_bloc/fly_bloc.dart';
+import 'package:object_3d/bloc/home_bloc/home_bloc.dart';
 import 'package:object_3d/bloc/ota_bloc/ota_bloc.dart';
 import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
 import 'package:object_3d/bloc/recordings_bloc/recordings_bloc.dart';
@@ -43,6 +44,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<RecordedFlightsBloc>(
           create: (context) => RecordedFlightsBloc(),
+        ),
+        BlocProvider<HomeBloc>(
+          create: (context) => HomeBloc(),
         ),
         BlocProvider<ConnectBloc>(
           create: (context) => ConnectBloc(
