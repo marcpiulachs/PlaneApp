@@ -24,93 +24,87 @@ class _SettingsState extends State<Settings> {
             return const Center();
           } else if (state is OtaLoadedVersionState) {
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Center(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Version(
-                              appVersion: state.appVersion,
-                              firmwareVersion: state.devFirmware,
-                            ),
-                            const SizedBox(height: 20),
-                            state.updateAvailable
-                                ? Column(
-                                    children: [
-                                      const Icon(
-                                        Icons.system_update,
-                                        color: Colors.white,
-                                        size: 50,
-                                      ),
-                                      const SizedBox(height: 16),
-                                      Text(
-                                        'New version ${state.appFirmware} available!',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 20),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          context
-                                              .read<OtaBloc>()
-                                              .add(StartUpdateEvent());
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 16,
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'UPDATE FIRMWARE',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : const Column(
-                                    children: [
-                                      Icon(
-                                        Icons.check_circle,
-                                        color: Colors.white,
-                                        size: 50,
-                                      ),
-                                      SizedBox(height: 16),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 40,
-                                          right: 40,
-                                        ),
-                                        child: Text(
-                                          'No update available, you are already running the lastest version',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ],
+                      Version(
+                        appVersion: state.appVersion,
+                        firmwareVersion: state.devFirmware,
+                      ),
+                      const SizedBox(height: 20),
+                      state.updateAvailable
+                          ? Column(
+                              children: [
+                                const Icon(
+                                  Icons.system_update,
+                                  color: Colors.white,
+                                  size: 50,
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'New version ${state.appFirmware} available!',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
-                          ],
-                        ),
-                      )
+                                ),
+                                const SizedBox(height: 20),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    context
+                                        .read<OtaBloc>()
+                                        .add(StartUpdateEvent());
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'UPDATE FIRMWARE',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const Column(
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.white,
+                                  size: 50,
+                                ),
+                                SizedBox(height: 16),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 40,
+                                    right: 40,
+                                  ),
+                                  child: Text(
+                                    'No update available, you are already running the lastest version',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
                     ],
                   ),
-                ),
+                )
               ],
             );
           } else if (state is OtaGettingVersionState) {
