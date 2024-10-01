@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:object_3d/bloc/home_bloc/home_bloc.dart';
-import 'package:object_3d/bloc/home_bloc/home_event.dart';
-import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
-import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_event.dart';
-import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_state.dart';
-import 'package:object_3d/widgets/circular.dart';
-import 'package:object_3d/widgets/plane_carousel.dart';
+import 'package:paperwings/bloc/home_bloc/home_bloc.dart';
+import 'package:paperwings/bloc/home_bloc/home_event.dart';
+import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
+import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_event.dart';
+import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_state.dart';
+import 'package:paperwings/widgets/circular.dart';
+import 'package:paperwings/widgets/plane_carousel.dart';
 
 class PlaneCarousel extends StatefulWidget {
   const PlaneCarousel({super.key});

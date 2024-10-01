@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:developer' as developer;
-import 'package:object_3d/clients/plane_client_interface.dart';
+import 'package:paperwings/clients/plane_client_interface.dart';
 
 // Definición de la clase Packet con el método toBytes()
 class Packet {

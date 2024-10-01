@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:object_3d/bloc/fly_bloc/fly_event.dart';
-import 'package:object_3d/bloc/fly_bloc/fly_state.dart';
-import 'package:object_3d/clients/plane_client_interface.dart';
-import 'package:object_3d/core/flight_orientation.dart';
-import 'package:object_3d/core/flight_recorder.dart';
+import 'package:paperwings/bloc/fly_bloc/fly_event.dart';
+import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
+import 'package:paperwings/clients/plane_client_interface.dart';
+import 'package:paperwings/core/flight_orientation.dart';
+import 'package:paperwings/core/flight_recorder.dart';
 import 'dart:developer' as developer;
 
 class FlyBloc extends Bloc<FlyEvent, FlyState> {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:object_3d/bloc/recordings_bloc/recordings_bloc.dart';
-import 'package:object_3d/bloc/recordings_bloc/recordings_events.dart';
-import 'package:object_3d/bloc/recordings_bloc/recordings_states.dart';
+import 'package:paperwings/bloc/recordings_bloc/recordings_bloc.dart';
+import 'package:paperwings/bloc/recordings_bloc/recordings_events.dart';
+import 'package:paperwings/bloc/recordings_bloc/recordings_states.dart';
 
 class RecordedFlights extends StatelessWidget {
   const RecordedFlights({super.key});

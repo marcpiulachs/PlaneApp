@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:object_3d/models/plane_item.dart';
+import 'package:paperwings/models/plane_item.dart';
 
 class PlaneCarouselWidget extends StatefulWidget {
   final List<PlaneItem> planeItems;

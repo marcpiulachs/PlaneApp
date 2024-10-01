@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:object_3d/bloc/connect_bloc/connect_bloc.dart';
-import 'package:object_3d/bloc/connect_bloc/connect_event.dart';
-import 'package:object_3d/bloc/connect_bloc/connect_state.dart';
-import 'package:object_3d/widgets/connecting.dart';
-import 'package:object_3d/widgets/disconected.dart';
+import 'package:paperwings/bloc/connect_bloc/connect_bloc.dart';
+import 'package:paperwings/bloc/connect_bloc/connect_event.dart';
+import 'package:paperwings/bloc/connect_bloc/connect_state.dart';
+import 'package:paperwings/widgets/connecting.dart';
+import 'package:paperwings/widgets/disconected.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Connect extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:object_3d/core/flight_settings.dart';
+import 'package:paperwings/core/flight_settings.dart';
 
 class EngineSettingsBottomSheet extends StatefulWidget {
   final FlightSettings settings;

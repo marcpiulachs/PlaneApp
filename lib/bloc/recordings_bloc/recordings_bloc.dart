@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:object_3d/bloc/recordings_bloc/recordings_events.dart';
-import 'package:object_3d/bloc/recordings_bloc/recordings_states.dart';
-import 'package:object_3d/models/recorded_item.dart';
+import 'package:paperwings/bloc/recordings_bloc/recordings_events.dart';
+import 'package:paperwings/bloc/recordings_bloc/recordings_states.dart';
+import 'package:paperwings/models/recorded_item.dart';
 
 // Bloc
 class RecordedFlightsBloc

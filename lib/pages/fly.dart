@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:object_3d/bloc/fly_bloc/fly_bloc.dart';
-import 'package:object_3d/bloc/fly_bloc/fly_event.dart';
-import 'package:object_3d/bloc/fly_bloc/fly_state.dart';
-import 'package:object_3d/core/flight_settings.dart';
-import 'package:object_3d/pages/connect.dart';
-import 'package:object_3d/pages/widgets/aerobatic_maneuvers_bottom_sheet.dart';
-import 'package:object_3d/pages/widgets/engine_settings_bottom_sheet.dart';
-import 'package:object_3d/pages/widgets/record_indicator.dart';
-import 'package:object_3d/widgets/circular.dart';
-import 'package:object_3d/widgets/compass.dart';
-import 'package:object_3d/widgets/plane_direction.dart';
-import 'package:object_3d/widgets/throttle.dart';
+import 'package:paperwings/bloc/fly_bloc/fly_bloc.dart';
+import 'package:paperwings/bloc/fly_bloc/fly_event.dart';
+import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
+import 'package:paperwings/core/flight_settings.dart';
+import 'package:paperwings/pages/connect.dart';
+import 'package:paperwings/pages/widgets/aerobatic_maneuvers_bottom_sheet.dart';
+import 'package:paperwings/pages/widgets/engine_settings_bottom_sheet.dart';
+import 'package:paperwings/pages/widgets/record_indicator.dart';
+import 'package:paperwings/widgets/circular.dart';
+import 'package:paperwings/widgets/compass.dart';
+import 'package:paperwings/widgets/plane_direction.dart';
+import 'package:paperwings/widgets/throttle.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 

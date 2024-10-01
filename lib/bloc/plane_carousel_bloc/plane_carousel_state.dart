@@ -1,5 +1,5 @@
 // Definir el estado del PlaneCarouselBloc
-import 'package:object_3d/models/plane_item.dart';
+import 'package:paperwings/models/plane_item.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class PlaneCarouselState extends Equatable {}

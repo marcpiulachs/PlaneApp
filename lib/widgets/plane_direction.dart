@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:object_3d/models/direction.dart';
-import 'package:object_3d/models/telemetry.dart';
+import 'package:paperwings/models/direction.dart';
+import 'package:paperwings/models/telemetry.dart';
 
 class PlaneDirection extends StatelessWidget {
   final Telemetry telemetry;

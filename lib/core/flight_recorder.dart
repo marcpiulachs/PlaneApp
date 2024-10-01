@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:developer' as developer;
-import 'package:object_3d/models/telemetry.dart';
+import 'package:paperwings/models/telemetry.dart';
 
 class FlightRecorder {
   Timer? _timer;

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:object_3d/bloc/home_bloc/home_bloc.dart';
-import 'package:object_3d/bloc/home_bloc/home_event.dart';
-import 'package:object_3d/bloc/home_bloc/home_state.dart';
-import 'package:object_3d/models/menu_item.dart';
-import 'package:object_3d/pages/mechanics.dart';
-import 'package:object_3d/pages/planes.dart';
-import 'package:object_3d/pages/fly.dart';
-import 'package:object_3d/pages/recorder.dart';
-import 'package:object_3d/pages/settings.dart';
-import 'package:object_3d/widgets/tabbar.dart';
+import 'package:paperwings/bloc/home_bloc/home_bloc.dart';
+import 'package:paperwings/bloc/home_bloc/home_event.dart';
+import 'package:paperwings/bloc/home_bloc/home_state.dart';
+import 'package:paperwings/models/menu_item.dart';
+import 'package:paperwings/pages/mechanics.dart';
+import 'package:paperwings/pages/planes.dart';
+import 'package:paperwings/pages/fly.dart';
+import 'package:paperwings/pages/recorder.dart';
+import 'package:paperwings/pages/settings.dart';
+import 'package:paperwings/widgets/tabbar.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});

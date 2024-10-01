@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:object_3d/clients/plane_client_interface.dart';
+import 'package:paperwings/clients/plane_client_interface.dart';
 
 import 'ota_event.dart';
 import 'ota_state.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:object_3d/bloc/ota_bloc/ota_bloc.dart';
-import 'package:object_3d/bloc/ota_bloc/ota_event.dart';
-import 'package:object_3d/bloc/ota_bloc/ota_state.dart';
-import 'package:object_3d/pages/connect.dart';
-import 'package:object_3d/pages/widgets/version.dart';
+import 'package:paperwings/bloc/ota_bloc/ota_bloc.dart';
+import 'package:paperwings/bloc/ota_bloc/ota_event.dart';
+import 'package:paperwings/bloc/ota_bloc/ota_state.dart';
+import 'package:paperwings/pages/connect.dart';
+import 'package:paperwings/pages/widgets/version.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});

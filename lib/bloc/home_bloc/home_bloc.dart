@@ -1,7 +1,7 @@
 // Bloc que controla el tab activo
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:object_3d/bloc/home_bloc/home_event.dart';
-import 'package:object_3d/bloc/home_bloc/home_state.dart';
+import 'package:paperwings/bloc/home_bloc/home_event.dart';
+import 'package:paperwings/bloc/home_bloc/home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeTabState> {
   HomeBloc()

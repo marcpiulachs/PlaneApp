@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_event.dart';
-import 'package:object_3d/bloc/plane_carousel_bloc/plane_carousel_state.dart';
-import 'package:object_3d/clients/plane_client_interface.dart';
-import 'package:object_3d/core/flight_settings.dart';
-import 'package:object_3d/models/plane_item.dart';
+import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_event.dart';
+import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_state.dart';
+import 'package:paperwings/clients/plane_client_interface.dart';
+import 'package:paperwings/core/flight_settings.dart';
+import 'package:paperwings/models/plane_item.dart';
 
 class PlaneCarouselBloc extends Bloc<PlaneCarouselEvent, PlaneCarouselState> {
   final IPlaneClient client;

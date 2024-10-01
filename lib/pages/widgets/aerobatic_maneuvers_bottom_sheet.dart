@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:object_3d/models/maneuver.dart';
+import 'package:paperwings/models/maneuver.dart';
 
 class AerobaticManeuversBottomSheet extends StatelessWidget {
   final Function(int) onManeuverSelected;

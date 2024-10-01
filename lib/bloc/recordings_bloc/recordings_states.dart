@@ -1,5 +1,5 @@
 // Estados
-import 'package:object_3d/models/recorded_item.dart';
+import 'package:paperwings/models/recorded_item.dart';
 
 abstract class RecordedFlightsState {}
 

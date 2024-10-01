@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:object_3d/models/telemetry.dart';
+import 'package:paperwings/models/telemetry.dart';
 
 abstract class FlyEvent extends Equatable {
   @override

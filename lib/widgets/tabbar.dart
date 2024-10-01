@@ -1,6 +1,6 @@
 // Widget reutilizable
 import 'package:flutter/material.dart';
-import 'package:object_3d/models/menu_item.dart';
+import 'package:paperwings/models/menu_item.dart';
 
 class AnimatedTabBar extends StatelessWidget {
   final TabController tabController;

@@ -1,4 +1,4 @@
-package com.example.object_3d
+package com.example.paperwings
 
 import io.flutter.embedding.android.FlutterActivity
 

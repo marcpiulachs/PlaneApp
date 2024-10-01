@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:object_3d/bloc/connect_bloc/connect_event.dart';
-import 'package:object_3d/bloc/connect_bloc/connect_state.dart';
-import 'package:object_3d/clients/plane_client_interface.dart';
+import 'package:paperwings/bloc/connect_bloc/connect_event.dart';
+import 'package:paperwings/bloc/connect_bloc/connect_state.dart';
+import 'package:paperwings/clients/plane_client_interface.dart';
 
 class ConnectBloc extends Bloc<ConnectEvent, ConnectState> {
   final IPlaneClient client;
