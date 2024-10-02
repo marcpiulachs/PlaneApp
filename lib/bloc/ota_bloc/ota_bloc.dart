@@ -70,7 +70,7 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
       }
     } on TimeoutException {
       // Manejar excepción
-      emit(OtaErrorState("Plane not responding"));
+      emit(OtaErrorState("Timeout: Plane not responding"));
     } on Exception catch (e) {
       // Manejar excepción
       emit(OtaErrorState(e.toString()));
