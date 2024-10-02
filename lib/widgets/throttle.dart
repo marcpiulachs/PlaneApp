@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'dart:developer' as developer;
 
 enum ThrottleState { locked, unlocked, armed }
 
