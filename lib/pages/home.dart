@@ -88,77 +88,81 @@ class _MyHomePageState extends State<MyHomePage>
           ),
         ),
       ),
-      body: BlocBuilder<HomeBloc, HomeTabState>(
+      body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
-          // Asegúrate de ejecutar el cambio después del build
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (_tabController.index != state.currentTabIndex) {
-              _tabController.animateTo(state.currentTabIndex);
-            }
-          });
-          return Stack(
-            children: [
-              // Fondo que cambia y se desplaza con el TabBarView
-              TweenAnimationBuilder<Color?>(
-                tween: ColorTween(
-                  // Usamos el estado anterior
-                  begin: menuItems[state.previousTabIndex].color,
-                  // Usamos el estado actual
-                  end: menuItems[state.currentTabIndex].color,
-                ),
-                duration: const Duration(milliseconds: 300),
-                builder: (context, color, child) {
-                  return Container(
-                    color: color,
-                    child: Center(
-                      child: LayoutBuilder(builder: (context, constraints) {
-                        return Container(
-                          width: constraints.maxWidth,
-                          height: constraints.maxHeight,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: RadialGradient(
-                              colors: [
-                                Colors.white.withOpacity(0.3),
-                                Colors.transparent,
-                              ],
-                              radius: 0.5,
+          if (state is HomeLoadedState) {
+            // Asegúrate de ejecutar el cambio después del build
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_tabController.index != state.currentTabIndex) {
+                _tabController.animateTo(state.currentTabIndex);
+              }
+            });
+            return Stack(
+              children: [
+                // Fondo que cambia y se desplaza con el TabBarView
+                TweenAnimationBuilder<Color?>(
+                  tween: ColorTween(
+                    // Usamos el estado anterior
+                    begin: menuItems[state.previousTabIndex].color,
+                    // Usamos el estado actual
+                    end: menuItems[state.currentTabIndex].color,
+                  ),
+                  duration: const Duration(milliseconds: 300),
+                  builder: (context, color, child) {
+                    return Container(
+                      color: color,
+                      child: Center(
+                        child: LayoutBuilder(builder: (context, constraints) {
+                          return Container(
+                            width: constraints.maxWidth,
+                            height: constraints.maxHeight,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: RadialGradient(
+                                colors: [
+                                  Colors.white.withOpacity(0.3),
+                                  Colors.transparent,
+                                ],
+                                radius: 0.5,
+                              ),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        }),
+                      ),
+                    );
+                  },
+                ),
+                // Contenido del TabBarView
+                Column(
+                  children: [
+                    const SizedBox(height: 125),
+                    Text(
+                      menuItems[state.currentTabIndex].title,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
-                  );
-                },
-              ),
-              // Contenido del TabBarView
-              Column(
-                children: [
-                  const SizedBox(height: 125),
-                  Text(
-                    menuItems[state.currentTabIndex].title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: const [
+                          PlaneCarousel(),
+                          Fly(),
+                          RecordedFlights(),
+                          Mechanics(),
+                          Settings(),
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: const [
-                        PlaneCarousel(),
-                        Fly(),
-                        RecordedFlights(),
-                        Mechanics(),
-                        Settings(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
+                  ],
+                ),
+              ],
+            );
+          } else {
+            return const Center();
+          }
         },
       ),
     );
