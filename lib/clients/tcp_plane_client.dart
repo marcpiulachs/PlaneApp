@@ -141,7 +141,9 @@ class TcpPlaneClient implements IPlaneClient {
       );
       developer.log('Connection with plane stablished');
       setConnected(true);
-      if (onConnect != null) onConnect!(); // Emitir evento de conexión
+      if (onConnect != null) {
+        onConnect!(); // Emitir evento de conexión
+      }
       _listenToServer();
     } catch (e) {
       developer.log('Error connecting to the server: $e');
@@ -253,37 +255,59 @@ class TcpPlaneClient implements IPlaneClient {
   void _handleReceivedPacket(Packet packet) {
     switch (packet.function) {
       case Packet.GYRO_X:
-        if (onGyroX != null) onGyroX!(packet.value);
+        if (onGyroX != null) {
+          onGyroX!(packet.value);
+        }
         break;
       case Packet.GYRO_Y:
-        if (onGyroY != null) onGyroY!(packet.value);
+        if (onGyroY != null) {
+          onGyroY!(packet.value);
+        }
         break;
       case Packet.GYRO_Z:
-        if (onGyroZ != null) onGyroZ!(packet.value);
+        if (onGyroZ != null) {
+          onGyroZ!(packet.value);
+        }
         break;
       case Packet.MAGNETOMETER_X:
-        if (onMagnetometerX != null) onMagnetometerX!(packet.value);
+        if (onMagnetometerX != null) {
+          onMagnetometerX!(packet.value);
+        }
         break;
       case Packet.MAGNETOMETER_Y:
-        if (onMagnetometerY != null) onMagnetometerY!(packet.value);
+        if (onMagnetometerY != null) {
+          onMagnetometerY!(packet.value);
+        }
         break;
       case Packet.MAGNETOMETER_Z:
-        if (onMagnetometerZ != null) onMagnetometerZ!(packet.value);
+        if (onMagnetometerZ != null) {
+          onMagnetometerZ!(packet.value);
+        }
         break;
       case Packet.BAROMETER:
-        if (onBarometer != null) onBarometer!(packet.value);
+        if (onBarometer != null) {
+          onBarometer!(packet.value);
+        }
         break;
       case Packet.MOTOR_1_SPEED:
-        if (onMotor1Speed != null) onMotor1Speed!(packet.value);
+        if (onMotor1Speed != null) {
+          onMotor1Speed!(packet.value);
+        }
         break;
       case Packet.MOTOR_2_SPEED:
-        if (onMotor2Speed != null) onMotor2Speed!(packet.value);
+        if (onMotor2Speed != null) {
+          onMotor2Speed!(packet.value);
+        }
         break;
       case Packet.BATTERY:
-        if (onBattery != null) onBattery!(packet.value);
+        if (onBattery != null) {
+          onBattery!(packet.value);
+        }
         break;
       case Packet.SIGNAL:
-        if (onSignal != null) onSignal!(packet.value);
+        if (onSignal != null) {
+          onSignal!(packet.value);
+        }
         break;
       default:
         developer.log('Unknown function: ${packet.function}');
