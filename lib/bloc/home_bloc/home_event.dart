@@ -6,10 +6,10 @@ abstract class HomeEvent extends Equatable {
 }
 
 class HomeTabChangedEvent extends HomeEvent {
-  final int tabIndex;
+  final int selectedTabIndex;
 
-  const HomeTabChangedEvent(this.tabIndex);
+  const HomeTabChangedEvent(this.selectedTabIndex);
 
   @override
-  List<Object> get props => [tabIndex];
+  List<Object> get props => [selectedTabIndex];
 }

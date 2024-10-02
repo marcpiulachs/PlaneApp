@@ -8,7 +8,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeTabState> {
       : super(const HomeTabState(currentTabIndex: 0, previousTabIndex: 0)) {
     on<HomeTabChangedEvent>((event, emit) {
       emit(HomeTabState(
-        currentTabIndex: event.tabIndex,
+        currentTabIndex: event.selectedTabIndex,
         previousTabIndex: state.currentTabIndex,
       ));
     });
