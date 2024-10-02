@@ -11,7 +11,7 @@ class Connecting extends StatelessWidget {
         children: [
           Icon(
             Icons.airplanemode_active,
-            size: 100,
+            size: 120,
             color: Colors.white,
           ),
           SizedBox(height: 16),
