@@ -82,24 +82,26 @@ class _FlyState extends State<Fly> {
                   ],
                 ),
                 Expanded(
-                  child: Center(
-                      /*
+                  child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Center(
+                        /*
                     child: PlaneDirection(
                       direction: state.direction,
                       telemetry: state.telemetry,
                     ), ,*/
-                      child: CompassWidget(
-                    degrees: state.telemetry.degrees,
-                    size: const Size(250, 250),
-                    textColor: Colors.white,
-                    barsColor: Colors.white,
-                    showDegrees: false,
-                    child: const Icon(
-                      Icons.flight,
-                      size: 150,
-                      color: Colors.white,
-                    ),
-                  )),
+                        child: CompassWidget(
+                          degrees: state.telemetry.degrees,
+                          textColor: Colors.white,
+                          barsColor: Colors.white,
+                          showDegrees: false,
+                          child: const Icon(
+                            Icons.flight,
+                            size: 150,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )),
                 ),
                 Expanded(
                   child: Row(

@@ -6,7 +6,6 @@ class CompassWidget extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
   final Color barsColor;
-  final Size size;
   final bool showDegrees;
   final Widget? child; // Nuevo child opcional
 
@@ -16,7 +15,6 @@ class CompassWidget extends StatelessWidget {
     this.backgroundColor = const Color(0xFFEEEEEE),
     this.textColor = Colors.black,
     this.barsColor = Colors.black,
-    required this.size,
     this.showDegrees = true,
     this.child, // Añadido el parámetro child
   });
@@ -37,15 +35,13 @@ class CompassWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        //double size = min(constraints.maxWidth, constraints.maxHeight);
         return Stack(
           alignment: Alignment.center, // Centra los elementos
           children: [
             Transform.rotate(
               angle: (degrees - 90) * pi / 180,
               child: CustomPaint(
-                //size: Size(size * visibility, size * visibility),
-                size: this.size,
+                size: Size(constraints.maxHeight, constraints.maxHeight),
                 painter: CompassPainter(
                   degrees: degrees,
                   cardinalDirection: getCardinalDirection(degrees),

@@ -2,29 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 
-class MyApp4 extends StatelessWidget {
-  const MyApp4({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Vertical Slider')),
-        body: Center(
-          child: Throttle(
-            onStateChanged: (ThrottleState state) {
-              developer.log('Throttle state: ${state.toString()}');
-            },
-            onThrottleUpdated: (double value) {
-              developer.log('Armed throttle value: ${value.toInt()}');
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 enum ThrottleState { locked, unlocked, armed }
 
 class Throttle extends StatefulWidget {
@@ -165,15 +142,12 @@ class _ThrottleState extends State<Throttle>
           decoration: BoxDecoration(
             color: Colors.black, // Fondo por defecto
             borderRadius: BorderRadius.circular(50), // Bordes redondeados
-          ),
-          padding:
-              const EdgeInsets.all(4), // Padding entre el borde y el control
+          ), // Padding entre el borde y el control
+          padding: const EdgeInsets.all(4),
           child: LayoutBuilder(
             builder: (context, constraints) {
-              _maxDrag = constraints.maxHeight -
-                  widget
-                      .iconSize; // Calcula el drag máximo según el tamaño del icono y el tamaño disponible
-
+              // Calcula el drag máximo según el tamaño del icono y el tamaño disponible
+              _maxDrag = constraints.maxHeight - widget.iconSize;
               return Stack(
                 alignment: Alignment.center,
                 children: [
