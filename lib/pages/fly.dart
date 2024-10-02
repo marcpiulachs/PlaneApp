@@ -7,6 +7,7 @@ import 'package:paperwings/pages/connect.dart';
 import 'package:paperwings/pages/widgets/aerobatic_maneuvers_bottom_sheet.dart';
 import 'package:paperwings/pages/widgets/engine_settings_bottom_sheet.dart';
 import 'package:paperwings/pages/widgets/record_indicator.dart';
+import 'package:paperwings/widgets/carousel.dart';
 import 'package:paperwings/widgets/circular.dart';
 import 'package:paperwings/widgets/compass.dart';
 import 'package:paperwings/widgets/plane_direction.dart';
@@ -86,24 +87,31 @@ class _FlyState extends State<Fly> {
                       padding: const EdgeInsets.all(16.0),
                       child: Center(
                         /*
-                    child: PlaneDirection(
-                      direction: state.direction,
-                      telemetry: state.telemetry,
-                    ), ,*/
-                        child: CompassWidget(
-                          degrees: state.telemetry.degrees,
-                          textColor: Colors.white,
-                          barsColor: Colors.white,
-                          showDegrees: false,
-                          child: const Icon(
-                            Icons.flight,
-                            size: 150,
-                            color: Colors.white,
-                          ),
+                    child: ,*/
+                        child: CarouselWidget(
+                          items: [
+                            CompassWidget(
+                              degrees: state.telemetry.degrees,
+                              textColor: Colors.white,
+                              barsColor: Colors.white,
+                              showDegrees: false,
+                              child: const Icon(
+                                Icons.flight,
+                                size: 150,
+                                color: Colors.white,
+                              ),
+                            ),
+                            PlaneDirection(
+                              direction: state.direction,
+                              telemetry: state.telemetry,
+                            ),
+                          ],
+                          indicatorSize: 10.0,
                         ),
                       )),
                 ),
-                Expanded(
+                SizedBox(
+                  height: 250,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
