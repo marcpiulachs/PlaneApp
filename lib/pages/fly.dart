@@ -5,6 +5,7 @@ import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
 import 'package:paperwings/core/flight_settings.dart';
 import 'package:paperwings/pages/connect.dart';
 import 'package:paperwings/pages/widgets/aerobatic_maneuvers_bottom_sheet.dart';
+import 'package:paperwings/pages/widgets/attitude.dart';
 import 'package:paperwings/pages/widgets/engine_settings_bottom_sheet.dart';
 import 'package:paperwings/pages/widgets/record_indicator.dart';
 import 'package:paperwings/widgets/carousel.dart';
@@ -84,31 +85,34 @@ class _FlyState extends State<Fly> {
                 ),
                 Expanded(
                   child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Center(
-                        /*
-                    child: ,*/
-                        child: CarouselWidget(
-                          items: [
-                            CompassWidget(
-                              degrees: state.telemetry.degrees,
-                              textColor: Colors.white,
-                              barsColor: Colors.white,
-                              showDegrees: false,
-                              child: const Icon(
-                                Icons.flight,
-                                size: 150,
-                                color: Colors.white,
-                              ),
+                    padding: const EdgeInsets.all(16.0),
+                    child: Center(
+                      child: CarouselWidget(
+                        items: [
+                          CompassWidget(
+                            degrees: state.telemetry.degrees,
+                            textColor: Colors.white,
+                            barsColor: Colors.white,
+                            showDegrees: false,
+                            child: const Icon(
+                              Icons.flight,
+                              size: 150,
+                              color: Colors.white,
                             ),
-                            PlaneDirection(
-                              direction: state.direction,
-                              telemetry: state.telemetry,
-                            ),
-                          ],
-                          indicatorSize: 10.0,
-                        ),
-                      )),
+                          ),
+                          PlaneDirection(
+                            direction: state.direction,
+                            telemetry: state.telemetry,
+                          ),
+                          AttitudeIndicator(
+                            roll: state.direction.roll.toDouble(),
+                            pitch: state.direction.pitch.toDouble(),
+                          ),
+                        ],
+                        indicatorSize: 10.0,
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 250,
