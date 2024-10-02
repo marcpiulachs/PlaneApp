@@ -84,9 +84,10 @@ class Disconnected extends StatelessWidget {
             onPressed: onConnect,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
+              minimumSize: const Size(50, 50),
             ),
             child: const Text(
-              'Connect',
+              'CONNECT',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
