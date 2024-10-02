@@ -28,6 +28,9 @@ abstract class IPlaneClient {
   TelemetryCallback? onMotor2Speed;
   TelemetryCallback? onBattery;
   TelemetryCallback? onSignal;
+  TelemetryCallback? onAccelerometerX;
+  TelemetryCallback? onAccelerometerY;
+  TelemetryCallback? onAccelerometerZ;
 
   // Stream que emite los cambios de conexión
   Stream<bool> get connectedStream;

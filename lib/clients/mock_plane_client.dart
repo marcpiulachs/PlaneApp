@@ -36,6 +36,12 @@ class MockPlaneClient implements IPlaneClient {
   TelemetryCallback? onBattery;
   @override
   TelemetryCallback? onSignal;
+  @override
+  TelemetryCallback? onAccelerometerX;
+  @override
+  TelemetryCallback? onAccelerometerY;
+  @override
+  TelemetryCallback? onAccelerometerZ;
 
   // Controlador del stream para la propiedad booleana
   final _connectedStreamController = StreamController<bool>.broadcast();
@@ -54,6 +60,7 @@ class MockPlaneClient implements IPlaneClient {
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (_armed) {
         _simulateGyroData();
+        _simulateAccelerometerData();
         _simulateMagnetometerData();
         _simulateBarometerData();
         _simulateMotorData();
@@ -106,6 +113,12 @@ class MockPlaneClient implements IPlaneClient {
     onGyroX?.call(_generateRandomInt(-1000, 1000));
     onGyroY?.call(_generateRandomInt(-1000, 1000));
     onGyroZ?.call(_generateRandomInt(-1000, 1000));
+  }
+
+  void _simulateAccelerometerData() {
+    onAccelerometerX?.call(_generateRandomInt(-1000, 1000));
+    onAccelerometerY?.call(_generateRandomInt(-1000, 1000));
+    onAccelerometerZ?.call(_generateRandomInt(-1000, 1000));
   }
 
   void _simulateMagnetometerData() {

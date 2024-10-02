@@ -38,6 +38,21 @@ class MagnetometerZUpdated extends FlyEvent {
   MagnetometerZUpdated(this.value);
 }
 
+class AccelerometerXUpdated extends FlyEvent {
+  final int value;
+  AccelerometerXUpdated(this.value);
+}
+
+class AccelerometerYUpdated extends FlyEvent {
+  final int value;
+  AccelerometerYUpdated(this.value);
+}
+
+class AccelerometerZUpdated extends FlyEvent {
+  final int value;
+  AccelerometerZUpdated(this.value);
+}
+
 class BarometerUpdated extends FlyEvent {
   final int value;
   BarometerUpdated(this.value);

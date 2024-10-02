@@ -74,6 +74,15 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     client.onSignal = (value) {
       add(SignalUpdated(value));
     };
+    client.onAccelerometerX = (value) {
+      add(AccelerometerXUpdated(value));
+    };
+    client.onAccelerometerY = (value) {
+      add(AccelerometerYUpdated(value));
+    };
+    client.onAccelerometerZ = (value) {
+      add(AccelerometerZUpdated(value));
+    };
 
     // Configuración de FlightRecorder
     flightRecorder = FlightRecorder(
@@ -103,6 +112,7 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     );
 
     on<CaptureData>((event, emit) async {
+      /*
       developer.log('Telemetry Data:');
       developer.log('GyroX: ${event.telemetry.gyroX}');
       developer.log('GyroY: ${event.telemetry.gyroY}');
@@ -113,6 +123,10 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       developer.log('Barometer: ${event.telemetry.barometer}');
       developer.log('Motor1Speed: ${event.telemetry.motor1Speed}');
       developer.log('Motor2Speed: ${event.telemetry.motor2Speed}');
+      developer.log('AccelX: ${event.telemetry.accelX}');
+      developer.log('AccelY: ${event.telemetry.accelY}');
+      developer.log('AccelZ: ${event.telemetry.accelZ}');
+      */
       // store telemetry data
       flightRecorder.data.add(event.telemetry);
     });
@@ -149,6 +163,7 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         final updatedTelemetry =
             loadedState.telemetry.copyWith(gyroX: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
+        developer.log('GyroX: ${event.value}');
       }
     });
 
@@ -158,6 +173,7 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         final updatedTelemetry =
             loadedState.telemetry.copyWith(gyroY: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
+        developer.log('GyroY: ${event.value}');
       }
     });
 
@@ -167,6 +183,7 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         final updatedTelemetry =
             loadedState.telemetry.copyWith(gyroZ: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
+        developer.log('GyroZ: ${event.value}');
       }
     });
 
@@ -193,6 +210,33 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(magnetometerZ: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
+      }
+    });
+
+    on<AccelerometerXUpdated>((event, emit) {
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(accelX: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
+      }
+    });
+
+    on<AccelerometerYUpdated>((event, emit) {
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(accelY: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
+      }
+    });
+
+    on<AccelerometerZUpdated>((event, emit) {
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(accelZ: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
@@ -259,9 +303,9 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         final updatedDirection =
             loadedState.direction.copyWith(yaw: event.value);
         emit(loadedState.copyWith(direction: updatedDirection));
-        developer.log('Pitch: ${loadedState.direction.pitch}');
-        developer.log('Roll:  ${loadedState.direction.roll}');
-        developer.log('Yaw:   ${loadedState.direction.yaw}');
+        //developer.log('Pitch: ${loadedState.direction.pitch}');
+        //developer.log('Roll:  ${loadedState.direction.roll}');
+        //developer.log('Yaw:   ${loadedState.direction.yaw}');
       }
     });
 
@@ -272,9 +316,9 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         final updatedDirection =
             loadedState.direction.copyWith(pitch: event.value);
         emit(loadedState.copyWith(direction: updatedDirection));
-        developer.log('Pitch: ${loadedState.direction.pitch}');
-        developer.log('Roll:  ${loadedState.direction.roll}');
-        developer.log('Yaw:   ${loadedState.direction.yaw}');
+        //developer.log('Pitch: ${loadedState.direction.pitch}');
+        //developer.log('Roll:  ${loadedState.direction.roll}');
+        //developer.log('Yaw:   ${loadedState.direction.yaw}');
       }
     });
 
@@ -285,9 +329,9 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         final updatedDirection =
             loadedState.direction.copyWith(roll: event.value);
         emit(loadedState.copyWith(direction: updatedDirection));
-        developer.log('Pitch: ${loadedState.direction.pitch}');
-        developer.log('Roll:  ${loadedState.direction.roll}');
-        developer.log('Yaw:   ${loadedState.direction.yaw}');
+        //developer.log('Pitch: ${loadedState.direction.pitch}');
+        //developer.log('Roll:  ${loadedState.direction.roll}');
+        //developer.log('Yaw:   ${loadedState.direction.yaw}');
       }
     });
 

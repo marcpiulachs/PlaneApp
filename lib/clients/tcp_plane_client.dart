@@ -20,9 +20,11 @@ class Packet {
   static const int BAROMETER = 0x40;
   static const int MOTOR_1_SPEED = 0x50;
   static const int MOTOR_2_SPEED = 0x51;
-
   static const int BATTERY = 0x70;
   static const int SIGNAL = 0x71;
+  static const int ACCEL_X = 0x80;
+  static const int ACCEL_Y = 0x81;
+  static const int ACCEL_Z = 0x82;
 
   static const int ARMED = 0x60;
   static const int THROTTLE = 0x61;
@@ -36,47 +38,38 @@ class Packet {
 
   final int function;
   final int dataType;
-  final dynamic value;
+  final int payload;
 
-  Packet(this.function, this.dataType, this.value);
+  static const int boolTrue = 0x01;
+  static const int boolFalse = 0x00;
+
+  Packet(this.function, this.dataType, this.payload);
+
+  // Constructor adicional para booleanos
+  Packet.forBool(this.function, bool value)
+      : dataType = dataTypeBool,
+        payload = value ? boolTrue : boolFalse;
+
+  // Constructor adicional para int
+  Packet.forInt(this.function, int value)
+      : dataType = dataTypeInt,
+        payload = value;
 
   // Método que convierte el paquete a bytes, según el tipo de dato
   Uint8List toBytes() {
-    List<int> packet = [];
-
-    // Byte de inicio
-    packet.add(startByte);
-
-    // Función
-    packet.add(function);
-
-    // Tipo de dato
-    packet.add(dataType);
-
-    // Valor convertido según el tipo de dato
-    if (dataType == dataTypeInt) {
-      packet.addAll(intToBytes(value));
-    } else if (dataType == dataTypeBool) {
-      packet.addAll(boolToBytes(value));
-    }
-
-    // Byte de fin
-    packet.add(endByte);
-
-    return Uint8List.fromList(packet);
+    return Uint8List.fromList([
+      startByte, // Byte de inicio
+      function, // Función
+      dataType, // Tipo de dato
+      ...intToBytes(payload),
+      endByte // Byte de fin
+    ]);
   }
 
   // Conversión de int a bytes
   static List<int> intToBytes(int value) {
     ByteData byteData = ByteData(2);
     byteData.setInt16(0, value, Endian.big);
-    return byteData.buffer.asUint8List();
-  }
-
-  // Conversión de bool a bytes
-  static List<int> boolToBytes(bool value) {
-    ByteData byteData = ByteData(2);
-    byteData.setUint16(0, value ? 0x01 : 0x00, Endian.big);
     return byteData.buffer.asUint8List();
   }
 }
@@ -116,6 +109,12 @@ class TcpPlaneClient implements IPlaneClient {
   TelemetryCallback? onBattery;
   @override
   TelemetryCallback? onSignal;
+  @override
+  TelemetryCallback? onAccelerometerX;
+  @override
+  TelemetryCallback? onAccelerometerY;
+  @override
+  TelemetryCallback? onAccelerometerZ;
 
   // Controlador del stream para la propiedad booleana
   final _connectedStreamController = StreamController<bool>.broadcast();
@@ -226,27 +225,23 @@ class TcpPlaneClient implements IPlaneClient {
         data.last == Packet.endByte) {
       int function = data[1];
       int dataType = data[2];
-      dynamic value;
+
+      ByteData byteData = ByteData(2);
+
+      // Coloca los bytes en el buffer
+      byteData.setUint8(0, data[3]); // Primer byte (byte alto)
+      byteData.setUint8(1, data[4]); // Segundo byte (byte bajo)
+
+      // Lee los bytes como un int16 (Endianness puede cambiar según el caso)
+      int value = byteData.getInt16(0, Endian.little);
 
       if (dataType == Packet.dataTypeInt) {
-        // Verificar que hay suficientes bytes para un int (2 bytes)
-        if (data.length >= 5) {
-          value = ByteData.sublistView(data, 3, 5).getInt16(0, Endian.big);
-        } else {
-          return null; // Paquete inválido
-        }
+        return Packet.forInt(function, value);
       } else if (dataType == Packet.dataTypeBool) {
-        // Verificar que hay suficientes bytes para un bool (1 byte)
-        if (data.length >= 4) {
-          value = data[3] == 0x01;
-        } else {
-          return null; // Paquete inválido
-        }
+        return Packet.forBool(function, value == Packet.boolTrue);
       } else {
         return null; // Tipo de dato desconocido
       }
-
-      return Packet(function, dataType, value);
     } else {
       return null; // Paquete inválido
     }
@@ -256,59 +251,73 @@ class TcpPlaneClient implements IPlaneClient {
     switch (packet.function) {
       case Packet.GYRO_X:
         if (onGyroX != null) {
-          onGyroX!(packet.value);
+          onGyroX!(packet.payload);
         }
         break;
       case Packet.GYRO_Y:
         if (onGyroY != null) {
-          onGyroY!(packet.value);
+          onGyroY!(packet.payload);
         }
         break;
       case Packet.GYRO_Z:
         if (onGyroZ != null) {
-          onGyroZ!(packet.value);
+          onGyroZ!(packet.payload);
         }
         break;
       case Packet.MAGNETOMETER_X:
         if (onMagnetometerX != null) {
-          onMagnetometerX!(packet.value);
+          onMagnetometerX!(packet.payload);
         }
         break;
       case Packet.MAGNETOMETER_Y:
         if (onMagnetometerY != null) {
-          onMagnetometerY!(packet.value);
+          onMagnetometerY!(packet.payload);
         }
         break;
       case Packet.MAGNETOMETER_Z:
         if (onMagnetometerZ != null) {
-          onMagnetometerZ!(packet.value);
+          onMagnetometerZ!(packet.payload);
         }
         break;
       case Packet.BAROMETER:
         if (onBarometer != null) {
-          onBarometer!(packet.value);
+          onBarometer!(packet.payload);
         }
         break;
       case Packet.MOTOR_1_SPEED:
         if (onMotor1Speed != null) {
-          onMotor1Speed!(packet.value);
+          onMotor1Speed!(packet.payload);
         }
         break;
       case Packet.MOTOR_2_SPEED:
         if (onMotor2Speed != null) {
-          onMotor2Speed!(packet.value);
+          onMotor2Speed!(packet.payload);
         }
         break;
       case Packet.BATTERY:
         if (onBattery != null) {
-          onBattery!(packet.value);
+          onBattery!(packet.payload);
         }
         break;
       case Packet.SIGNAL:
         if (onSignal != null) {
-          onSignal!(packet.value);
+          onSignal!(packet.payload);
         }
         break;
+      case Packet.ACCEL_X:
+        if (onAccelerometerX != null) {
+          onAccelerometerX!(packet.payload);
+        }
+        break;
+      case Packet.ACCEL_Y:
+        if (onAccelerometerY != null) {
+          onAccelerometerY!(packet.payload);
+        }
+        break;
+      case Packet.ACCEL_Z:
+        if (onAccelerometerZ != null) {
+          onAccelerometerZ!(packet.payload);
+        }
       default:
         developer.log('Unknown function: ${packet.function}');
         break;
@@ -343,38 +352,38 @@ class TcpPlaneClient implements IPlaneClient {
   // Método para armar o desarmar el sistema
   @override
   Future<void> sendArmed(bool armed) async {
-    Packet packet = Packet(Packet.ARMED, Packet.dataTypeBool, armed);
+    Packet packet = Packet.forBool(Packet.ARMED, armed);
     await sendPacket(packet);
   }
 
   // Método para ajustar el throttle
   @override
   Future<void> sendThrottle(int throttle) async {
-    Packet packet = Packet(Packet.THROTTLE, Packet.dataTypeInt, throttle);
+    Packet packet = Packet.forInt(Packet.THROTTLE, throttle);
     await sendPacket(packet);
   }
 
   @override
   Future<void> sendYaw(int yaw) async {
-    Packet packet = Packet(Packet.YAW, Packet.dataTypeInt, yaw);
+    Packet packet = Packet.forInt(Packet.YAW, yaw);
     await sendPacket(packet);
   }
 
   @override
   Future<void> sendRoll(int roll) async {
-    Packet packet = Packet(Packet.ROLL, Packet.dataTypeInt, roll);
+    Packet packet = Packet.forInt(Packet.ROLL, roll);
     await sendPacket(packet);
   }
 
   @override
   Future<void> sendPitch(int pitch) async {
-    Packet packet = Packet(Packet.PITCH, Packet.dataTypeInt, pitch);
+    Packet packet = Packet.forInt(Packet.PITCH, pitch);
     await sendPacket(packet);
   }
 
   @override
   Future<void> sendManeuver(int maneuver) async {
-    Packet packet = Packet(Packet.MANEUVER, Packet.dataTypeInt, maneuver);
+    Packet packet = Packet.forInt(Packet.MANEUVER, maneuver);
     await sendPacket(packet);
   }
 

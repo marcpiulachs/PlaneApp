@@ -12,6 +12,9 @@ class Telemetry {
   final int motor2Speed;
   final int battery;
   final int signal;
+  final int accelX;
+  final int accelY;
+  final int accelZ;
 
   Telemetry({
     this.gyroX = 0,
@@ -25,6 +28,9 @@ class Telemetry {
     this.motor2Speed = 0,
     this.battery = 0,
     this.signal = 0,
+    this.accelX = 0,
+    this.accelY = 0,
+    this.accelZ = 0,
   });
 
   double get degrees {
@@ -46,6 +52,9 @@ class Telemetry {
     int? motor2Speed,
     int? battery,
     int? signal,
+    int? accelX,
+    int? accelY,
+    int? accelZ,
   }) {
     return Telemetry(
       gyroX: gyroX ?? this.gyroX,
@@ -59,6 +68,9 @@ class Telemetry {
       motor2Speed: motor2Speed ?? this.motor2Speed,
       battery: battery ?? this.battery,
       signal: signal ?? this.signal,
+      accelX: accelX ?? this.accelX,
+      accelY: accelY ?? this.accelY,
+      accelZ: accelZ ?? this.accelZ,
     );
   }
 }
