@@ -51,7 +51,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                 shape: BoxShape.circle,
                 color: _currentIndex == index
                     ? Colors.black // Color activo
-                    : Colors.grey, // Color inactivo
+                    : Colors.white, // Color inactivo
               ),
             );
           }),
