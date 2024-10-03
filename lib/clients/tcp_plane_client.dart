@@ -219,32 +219,34 @@ class TcpPlaneClient implements IPlaneClient {
   }
 
   Packet? _parsePacket(Uint8List data) {
-    // Verificar si el paquete tiene al menos la longitud mínima
-    if (data.length >= 5 &&
-        data.first == Packet.startByte &&
-        data.last == Packet.endByte) {
-      int function = data[1];
-      int dataType = data[2];
-
-      ByteData byteData = ByteData(2);
-
-      // Coloca los bytes en el buffer
-      byteData.setUint8(0, data[3]); // Primer byte (byte alto)
-      byteData.setUint8(1, data[4]); // Segundo byte (byte bajo)
-
-      // Lee los bytes como un int16 (Endianness puede cambiar según el caso)
-      int value = byteData.getInt16(0, Endian.little);
-
-      if (dataType == Packet.dataTypeInt) {
-        return Packet.forInt(function, value);
-      } else if (dataType == Packet.dataTypeBool) {
-        return Packet.forBool(function, value == Packet.boolTrue);
-      } else {
-        return null; // Tipo de dato desconocido
-      }
-    } else {
-      return null; // Paquete inválido
+    // Validar la longitud y los delimitadores de inicio y fin
+    if (data.length != 6 ||
+        data.first != Packet.startByte ||
+        data.last != Packet.endByte) {
+      // Paquete inválido
+      return null;
     }
+
+    ByteData byteData = ByteData.sublistView(data);
+
+    // Leer la función y el tipo de dato
+    int function = byteData.getUint8(1);
+    int dataType = byteData.getUint8(2);
+
+    // Leer el payload como un entero de 16 bits en little-endian
+    int payload = byteData.getInt16(3, Endian.little);
+
+    // Crear el paquete en función del tipo de dato
+    if (dataType == Packet.dataTypeInt) {
+      return Packet.forInt(function, payload);
+    }
+
+    if (dataType == Packet.dataTypeBool) {
+      return Packet.forBool(function, payload == Packet.boolTrue);
+    }
+
+    // Tipo de dato desconocido
+    return null;
   }
 
   void _handleReceivedPacket(Packet packet) {
