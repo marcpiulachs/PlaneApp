@@ -5,6 +5,7 @@ import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
 import 'package:paperwings/core/flight_settings.dart';
 import 'package:paperwings/pages/connect.dart';
 import 'package:paperwings/pages/widgets/aerobatic_maneuvers_bottom_sheet.dart';
+import 'package:paperwings/pages/widgets/altimeter.dart';
 import 'package:paperwings/pages/widgets/attitude.dart';
 import 'package:paperwings/pages/widgets/engine_settings_bottom_sheet.dart';
 import 'package:paperwings/pages/widgets/record_indicator.dart';
@@ -65,7 +66,7 @@ class _FlyState extends State<Fly> {
                           progress: 0.7,
                           icon: Icons.height,
                           text:
-                              "${(state.telemetry.barometer / 100).toStringAsFixed(2)} m.",
+                              "${(state.telemetry.altitude).toStringAsFixed(2)} m.",
                           backgroundColor: Colors.white,
                         ),
                       ],
@@ -100,13 +101,16 @@ class _FlyState extends State<Fly> {
                               color: Colors.white,
                             ),
                           ),
-                          PlaneDirection(
-                            direction: state.direction,
-                            telemetry: state.telemetry,
-                          ),
                           AttitudeIndicator(
                             roll: state.direction.roll.toDouble(),
                             pitch: state.direction.pitch.toDouble(),
+                          ),
+                          Altimeter(
+                            altitude: state.telemetry.altitude,
+                          ),
+                          PlaneDirection(
+                            direction: state.direction,
+                            telemetry: state.telemetry,
                           ),
                         ],
                         indicatorSize: 10.0,

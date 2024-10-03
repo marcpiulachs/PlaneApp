@@ -207,7 +207,10 @@ class _PlanePainter extends CustomPainter {
     TextPainter textPainter = TextPainter(
       text: TextSpan(
         text: '$degrees°',
-        style: TextStyle(color: Colors.white, fontSize: 12),
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+        ),
       ),
       textDirection: TextDirection.ltr,
     );

@@ -40,6 +40,11 @@ class Telemetry {
     return angle * (180 / pi);
   }
 
+  double get altitude {
+    const double seaLevelPressure = 1013.25; // Presión al nivel del mar en hPa
+    return (seaLevelPressure - barometer) / 0.12;
+  }
+
   Telemetry copyWith({
     int? gyroX,
     int? gyroY,

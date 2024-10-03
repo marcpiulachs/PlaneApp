@@ -128,7 +128,7 @@ class MockPlaneClient implements IPlaneClient {
   }
 
   void _simulateBarometerData() {
-    onBarometer?.call(_generateRandomInt(900, 1100)); // hPa
+    onBarometer?.call(_generateRandomInt(1013, 1010)); // hPa
   }
 
   void _simulateMotorData() {
