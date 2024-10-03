@@ -237,16 +237,15 @@ class TcpPlaneClient implements IPlaneClient {
     int payload = byteData.getInt16(3, Endian.little);
 
     // Crear el paquete en función del tipo de dato
-    if (dataType == Packet.dataTypeInt) {
-      return Packet.forInt(function, payload);
+    switch (dataType) {
+      case Packet.dataTypeInt:
+        return Packet.forInt(function, payload);
+      case Packet.dataTypeBool:
+        return Packet.forBool(function, payload == Packet.boolTrue);
+      default: // Tipo de dato desconocido
+        developer.log('Unknown data type: $dataType');
+        return null;
     }
-
-    if (dataType == Packet.dataTypeBool) {
-      return Packet.forBool(function, payload == Packet.boolTrue);
-    }
-
-    // Tipo de dato desconocido
-    return null;
   }
 
   void _handleReceivedPacket(Packet packet) {
