@@ -13,6 +13,10 @@ abstract class IPlaneClient {
 
   bool get isConnected;
 
+  // Campos de estadísticas
+  int get packetsOk;
+  int get packetsWithError;
+
   // Callbacks
   void Function()? onConnect;
   void Function()? onDisconnect;

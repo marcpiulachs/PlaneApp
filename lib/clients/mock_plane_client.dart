@@ -7,6 +7,12 @@ class MockPlaneClient implements IPlaneClient {
   bool _armed = false;
   int _throttle = 0;
 
+  // Implementación de los getters para las estadísticas
+  @override
+  int get packetsOk => 0;
+  @override
+  int get packetsWithError => 0;
+
   // Callbacks
   @override
   void Function()? onConnect;

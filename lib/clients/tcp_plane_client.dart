@@ -8,9 +8,14 @@ import 'package:paperwings/clients/plane_client_interface.dart';
 
 // Definición de la clase Packet con el método toBytes()
 class Packet {
+  // Tamaño mínimo del paquete (por ejemplo, start, function, dataType, intData, end)
+  static const int length = 6;
+
+  // Bytes de inicio y fin
   static const int startByte = 0x02;
   static const int endByte = 0x03;
 
+  // Definiciones de funciones
   static const int GYRO_X = 0x20;
   static const int GYRO_Y = 0x21;
   static const int GYRO_Z = 0x22;
@@ -33,6 +38,7 @@ class Packet {
   static const int YAW = 0x64;
   static const int MANEUVER = 0x65;
 
+  // Definiciones de tipo de datos
   static const int dataTypeInt = 0x01;
   static const int dataTypeBool = 0x03;
 
@@ -40,9 +46,11 @@ class Packet {
   final int dataType;
   final int payload;
 
+  // Payload para booleanos
   static const int boolTrue = 0x01;
   static const int boolFalse = 0x00;
 
+  // Constructor básico
   Packet(this.function, this.dataType, this.payload);
 
   // Constructor adicional para booleanos
@@ -54,6 +62,38 @@ class Packet {
   Packet.forInt(this.function, int value)
       : dataType = dataTypeInt,
         payload = value;
+
+  // Método para convertir un array de bytes en un Packet
+  static Packet? fromBytes(Uint8List data) {
+    // Validar la longitud y los delimitadores de inicio y fin
+    if (data.length != Packet.length ||
+        data.first != Packet.startByte ||
+        data.last != Packet.endByte) {
+      // Paquete inválido
+      developer.log('Invalid packet: incorrect length or delimiters');
+      return null;
+    }
+
+    ByteData byteData = ByteData.sublistView(data);
+
+    // Leer la función y el tipo de dato
+    int function = byteData.getUint8(1);
+    int dataType = byteData.getUint8(2);
+
+    // Leer el payload como un entero de 16 bits en little-endian
+    int payload = byteData.getInt16(3, Endian.little);
+
+    // Crear el paquete en función del tipo de dato
+    switch (dataType) {
+      case Packet.dataTypeInt:
+        return Packet.forInt(function, payload);
+      case Packet.dataTypeBool:
+        return Packet.forBool(function, payload == Packet.boolTrue);
+      default: // Tipo de dato desconocido
+        developer.log('Invalid packet: unknown data type: $dataType');
+        return null;
+    }
+  }
 
   // Método que convierte el paquete a bytes, según el tipo de dato
   Uint8List toBytes() {
@@ -75,10 +115,18 @@ class Packet {
 }
 
 class TcpPlaneClient implements IPlaneClient {
+  // Controlador del stream para la propiedad booleana
+  final _connectedStreamController = StreamController<bool>.broadcast();
   final String host;
   final int port;
   late Socket _socket;
   bool _isConnected = false;
+
+  // Contadores para estadísticas
+  @override
+  int packetsOk = 0;
+  @override
+  int packetsWithError = 0;
 
   // Callbacks para eventos
   @override
@@ -116,9 +164,6 @@ class TcpPlaneClient implements IPlaneClient {
   @override
   TelemetryCallback? onAccelerometerZ;
 
-  // Controlador del stream para la propiedad booleana
-  final _connectedStreamController = StreamController<bool>.broadcast();
-
   // Exponer el Stream público
   @override
   Stream<bool> get connectedStream => _connectedStreamController.stream;
@@ -134,22 +179,21 @@ class TcpPlaneClient implements IPlaneClient {
       _socket = await Socket.connect(
         host,
         port,
-        timeout: const Duration(
-          seconds: 5,
-        ),
+        timeout: const Duration(seconds: 5),
       );
-      developer.log('Connection with plane stablished');
+      developer.log('Connection established with $host:$port');
+      // Actualiza el estado de conexión
       setConnected(true);
-      if (onConnect != null) {
-        onConnect!(); // Emitir evento de conexión
-      }
+      // Emite el evento de conexión si existe
+      onConnect?.call();
+      // Escuchar mensajes del servidor
       _listenToServer();
     } catch (e) {
       developer.log('Error connecting to the server: $e');
+      // Actualiza el estado de conexión
       setConnected(false);
-      if (onConnectionFailed != null) {
-        onConnectionFailed!(); // Emitir evento de desconexión por error
-      }
+      // Emite el evento de falla de conexión si existe
+      onConnectionFailed?.call();
     }
   }
 
@@ -183,68 +227,47 @@ class TcpPlaneClient implements IPlaneClient {
   }
 
   void _processReceivedData(Uint8List data) {
-    // Máquina de estados para manejar el parsing del paquete
     int index = 0;
-    bool startDetected = false;
     List<int> packetBuffer = [];
 
+    // Bucle que recorre todos los bytes recibidos
     while (index < data.length) {
+      // Obtener el byte actual
       int byte = data[index];
-
-      if (!startDetected) {
-        // Esperamos el byte de inicio
-        if (byte == Packet.startByte) {
-          startDetected = true;
-          packetBuffer.clear();
-          packetBuffer.add(byte);
-        }
-      } else {
+      // Detectar byte de inicio
+      if (packetBuffer.isEmpty && byte == Packet.startByte) {
+        // Si es el byte de inicio, agregarlo al buffer
         packetBuffer.add(byte);
-
+      }
+      // Si se ha detectado el byte de inicio, seguimos agregando bytes
+      else if (packetBuffer.isNotEmpty) {
+        // Agregar el byte actual al buffer
+        packetBuffer.add(byte);
+        // Detectar byte de fin y validar el paquete
         if (byte == Packet.endByte) {
-          // Fin de paquete detectado, procesar paquete
-          Packet? packet = _parsePacket(Uint8List.fromList(packetBuffer));
-          if (packet != null) {
-            _handleReceivedPacket(packet);
+          if (packetBuffer.length != Packet.length) {
+            // Convertir el buffer en un Uint8List y tratar de interpretar el paquete
+            Uint8List packetBytes = Uint8List.fromList(packetBuffer);
+            // Load packet from bytes
+            Packet? packet = Packet.fromBytes(packetBytes);
+            if (packet != null) {
+              packetsOk++;
+              _handleReceivedPacket(packet);
+            } else {
+              packetsWithError++;
+              developer.log('Invalid packet received');
+            }
           } else {
-            developer.log('Invalid packet received');
+            packetsWithError++;
+            developer.log('Packet too short');
           }
-          startDetected = false;
+
+          // Reiniciar el buffer tras procesar el paquete (correcto o incorrecto)
           packetBuffer.clear();
         }
       }
-
+      // Avanzar al siguiente byte
       index++;
-    }
-  }
-
-  Packet? _parsePacket(Uint8List data) {
-    // Validar la longitud y los delimitadores de inicio y fin
-    if (data.length != 6 ||
-        data.first != Packet.startByte ||
-        data.last != Packet.endByte) {
-      // Paquete inválido
-      return null;
-    }
-
-    ByteData byteData = ByteData.sublistView(data);
-
-    // Leer la función y el tipo de dato
-    int function = byteData.getUint8(1);
-    int dataType = byteData.getUint8(2);
-
-    // Leer el payload como un entero de 16 bits en little-endian
-    int payload = byteData.getInt16(3, Endian.little);
-
-    // Crear el paquete en función del tipo de dato
-    switch (dataType) {
-      case Packet.dataTypeInt:
-        return Packet.forInt(function, payload);
-      case Packet.dataTypeBool:
-        return Packet.forBool(function, payload == Packet.boolTrue);
-      default: // Tipo de dato desconocido
-        developer.log('Unknown data type: $dataType');
-        return null;
     }
   }
 
