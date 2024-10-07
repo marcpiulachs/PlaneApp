@@ -182,16 +182,21 @@ class TcpPlaneClient implements IPlaneClient {
         timeout: const Duration(seconds: 5),
       );
       developer.log('Connection established with $host:$port');
+
       // Actualiza el estado de conexión
       setConnected(true);
+
       // Emite el evento de conexión si existe
       onConnect?.call();
+
       // Escuchar mensajes del servidor
       _listenToServer();
     } catch (e) {
       developer.log('Error connecting to the server: $e');
+
       // Actualiza el estado de conexión
       setConnected(false);
+
       // Emite el evento de falla de conexión si existe
       onConnectionFailed?.call();
     }
@@ -415,7 +420,10 @@ class TcpPlaneClient implements IPlaneClient {
   void setConnected(bool value) {
     if (_isConnected != value) {
       _isConnected = value;
-      _connectedStreamController.add(value); // Emitir el nuevo valor
+      // Emitir el nuevo valor solo si el StreamController está abierto
+      if (!_connectedStreamController.isClosed) {
+        _connectedStreamController.add(value); // Emitir el nuevo valor
+      }
     }
   }
 
