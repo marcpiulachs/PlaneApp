@@ -15,11 +15,11 @@ class MockPlaneClient implements IPlaneClient {
 
   // Callbacks
   @override
-  void Function()? onConnect;
+  ConnectionCallback? onConnect;
   @override
-  void Function()? onDisconnect;
+  ConnectionCallback? onDisconnect;
   @override
-  void Function()? onConnectionFailed;
+  ConnectionCallback? onConnectionFailed;
   @override
   TelemetryCallback? onGyroX;
   @override

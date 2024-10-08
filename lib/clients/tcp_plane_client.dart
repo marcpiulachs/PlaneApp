@@ -130,11 +130,11 @@ class TcpPlaneClient implements IPlaneClient {
 
   // Callbacks para eventos
   @override
-  void Function()? onConnect;
+  ConnectionCallback? onConnect;
   @override
-  void Function()? onDisconnect;
+  ConnectionCallback? onDisconnect;
   @override
-  void Function()? onConnectionFailed;
+  ConnectionCallback? onConnectionFailed;
   @override
   TelemetryCallback? onGyroX;
   @override
@@ -226,9 +226,7 @@ class TcpPlaneClient implements IPlaneClient {
   void _handleDisconnection() {
     setConnected(false);
     _socket.close(); // Cerrar el socket
-    if (onDisconnect != null) {
-      onDisconnect!(); // Emitir evento de desconexión
-    }
+    onDisconnect?.call();
   }
 
   void _processReceivedData(Uint8List data) {

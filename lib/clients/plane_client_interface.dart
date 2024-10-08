@@ -1,4 +1,5 @@
 typedef TelemetryCallback = void Function(int value);
+typedef ConnectionCallback = void Function();
 
 abstract class IPlaneClient {
   Future<void> connect();
@@ -18,9 +19,9 @@ abstract class IPlaneClient {
   int get packetsWithError;
 
   // Callbacks
-  void Function()? onConnect;
-  void Function()? onDisconnect;
-  void Function()? onConnectionFailed;
+  ConnectionCallback? onConnect;
+  ConnectionCallback? onDisconnect;
+  ConnectionCallback? onConnectionFailed;
   TelemetryCallback? onGyroX;
   TelemetryCallback? onGyroY;
   TelemetryCallback? onGyroZ;
