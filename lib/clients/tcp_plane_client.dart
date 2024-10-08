@@ -370,9 +370,7 @@ class TcpPlaneClient implements IPlaneClient {
     if (_isConnected) {
       await _socket.close();
       setConnected(false);
-      if (onDisconnect != null) {
-        onDisconnect!();
-      }
+      onDisconnect?.call();
     }
   }
 
