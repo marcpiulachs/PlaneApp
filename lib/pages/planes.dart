@@ -8,14 +8,14 @@ import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_state.dart';
 import 'package:paperwings/widgets/circular.dart';
 import 'package:paperwings/widgets/plane_carousel.dart';
 
-class PlaneCarousel extends StatefulWidget {
-  const PlaneCarousel({super.key});
+class Planes extends StatefulWidget {
+  const Planes({super.key});
 
   @override
-  State<PlaneCarousel> createState() => _PlaneCarouselState();
+  State<Planes> createState() => _PlanesState();
 }
 
-class _PlaneCarouselState extends State<PlaneCarousel> {
+class _PlanesState extends State<Planes> {
   final PageController _pageController = PageController();
   late PlaneCarouselBloc planeCarouselBloc;
   @override

@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_bloc.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_event.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
 import 'package:paperwings/core/flight_settings.dart';
 import 'package:paperwings/pages/connect.dart';
-import 'package:paperwings/pages/widgets/aerobatic_maneuvers_bottom_sheet.dart';
+import 'package:paperwings/pages/widgets/maneuvers.dart';
 import 'package:paperwings/pages/widgets/altimeter.dart';
 import 'package:paperwings/pages/widgets/attitude.dart';
-import 'package:paperwings/pages/widgets/engine_settings_bottom_sheet.dart';
+import 'package:paperwings/pages/widgets/engine_settings.dart';
 import 'package:paperwings/pages/widgets/record_indicator.dart';
+import 'package:paperwings/pages/widgets/turn_coordinator.dart';
 import 'package:paperwings/widgets/carousel.dart';
 import 'package:paperwings/widgets/circular.dart';
 import 'package:paperwings/widgets/compass.dart';
 import 'package:paperwings/widgets/plane_direction.dart';
 import 'package:paperwings/widgets/throttle.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 
 class Fly extends StatefulWidget {
@@ -87,34 +88,43 @@ class _FlyState extends State<Fly> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Center(
-                      child: CarouselWidget(
-                        items: [
-                          CompassWidget(
-                            degrees: state.telemetry.degrees,
-                            textColor: Colors.white,
-                            barsColor: Colors.white,
-                            showDegrees: false,
-                            child: const Icon(
-                              Icons.flight,
-                              size: 150,
-                              color: Colors.white,
-                            ),
+                    child: CarouselWidget(
+                      items: [
+                        CompassWidget(
+                          degrees: state.telemetry.degrees,
+                          textColor: Colors.white,
+                          barsColor: Colors.white,
+                          showDegrees: false,
+                          child: const Icon(
+                            Icons.flight,
+                            size: 150,
+                            color: Colors.white,
                           ),
-                          AttitudeIndicator(
-                            roll: state.direction.roll.toDouble(),
-                            pitch: state.direction.pitch.toDouble(),
-                          ),
-                          Altimeter(
-                            altitude: state.telemetry.altitude,
-                          ),
-                          PlaneDirection(
-                            direction: state.direction,
-                            telemetry: state.telemetry,
-                          ),
-                        ],
-                        indicatorSize: 10.0,
-                      ),
+                        ),
+                        AttitudeIndicator(
+                          roll: state.direction.roll.toDouble(),
+                          pitch: state.direction.pitch.toDouble(),
+                        ),
+                        Altimeter(
+                          altitude: state.telemetry.altitude,
+                        ),
+                        const TurnCoordinator(
+                          // 0: sin giro, 1: giro completo derecha
+                          turnRate: 0.5,
+                          // 0: sin deslizamiento, valores negativos/positivos indican deslizamiento
+                          slip: 0.3,
+                        ),
+                        PlaneDirection(
+                          direction: state.direction,
+                          telemetry: state.telemetry,
+                        ),
+                        Maneuvers(
+                          onManeuverSelected: (int index) {
+                            context.read<FlyBloc>().add(SendManeuver(index));
+                          },
+                        ),
+                      ],
+                      indicatorSize: 10.0,
                     ),
                   ),
                 ),
@@ -216,7 +226,7 @@ class _FlyState extends State<Fly> {
   void _showEngineSettingsBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) => EngineSettingsBottomSheet(
+      builder: (BuildContext context) => EngineSettings(
         settings: FlightSettings(
           steeringAngle: 30.0,
           pitchKp: 0.9,
@@ -245,7 +255,7 @@ class _FlyState extends State<Fly> {
   void _showAerobaticManeuversBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) => AerobaticManeuversBottomSheet(
+      builder: (BuildContext context) => Maneuvers(
         onManeuverSelected: (int index) {
           context.read<FlyBloc>().add(SendManeuver(index));
         },

@@ -4,20 +4,19 @@ import 'package:paperwings/bloc/recordings_bloc/recordings_bloc.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_events.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_states.dart';
 
-class RecordedFlights extends StatelessWidget {
+class RecordedFlights extends StatefulWidget {
   const RecordedFlights({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => RecordedFlightsBloc()..add(LoadRecordedFlights()),
-      child: const RecordedFlightsList(),
-    );
-  }
+  State<RecordedFlights> createState() => _RecordedFlightsState();
 }
 
-class RecordedFlightsList extends StatelessWidget {
-  const RecordedFlightsList({super.key});
+class _RecordedFlightsState extends State<RecordedFlights> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<RecordedFlightsBloc>(context).add(LoadRecordedFlights());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +60,12 @@ class RecordedFlightsList extends StatelessWidget {
                           leading: flight.icon,
                           iconColor: Colors.red,
                           textColor: Colors.black,
-                          title: Text(flight.time,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              )),
+                          title: Text(
+                            flight.time,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: flight.additionalIcons,

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:paperwings/core/flight_settings.dart';
 
-class EngineSettingsBottomSheet extends StatefulWidget {
+class EngineSettings extends StatefulWidget {
   final FlightSettings settings;
   final Function(FlightSettings) onSettingsChanged;
   final VoidCallback onFactorySettings;
   final VoidCallback onDone;
 
-  const EngineSettingsBottomSheet({
+  const EngineSettings({
     super.key,
     required this.settings,
     required this.onSettingsChanged,
@@ -16,11 +16,10 @@ class EngineSettingsBottomSheet extends StatefulWidget {
   });
 
   @override
-  State<EngineSettingsBottomSheet> createState() =>
-      _EngineSettingsBottomSheetState();
+  State<EngineSettings> createState() => _EngineSettingsState();
 }
 
-class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
+class _EngineSettingsState extends State<EngineSettings> {
   late FlightSettings _settings;
 
   @override
@@ -44,7 +43,7 @@ class _EngineSettingsBottomSheetState extends State<EngineSettingsBottomSheet> {
         topRight: Radius.circular(32.0),
       ),
       child: Container(
-        color: Colors.black,
+        color: Colors.grey[900],
         padding: const EdgeInsets.all(32.0),
         child: SingleChildScrollView(
           child: Column(

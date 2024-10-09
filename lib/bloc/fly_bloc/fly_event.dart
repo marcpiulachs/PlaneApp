@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:paperwings/models/direction.dart';
 import 'package:paperwings/models/telemetry.dart';
 
 abstract class FlyEvent extends Equatable {
@@ -117,5 +118,6 @@ class PitchUpdated extends FlyEvent {
 
 class CaptureData extends FlyEvent {
   final Telemetry telemetry;
-  CaptureData(this.telemetry);
+  final Direction direction;
+  CaptureData(this.telemetry, this.direction);
 }

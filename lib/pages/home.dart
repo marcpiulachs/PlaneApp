@@ -148,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage>
                       child: TabBarView(
                         controller: _tabController,
                         children: const [
-                          PlaneCarousel(),
+                          Planes(),
                           Fly(),
                           RecordedFlights(),
                           Mechanics(),

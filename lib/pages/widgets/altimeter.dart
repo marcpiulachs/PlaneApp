@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-enum AltitudeUnit { feet, meters } // Enum para las unidades de altitud
+enum AltitudeUnit { feet, meters }
 
 class Altimeter extends StatelessWidget {
-  final double altitude; // Altitud
-  final AltitudeUnit unit; // Unidad de altitud
+  final double altitude;
+  final AltitudeUnit unit;
 
   const Altimeter({
     super.key,
     required this.altitude,
-    this.unit = AltitudeUnit.feet, // Valor por defecto en pies
+    this.unit = AltitudeUnit.feet,
   });
 
   @override
@@ -18,7 +18,7 @@ class Altimeter extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Stack(
-          alignment: Alignment.center, // Centra los elementos
+          alignment: Alignment.center,
           children: [
             Container(
               height: constraints.maxHeight,
@@ -30,7 +30,7 @@ class Altimeter extends StatelessWidget {
               child: CustomPaint(
                 painter: _AltimeterPainter(altitude: altitude, unit: unit),
               ),
-            )
+            ),
           ],
         );
       },
@@ -39,8 +39,8 @@ class Altimeter extends StatelessWidget {
 }
 
 class _AltimeterPainter extends CustomPainter {
-  final double altitude; // Altitud
-  final AltitudeUnit unit; // Unidad de altitud
+  final double altitude;
+  final AltitudeUnit unit;
 
   _AltimeterPainter({required this.altitude, required this.unit});
 
@@ -48,111 +48,69 @@ class _AltimeterPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double radius = size.width / 2;
     Offset center = Offset(radius, radius);
-    Paint circlePaint = Paint()..color = Colors.black;
 
-    // Dibujar el fondo del altímetro
-    //canvas.drawCircle(center, radius, circlePaint);
-    canvas.drawCircle(center, radius,
-        Paint()..color = Colors.grey.shade900); // Círculo interior
+    // Fondo gris oscuro
+    canvas.drawCircle(center, radius, Paint()..color = Colors.grey.shade900);
 
-    // Dibujar la escala de altitud
-    _drawScale(canvas, center, radius);
+    // Fondo blanco dinámico basado en altitud (llenado de abajo hacia arriba)
+    _drawDynamicFill(canvas, center, radius, size);
 
-    // Dibujar la aguja del altímetro
-    _drawNeedle(canvas, center, radius, altitude);
+    // Dibujar el círculo contrastante en el centro con el valor de altitud
+    _drawAltitudeText(canvas, center, altitude, unit);
   }
 
-  void _drawScale(Canvas canvas, Offset center, double radius) {
-    Paint scalePaint = Paint()..color = Colors.white;
-    double angleStep = math.pi / 25; // 7.2 grados
-    double length = radius - 20; // Longitud de las marcas
+  void _drawDynamicFill(
+      Canvas canvas, Offset center, double radius, Size size) {
+    // Calcular el porcentaje de relleno basado en la altitud
+    double fillPercentage = (altitude.clamp(0, 25) / 25);
 
-    // Definir los valores de altitud según la unidad
-    double maxAltitude = unit == AltitudeUnit.meters
-        ? 25.0
-        : 25.0 * 3.28084; // 25 metros en pies
-    int steps = (maxAltitude / 5)
-        .ceil(); // Cantidad de marcas de escala cada 5 metros o su equivalente
-    double stepSize = maxAltitude / steps;
+    // Crear un path circular que representa el círculo completo
+    Path clipPath = Path()
+      ..addOval(Rect.fromCircle(center: center, radius: radius));
 
-    // Dibujar marcas de la escala (toda la circunferencia)
-    for (int i = 0; i <= steps; i++) {
-      double angle = -math.pi / 2 + (i * angleStep);
-      double x1 = center.dx + (length * math.cos(angle));
-      double y1 = center.dy + (length * math.sin(angle));
-      double x2 = center.dx + (length - 10) * math.cos(angle);
-      double y2 = center.dy + (length - 10) * math.sin(angle);
+    // Aplicar un rectángulo de relleno que sube de abajo hacia arriba
+    double fillHeight = size.height * fillPercentage;
+    Rect fillRect =
+        Rect.fromLTWH(0, size.height - fillHeight, size.width, fillHeight);
 
-      // Dibujar líneas
-      canvas.drawLine(Offset(x1, y1), Offset(x2, y2), scalePaint);
-
-      // Dibujar texto de la altitud
-      TextPainter textPainter = TextPainter(
-        text: TextSpan(
-          text:
-              '${(i * stepSize).toStringAsFixed(0)} ${unit == AltitudeUnit.meters ? 'm' : 'ft'}',
-          style: const TextStyle(color: Colors.white, fontSize: 12),
-        ),
-        textDirection: TextDirection.ltr,
-      );
-      textPainter.layout();
-      textPainter.paint(
-        canvas,
-        Offset(center.dx + (length - 30) * math.cos(angle) - 10,
-            center.dy + (length - 30) * math.sin(angle) - 6),
-      );
-
-      // Dibujar texto negativo
-      double negativeAngle =
-          angle + math.pi; // Invertir el ángulo para el texto negativo
-      textPainter.paint(
-        canvas,
-        Offset(center.dx + (length - 30) * math.cos(negativeAngle) - 10,
-            center.dy + (length - 30) * math.sin(negativeAngle) - 6),
-      );
-    }
+    // Usar `clipPath` para enmascarar el rectángulo de relleno dentro del círculo
+    canvas.save();
+    canvas.clipPath(clipPath);
+    Paint fillPaint = Paint()..color = Colors.white;
+    canvas.drawRect(fillRect, fillPaint);
+    canvas.restore();
   }
 
-  void _drawNeedle(
-      Canvas canvas, Offset center, double radius, double altitude) {
-    Paint needlePaint = Paint()..color = Colors.red;
+  void _drawAltitudeText(
+      Canvas canvas, Offset center, double altitude, AltitudeUnit unit) {
+    // Texto que muestra la altitud actual
+    String altitudeText =
+        '${altitude.toStringAsFixed(1)} ${unit == AltitudeUnit.meters ? 'm' : 'ft'}';
 
-    // Calcular el ángulo de la aguja basado en la altitud
-    double angle = -math.pi / 2 + (altitude / 25 * (math.pi / 2));
+    // Círculo en el centro para destacar el texto
+    double textCircleRadius = center.dx * 0.4; // 40% del radio total
+    Paint textCirclePaint = Paint()..color = Colors.black;
+    canvas.drawCircle(center, textCircleRadius, textCirclePaint);
 
-    // Longitudes de la aguja (más largas en la base y más cortas en la punta)
-    double baseLength = radius - 40; // Longitud de la base
-    double tipLength = 20; // Longitud de la punta
+    // Configuración del texto en el centro
+    TextPainter textPainter = TextPainter(
+      text: TextSpan(
+        text: altitudeText,
+        style: const TextStyle(
+            color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
 
-    // Calcular la posición de la base y la punta de la aguja
-    double xBase = center.dx + baseLength * math.cos(angle);
-    double yBase = center.dy + baseLength * math.sin(angle);
-    double xTip = center.dx + (baseLength - tipLength) * math.cos(angle);
-    double yTip = center.dy + (baseLength - tipLength) * math.sin(angle);
-
-    // Dibujar la aguja
-    Path needlePath = Path();
-    needlePath.moveTo(center.dx, center.dy); // Comenzar desde el centro
-    needlePath.lineTo(xBase, yBase); // Línea a la base
-    needlePath.lineTo(xTip, yTip); // Línea a la punta
-
-    // Dibujar la base ancha de la aguja
-    needlePath.lineTo(
-        center.dx + 5 * math.cos(angle + math.pi / 2),
-        center.dy +
-            5 * math.sin(angle + math.pi / 2)); // Línea hacia la derecha
-    needlePath.lineTo(
-        center.dx + 5 * math.cos(angle - math.pi / 2),
-        center.dy +
-            5 * math.sin(angle - math.pi / 2)); // Línea hacia la izquierda
-    needlePath.close(); // Cerrar el camino
-
-    // Pintar la aguja
-    canvas.drawPath(needlePath, needlePaint);
+    // Centrar el texto dentro del círculo pequeño
+    Offset textOffset = Offset(
+        center.dx - textPainter.width / 2, center.dy - textPainter.height / 2);
+    textPainter.paint(canvas, textOffset);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true; // Repintar si cambia la altitud
+    return true;
   }
 }
