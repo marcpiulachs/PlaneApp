@@ -277,74 +277,47 @@ class TcpPlaneClient implements IPlaneClient {
   void _handleReceivedPacket(Packet packet) {
     switch (packet.function) {
       case Packet.GYRO_X:
-        if (onGyroX != null) {
-          onGyroX!(packet.payload);
-        }
+        onGyroX?.call(packet.payload);
         break;
       case Packet.GYRO_Y:
-        if (onGyroY != null) {
-          onGyroY!(packet.payload);
-        }
+        onGyroY?.call(packet.payload);
         break;
       case Packet.GYRO_Z:
-        if (onGyroZ != null) {
-          onGyroZ!(packet.payload);
-        }
+        onGyroZ?.call(packet.payload);
         break;
       case Packet.MAGNETOMETER_X:
-        if (onMagnetometerX != null) {
-          onMagnetometerX!(packet.payload);
-        }
+        onMagnetometerX?.call(packet.payload);
         break;
       case Packet.MAGNETOMETER_Y:
-        if (onMagnetometerY != null) {
-          onMagnetometerY!(packet.payload);
-        }
+        onMagnetometerY?.call(packet.payload);
         break;
       case Packet.MAGNETOMETER_Z:
-        if (onMagnetometerZ != null) {
-          onMagnetometerZ!(packet.payload);
-        }
+        onMagnetometerZ?.call(packet.payload);
         break;
       case Packet.BAROMETER:
-        if (onBarometer != null) {
-          onBarometer!(packet.payload);
-        }
+        onBarometer?.call(packet.payload);
         break;
       case Packet.MOTOR_1_SPEED:
-        if (onMotor1Speed != null) {
-          onMotor1Speed!(packet.payload);
-        }
+        onMotor1Speed?.call(packet.payload);
         break;
       case Packet.MOTOR_2_SPEED:
-        if (onMotor2Speed != null) {
-          onMotor2Speed!(packet.payload);
-        }
+        onMotor2Speed?.call(packet.payload);
         break;
       case Packet.BATTERY:
-        if (onBattery != null) {
-          onBattery!(packet.payload);
-        }
+        onBattery?.call(packet.payload);
         break;
       case Packet.SIGNAL:
-        if (onSignal != null) {
-          onSignal!(packet.payload);
-        }
+        onSignal?.call(packet.payload);
         break;
       case Packet.ACCEL_X:
-        if (onAccelerometerX != null) {
-          onAccelerometerX!(packet.payload);
-        }
+        onAccelerometerX?.call(packet.payload);
         break;
       case Packet.ACCEL_Y:
-        if (onAccelerometerY != null) {
-          onAccelerometerY!(packet.payload);
-        }
+        onAccelerometerY?.call(packet.payload);
         break;
       case Packet.ACCEL_Z:
-        if (onAccelerometerZ != null) {
-          onAccelerometerZ!(packet.payload);
-        }
+        onAccelerometerZ?.call(packet.payload);
+        break;
       default:
         developer.log('Unknown function: ${packet.function}');
         break;
