@@ -247,8 +247,8 @@ class TcpPlaneClient implements IPlaneClient {
         // Agregar el byte actual al buffer
         packetBuffer.add(byte);
         // Detectar byte de fin y validar el paquete
-        if (byte == Packet.endByte) {
-          if (packetBuffer.length != Packet.length) {
+        if (packetBuffer.length == Packet.length) {
+          if (byte == Packet.endByte) {
             // Convertir el buffer en un Uint8List y tratar de interpretar el paquete
             Uint8List packetBytes = Uint8List.fromList(packetBuffer);
             // Load packet from bytes
@@ -262,7 +262,8 @@ class TcpPlaneClient implements IPlaneClient {
             }
           } else {
             packetsWithError++;
-            developer.log('Packet too short');
+            developer.log(
+                'Packet malformed expecting ${Packet.endByte}, found $byte');
           }
 
           // Reiniciar el buffer tras procesar el paquete (correcto o incorrecto)
