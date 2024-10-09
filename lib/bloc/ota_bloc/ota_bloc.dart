@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:paperwings/clients/plane_client_interface.dart';
+import 'package:paperwings/models/verison.dart';
 
 import 'ota_event.dart';
 import 'ota_state.dart';
@@ -10,11 +11,11 @@ import 'ota_state.dart';
 class OtaBloc extends Bloc<OtaEvent, OtaState> {
   final IPlaneClient client;
   // App version
-  final String appVersion = "1.0.0";
+  Version appVersion = Version(1, 0, 0);
   // App firmware version
-  String devFirmwareVersion = "0.0.0";
+  Version devFirmwareVersion = Version(0, 0, 0);
   // Versión actual del firmware de la app
-  String appFirmwareVersion = "1.2.0";
+  Version appFirmwareVersion = Version(1, 2, 0);
 
   // Urls from device services
   final verUrl = Uri.parse('http://192.168.4.1/ver');
@@ -51,15 +52,12 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
             );
 
         if (response.statusCode == 200) {
-          devFirmwareVersion = response.body.trim();
-          bool updateAvailable =
-              isVersionLower(devFirmwareVersion, appFirmwareVersion);
+          devFirmwareVersion = Version.fromString(response.body);
 
           emit(OtaLoadedVersionState(
             appVersion,
             appFirmwareVersion,
             devFirmwareVersion,
-            updateAvailable,
           ));
         } else {
           emit(
@@ -117,18 +115,5 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
       // Fallo en la actualización
       emit(OtaUpdateCompletedState(false));
     }
-  }
-
-  // Compara las versiones del ESP32 y la app
-  bool isVersionLower(String devFirmware, String appFirmware) {
-    List<String> devVer = devFirmware.split('.');
-    List<String> appVer = appFirmware.split('.');
-
-    for (int i = 0; i < devVer.length; i++) {
-      if (int.parse(appVer[i]) > int.parse(devVer[i])) {
-        return true;
-      }
-    }
-    return false;
   }
 }

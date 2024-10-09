@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:paperwings/models/verison.dart';
 
 abstract class OtaState extends Equatable {
   @override
@@ -14,20 +15,26 @@ class OtaPlaneDisconectedState extends OtaState {}
 
 // Estado cuando la versión del ESP32 ha sido cargada
 class OtaLoadedVersionState extends OtaState {
-  final String appVersion;
-  final String appFirmware;
-  final String devFirmware;
-  final bool updateAvailable;
+  final Version appVersion;
+  final Version appFirmware;
+  final Version devFirmware;
 
   OtaLoadedVersionState(
     this.appVersion,
     this.appFirmware,
     this.devFirmware,
-    this.updateAvailable,
   );
 
+  // Calcula si la actualización está disponible
+  bool get updateAvailable => appFirmware.isNewerThan(devFirmware);
+
   @override
-  List<Object?> get props => [devFirmware, appFirmware, updateAvailable];
+  List<Object?> get props => [
+        appVersion,
+        devFirmware,
+        appFirmware,
+        updateAvailable,
+      ];
 }
 
 class OtaErrorState extends OtaState {

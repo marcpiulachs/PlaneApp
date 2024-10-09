@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:paperwings/models/verison.dart';
 
-class Version extends StatelessWidget {
-  final String appVersion;
-  final String firmwareVersion;
+class Versions extends StatelessWidget {
+  final Version appVersion;
+  final Version devVersion;
 
-  const Version({
+  const Versions({
     super.key,
     required this.appVersion,
-    required this.firmwareVersion,
+    required this.devVersion,
   });
 
   @override
@@ -26,7 +27,7 @@ class Version extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          appVersion,
+          appVersion.toString(),
           style: const TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,
@@ -44,7 +45,7 @@ class Version extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          firmwareVersion,
+          devVersion.toString(),
           style: const TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,

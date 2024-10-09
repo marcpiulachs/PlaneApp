@@ -31,9 +31,9 @@ class _SettingsState extends State<Settings> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Version(
+                      Versions(
                         appVersion: state.appVersion,
-                        firmwareVersion: state.devFirmware,
+                        devVersion: state.devFirmware,
                       ),
                       const SizedBox(height: 20),
                       state.updateAvailable
