@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_event.dart';
 import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_state.dart';
@@ -31,7 +30,6 @@ class PlaneCarouselBloc extends Bloc<PlaneCarouselEvent, PlaneCarouselState> {
           progress1: 0.3,
           progress2: 0.9,
           progress3: 0.4,
-          icon: Icons.support,
           settings: FlightSettings(
             steeringAngle: 110,
             pitchKp: 1.5,
@@ -50,7 +48,6 @@ class PlaneCarouselBloc extends Bloc<PlaneCarouselEvent, PlaneCarouselState> {
           progress1: 0.1,
           progress2: 0.7,
           progress3: 0.2,
-          icon: Icons.airplane_ticket,
           settings: FlightSettings(
             steeringAngle: 110,
             pitchKp: 1.5,
@@ -69,7 +66,6 @@ class PlaneCarouselBloc extends Bloc<PlaneCarouselEvent, PlaneCarouselState> {
           progress1: 0.1,
           progress2: 0.4,
           progress3: 0.9,
-          icon: Icons.timer,
           settings: FlightSettings(
             steeringAngle: 110,
             pitchKp: 1.5,
@@ -84,21 +80,17 @@ class PlaneCarouselBloc extends Bloc<PlaneCarouselEvent, PlaneCarouselState> {
       ];
 
       emit(PlaneCarouselLoaded(
-        planeItems: planeItems,
-        selectedPlane: planeItems[0],
+        planes: planeItems,
         currentIndex: 0,
         isConnected: client.isConnected,
       ));
-
-      //client.connect();
     });
 
     on<PlaneSelectedEvent>((event, emit) {
       if (state is PlaneCarouselLoaded) {
         final loadedState = state as PlaneCarouselLoaded;
         emit(PlaneCarouselLoaded(
-          planeItems: loadedState.planeItems,
-          selectedPlane: loadedState.planeItems[event.selectedIndex],
+          planes: loadedState.planes,
           currentIndex: event.selectedIndex,
           isConnected: client.isConnected,
         ));

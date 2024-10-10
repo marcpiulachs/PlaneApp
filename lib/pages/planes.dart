@@ -5,7 +5,8 @@ import 'package:paperwings/bloc/home_bloc/home_event.dart';
 import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
 import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_event.dart';
 import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_state.dart';
-import 'package:paperwings/widgets/circular.dart';
+import 'package:paperwings/pages/widgets/connected_indicator.dart';
+import 'package:paperwings/pages/widgets/plane_indicators.dart';
 import 'package:paperwings/widgets/plane_carousel.dart';
 
 class Planes extends StatefulWidget {
@@ -49,7 +50,7 @@ class _PlanesState extends State<Planes> {
               ),
               Expanded(
                 child: PlaneCarouselWidget(
-                  planeItems: state.planeItems,
+                  planeItems: state.planes,
                   pageController: _pageController,
                   onPageChanged: (index) {
                     planeCarouselBloc.add(PlaneSelectedEvent(index));
@@ -57,9 +58,9 @@ class _PlanesState extends State<Planes> {
                   currentIndex: state.currentIndex,
                 ),
               ),
-              _buildConnectionStatus(state),
+              ConnectedIndicator(isConnected: state.isConnected),
               const SizedBox(height: 10),
-              _buildIndicators(state),
+              PlaneIndicators(plane: state.selectedPlane),
               const SizedBox(height: 10),
               _buildGoFlyButton(),
             ],
@@ -99,91 +100,6 @@ class _PlanesState extends State<Planes> {
             color: Colors.white,
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildConnectionStatus(PlaneCarouselLoaded state) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 4,
-              offset: const Offset(0, 2), // Sombra hacia abajo
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              state.isConnected ? Icons.public : Icons.public_off,
-              size: 18,
-              color: Colors.black,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              state.isConnected ? 'Connected' : 'Disconnected',
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildIndicators(PlaneCarouselLoaded state) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 10),
-          const Text(
-            "FEATURES",
-            style: TextStyle(color: Colors.white),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressBar(
-                progress: state.selectedPlane.progress1,
-                icon: Icons.support,
-                text: "Easy",
-                backgroundColor: Colors.white,
-                size: 90.0,
-              ),
-              const SizedBox(width: 16),
-              CircularProgressBar(
-                progress: state.selectedPlane.progress2,
-                icon: Icons.airplane_ticket,
-                text: "Expertise",
-                backgroundColor: Colors.white,
-                size: 90.0,
-              ),
-              const SizedBox(width: 16),
-              CircularProgressBar(
-                progress: state.selectedPlane.progress3,
-                icon: Icons.timer,
-                text: "Range",
-                backgroundColor: Colors.white,
-                size: 90.0,
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

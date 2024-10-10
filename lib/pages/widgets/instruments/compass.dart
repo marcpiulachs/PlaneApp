@@ -38,17 +38,26 @@ class CompassWidget extends StatelessWidget {
         return Stack(
           alignment: Alignment.center, // Centra los elementos
           children: [
-            Transform.rotate(
-              angle: (degrees - 90) * pi / 180,
-              child: CustomPaint(
-                size: Size(constraints.maxHeight, constraints.maxHeight),
-                painter: CompassPainter(
-                  degrees: degrees,
-                  cardinalDirection: getCardinalDirection(degrees),
-                  backgroundColor: backgroundColor,
-                  textColor: textColor,
-                  barsColor: barsColor,
-                  showDegrees: showDegrees,
+            Container(
+              height: constraints.maxHeight,
+              width: constraints.maxHeight,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black,
+                border: Border.all(width: 2.0, color: Colors.grey.shade900),
+              ),
+              child: Transform.rotate(
+                angle: (degrees - 90) * pi / 180,
+                child: CustomPaint(
+                  size: Size(constraints.maxHeight, constraints.maxHeight),
+                  painter: CompassPainter(
+                    degrees: degrees,
+                    cardinalDirection: getCardinalDirection(degrees),
+                    backgroundColor: backgroundColor,
+                    textColor: textColor,
+                    barsColor: barsColor,
+                    showDegrees: showDegrees,
+                  ),
                 ),
               ),
             ),

@@ -30,8 +30,8 @@ class _TurnCoordinatorState extends State<TurnCoordinator>
               width: constraints.maxHeight,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.black,
-                border: Border.all(color: Colors.white, width: 2),
+                color: Colors.grey.shade900,
+                border: Border.all(color: Colors.black, width: 2),
               ),
             ),
             // Avión central que rota según la tasa de giro

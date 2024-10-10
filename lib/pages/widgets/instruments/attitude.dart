@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -7,10 +6,10 @@ class AttitudeIndicator extends StatelessWidget {
   final double pitch; // Ángulo de cabeceo (en grados)
 
   const AttitudeIndicator({
-    Key? key,
+    super.key,
     required this.roll,
     required this.pitch,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class AttitudeIndicator extends StatelessWidget {
               width: constraints.maxHeight,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(width: 2.0, color: Colors.black),
+                border: Border.all(width: 2.0, color: Colors.grey.shade900),
               ),
               child: ClipOval(
                 child: CustomPaint(

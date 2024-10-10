@@ -10,36 +10,33 @@ class PlaneCarouselInitial extends PlaneCarouselState {
 }
 
 class PlaneCarouselLoaded extends PlaneCarouselState {
-  final List<PlaneItem> planeItems;
-  final PlaneItem selectedPlane;
+  final List<PlaneItem> planes;
   final int currentIndex;
   final bool isConnected;
 
   PlaneCarouselLoaded({
-    required this.planeItems,
-    required this.selectedPlane,
+    required this.planes,
     required this.currentIndex,
     required this.isConnected,
   });
 
   // Método copyWith
   PlaneCarouselLoaded copyWith({
-    List<PlaneItem>? planeItems,
-    PlaneItem? selectedPlane,
+    List<PlaneItem>? planes,
     int? currentIndex,
     bool? isConnected,
   }) {
     return PlaneCarouselLoaded(
-      planeItems: planeItems ?? this.planeItems,
-      selectedPlane: selectedPlane ?? this.selectedPlane,
+      planes: planes ?? this.planes,
       currentIndex: currentIndex ?? this.currentIndex,
       isConnected: isConnected ?? this.isConnected,
     );
   }
 
+  PlaneItem get selectedPlane => planes[currentIndex];
+
   @override
-  List<Object?> get props =>
-      [planeItems, selectedPlane, currentIndex, isConnected];
+  List<Object?> get props => [planes, selectedPlane, currentIndex, isConnected];
 }
 
 class PlaneCarouselLoadFailed extends PlaneCarouselState {

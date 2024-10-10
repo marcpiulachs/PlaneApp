@@ -25,12 +25,12 @@ class Maneuvers extends StatelessWidget {
               borderRadius: BorderRadius.circular(3),
               onTap: () => onManeuverSelected(index),
               child: Container(
-                height: 130,
-                width: 100,
+                height: 110,
+                width: 110,
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: Colors.grey[800], // Recuadro gris oscuro
-                  borderRadius: BorderRadius.circular(8.0),
+                  color: Colors.black, // Recuadro gris oscuro
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -40,20 +40,14 @@ class Maneuvers extends StatelessWidget {
                       color: Colors.blue,
                       size: 40.0, // Icono grande
                     ),
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: 5),
                     Text(
                       maneuvers[index].text,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 14.0,
+                        fontSize: 12.0,
                       ),
                       textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8.0),
-                    const Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                      size: 30.0, // Icono grande
                     ),
                   ],
                 ),

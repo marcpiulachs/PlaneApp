@@ -12,10 +12,10 @@ class FlightOrientation {
   final Function(int degrees)? onUpChanged;
   final Function(int degrees)? onDownChanged;
 
-  final Function(int degrees)?
-      onRotateLeftChanged; // Evento para rotación hacia la izquierda (yaw)
-  final Function(int degrees)?
-      onRotateRightChanged; // Evento para rotación hacia la derecha (yaw)
+  // Evento para rotación hacia la izquierda (yaw)
+  final Function(int degrees)? onRotateLeftChanged;
+  // Evento para rotación hacia la derecha (yaw)
+  final Function(int degrees)? onRotateRightChanged;
 
   StreamSubscription<GyroscopeEvent>? _gyroscopeSubscription;
   StreamSubscription<AccelerometerEvent>? _accelerometerSubscription;
