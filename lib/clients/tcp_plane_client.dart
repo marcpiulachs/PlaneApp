@@ -74,6 +74,8 @@ class Packet {
       return null;
     }
 
+    // Crear una vista de los bytes del paquete sin copiar los datos
+    // Esto permite interpretar los datos de manera eficiente usando ByteData
     ByteData byteData = ByteData.sublistView(data);
 
     // Leer la función y el tipo de dato
@@ -176,27 +178,25 @@ class TcpPlaneClient implements IPlaneClient {
   @override
   Future<void> connect() async {
     try {
+      // Create socket
       _socket = await Socket.connect(
         host,
         port,
         timeout: const Duration(seconds: 5),
       );
+      // Report to console
       developer.log('Connection established with $host:$port');
-
       // Actualiza el estado de conexión
       setConnected(true);
-
       // Emite el evento de conexión si existe
       onConnect?.call();
-
       // Escuchar mensajes del servidor
       _listenToServer();
     } catch (e) {
+      // Report to console
       developer.log('Error connecting to the server: $e');
-
       // Actualiza el estado de conexión
       setConnected(false);
-
       // Emite el evento de falla de conexión si existe
       onConnectionFailed?.call();
     }
