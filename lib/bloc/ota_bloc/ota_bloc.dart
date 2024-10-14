@@ -86,7 +86,7 @@ class OtaBloc extends Bloc<OtaEvent, OtaState> {
     var firmware = await rootBundle.load(assetFirmware);
     var firmwareFile = firmware.buffer.asUint8List();
 
-    if (firmwareFile.isEmpty || firmwareFile[0] != 0xE9) {
+    if (firmwareFile.isEmpty || firmwareFile.first != 0xE9) {
       emit(OtaUpdateCompletedState(false));
     }
 
