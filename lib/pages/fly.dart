@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_bloc.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_event.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
-import 'package:paperwings/core/flight_settings.dart';
+import 'package:paperwings/models/flight_settings.dart';
 import 'package:paperwings/pages/connect.dart';
+import 'package:paperwings/pages/widgets/instruments/altimeterwidget.dart';
 import 'package:paperwings/pages/widgets/maneuvers.dart';
 import 'package:paperwings/pages/widgets/instruments/altimeter.dart';
 import 'package:paperwings/pages/widgets/instruments/attitude.dart';
@@ -123,6 +124,12 @@ class _FlyState extends State<Fly> {
                             context.read<FlyBloc>().add(SendManeuver(index));
                           },
                         ),
+                        const AltimeterWidget(
+                          minAltitude: 0,
+                          maxAltitude: 20, //unit: AltitudeUnit.,
+                          altitude: 2,
+                          pressure: 3,
+                        )
                       ],
                       indicatorSize: 10.0,
                     ),
@@ -227,16 +234,6 @@ class _FlyState extends State<Fly> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) => EngineSettings(
-        settings: FlightSettings(
-          steeringAngle: 30.0,
-          pitchKp: 0.9,
-          pitchRateKp: 1.1,
-          rollKp: 1.3,
-          rollRateKp: 1.2,
-          yawKp: 1.8,
-          yawRateKp: 1.0,
-          angleOfAttack: 7.5,
-        ), // Puedes pasar la configuración actual aquí
         onSettingsChanged: (FlightSettings updatedSettings) {
           // Manejar los ajustes actualizados
           developer.log('Settings changed');

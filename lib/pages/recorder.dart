@@ -57,7 +57,7 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: ListTile(
-                          leading: flight.icon,
+                          leading: const Icon(Icons.flight),
                           iconColor: Colors.red,
                           textColor: Colors.black,
                           title: Text(
@@ -68,7 +68,23 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: flight.additionalIcons,
+                            children: [
+                              Icon(
+                                Icons.circle,
+                                color:
+                                    flight.hasIcon1 ? Colors.red : Colors.grey,
+                              ),
+                              Icon(
+                                Icons.circle,
+                                color:
+                                    flight.hasIcon2 ? Colors.red : Colors.grey,
+                              ),
+                              Icon(
+                                Icons.circle,
+                                color:
+                                    flight.hasIcon3 ? Colors.red : Colors.grey,
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -102,7 +118,7 @@ class _RecordedFlightsState extends State<RecordedFlights> {
         } else if (state is RecordedFlightsError) {
           return Center(child: Text(state.message));
         } else {
-          return const Center(child: Text('No data'));
+          return const Center(child: Text('No recordings yet'));
         }
       },
     );

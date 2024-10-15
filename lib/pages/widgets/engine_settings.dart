@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:paperwings/core/flight_settings.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_bloc.dart';
+import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_event.dart';
+import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_state.dart';
+import 'package:paperwings/models/flight_settings.dart';
 
 class EngineSettings extends StatefulWidget {
-  final FlightSettings settings;
   final Function(FlightSettings) onSettingsChanged;
   final VoidCallback onFactorySettings;
   final VoidCallback onDone;
 
   const EngineSettings({
     super.key,
-    required this.settings,
     required this.onSettingsChanged,
     required this.onFactorySettings,
     required this.onDone,
@@ -20,176 +22,181 @@ class EngineSettings extends StatefulWidget {
 }
 
 class _EngineSettingsState extends State<EngineSettings> {
-  late FlightSettings _settings;
-
-  @override
-  void initState() {
-    super.initState();
-    _settings = widget.settings;
-  }
-
-  void _updateSetting(double value, Function(double) updateFunc) {
-    setState(() {
-      updateFunc(value);
-    });
-    widget.onSettingsChanged(_settings);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(32.0),
-        topRight: Radius.circular(32.0),
-      ),
-      child: Container(
-        color: Colors.grey[900],
-        padding: const EdgeInsets.all(32.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                "AIRCRAFT SETTINGS",
-                style: TextStyle(color: Colors.white, fontSize: 18.0),
-              ),
-              const SizedBox(height: 30.0),
-              _buildSlider(
-                "Steering Angle",
-                _settings.steeringAngle,
-                Icons.set_meal,
-                (value) {
-                  _updateSetting(value, _settings.updateSteeringAngle);
-                },
-                min: 5,
-                max: 175,
-                divisions: 35,
-              ),
-              _buildSlider(
-                "Pitch Kp",
-                _settings.pitchKp,
-                Icons.arrow_upward,
-                (value) {
-                  _updateSetting(value, _settings.updatePitchKp);
-                },
-                min: 0,
-                max: 2.540,
-                divisions: 254,
-              ),
-              _buildSlider(
-                "Pitch Rate Kp",
-                _settings.pitchRateKp,
-                Icons.arrow_downward,
-                (value) {
-                  _updateSetting(value, _settings.updatePitchRateKp);
-                },
-                min: 0,
-                max: 2.540,
-                divisions: 254,
-              ),
-              _buildSlider(
-                "Roll Kp",
-                _settings.rollKp,
-                Icons.arrow_forward,
-                (value) {
-                  _updateSetting(value, _settings.updateRollKp);
-                },
-                min: 0,
-                max: 2.540,
-                divisions: 254,
-              ),
-              _buildSlider(
-                "Roll Rate Kp",
-                _settings.rollRateKp,
-                Icons.arrow_back,
-                (value) {
-                  _updateSetting(value, _settings.updateRollRateKp);
-                },
-                min: 0,
-                max: 2.540,
-                divisions: 254,
-              ),
-              _buildSlider(
-                "Yaw Kp",
-                _settings.yawKp,
-                Icons.rotate_left,
-                (value) {
-                  _updateSetting(value, _settings.updateYawKp);
-                },
-                min: 0,
-                max: 2.540,
-                divisions: 254,
-              ),
-              _buildSlider(
-                "Yaw Rate Kp",
-                _settings.yawRateKp,
-                Icons.rotate_right,
-                (value) {
-                  _updateSetting(value, _settings.updateYawRateKp);
-                },
-                min: 0,
-                max: 2.540,
-                divisions: 254,
-              ),
-              _buildSlider(
-                "Angle of Attack",
-                _settings.angleOfAttack,
-                Icons.accessibility,
-                (value) {
-                  _updateSetting(value, _settings.updateAngleOfAttack);
-                },
-                min: 0,
-                max: 90,
-                divisions: 90,
-              ),
-              const SizedBox(height: 20.0),
-              Column(children: [
-                ElevatedButton(
-                  onPressed: () {
-                    widget.onFactorySettings();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  child: const Text(
-                    'FACTORY SETTINGS',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    // Llamar al callback
-                    widget.onDone();
-                    // Cerrar el BottomSheet
-                    Navigator.of(context).pop();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  child: const Text(
-                    'DONE',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                )
-              ]),
-            ],
+    return BlocBuilder<FlightSettingsBloc, FlightSettingsState>(
+      builder: (context, state) {
+        return ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(32.0),
+            topRight: Radius.circular(32.0),
           ),
-        ),
-      ),
+          child: Container(
+            color: Colors.grey[900],
+            padding: const EdgeInsets.all(32.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    "AIRCRAFT SETTINGS",
+                    style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  ),
+                  const SizedBox(height: 30.0),
+
+                  _buildSlider(
+                    "Steering Angle",
+                    state.flightSettings.steeringAngle,
+                    Icons.set_meal,
+                    (value) {
+                      context
+                          .read<FlightSettingsBloc>()
+                          .add(UpdateSteeringAngle(value));
+                    },
+                    min: 5,
+                    max: 175,
+                    divisions: 35,
+                  ),
+                  _buildSlider(
+                    "Pitch Kp",
+                    state.flightSettings.pitchKp,
+                    Icons.arrow_upward,
+                    (value) {
+                      context
+                          .read<FlightSettingsBloc>()
+                          .add(UpdatePitchKp(value));
+                    },
+                    min: 0,
+                    max: 2.540,
+                    divisions: 254,
+                  ),
+                  _buildSlider(
+                    "Pitch Rate Kp",
+                    state.flightSettings.pitchRateKp,
+                    Icons.arrow_downward,
+                    (value) {
+                      context
+                          .read<FlightSettingsBloc>()
+                          .add(UpdatePitchRateKp(value));
+                    },
+                    min: 0,
+                    max: 2.540,
+                    divisions: 254,
+                  ),
+                  _buildSlider(
+                    "Roll Kp",
+                    state.flightSettings.rollKp,
+                    Icons.arrow_forward,
+                    (value) {
+                      context
+                          .read<FlightSettingsBloc>()
+                          .add(UpdateRollKp(value));
+                    },
+                    min: 0,
+                    max: 2.540,
+                    divisions: 254,
+                  ),
+                  _buildSlider(
+                    "Roll Rate Kp",
+                    state.flightSettings.rollRateKp,
+                    Icons.arrow_back,
+                    (value) {
+                      context
+                          .read<FlightSettingsBloc>()
+                          .add(UpdateRollRateKp(value));
+                    },
+                    min: 0,
+                    max: 2.540,
+                    divisions: 254,
+                  ),
+                  _buildSlider(
+                    "Yaw Kp",
+                    state.flightSettings.yawKp,
+                    Icons.rotate_left,
+                    (value) {
+                      context
+                          .read<FlightSettingsBloc>()
+                          .add(UpdateYawKp(value));
+                    },
+                    min: 0,
+                    max: 2.540,
+                    divisions: 254,
+                  ),
+                  _buildSlider(
+                    "Yaw Rate Kp",
+                    state.flightSettings.yawRateKp,
+                    Icons.rotate_right,
+                    (value) {
+                      context
+                          .read<FlightSettingsBloc>()
+                          .add(UpdateYawRateKp(value));
+                    },
+                    min: 0,
+                    max: 2.540,
+                    divisions: 254,
+                  ),
+                  _buildSlider(
+                    "Angle of Attack",
+                    state.flightSettings.angleOfAttack,
+                    Icons.accessibility,
+                    (value) {
+                      context
+                          .read<FlightSettingsBloc>()
+                          .add(UpdateAngleOfAttack(value));
+                    },
+                    min: 0,
+                    max: 90,
+                    divisions: 90,
+                  ),
+                  // Agrega los otros sliders de la misma forma...
+                  const SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      context
+                          .read<FlightSettingsBloc>()
+                          .add(ResetFactorySettings());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      backgroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: const Text(
+                      'FACTORY SETTINGS',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      widget.onDone();
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      backgroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: const Text(
+                      'DONE',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

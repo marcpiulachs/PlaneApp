@@ -23,6 +23,7 @@ class _PlanesState extends State<Planes> {
   void initState() {
     super.initState(); // Recuperar el Bloc desde el contexto
     planeCarouselBloc = BlocProvider.of<PlaneCarouselBloc>(context);
+    planeCarouselBloc.add(LoadPlanesEvent());
   }
 
   @override
@@ -31,8 +32,7 @@ class _PlanesState extends State<Planes> {
       bloc: planeCarouselBloc,
       builder: (context, state) {
         if (state is PlaneCarouselInitial) {
-          planeCarouselBloc.add(LoadPlanesEvent());
-          return const Center(child: CircularProgressIndicator());
+          return const Center();
         } else if (state is PlaneCarouselLoaded) {
           return Column(
             children: [

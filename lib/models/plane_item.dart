@@ -1,4 +1,4 @@
-import 'package:paperwings/core/flight_settings.dart';
+import 'package:paperwings/models/flight_settings.dart';
 
 class PlaneItem {
   final String imageUrl;
@@ -7,7 +7,8 @@ class PlaneItem {
   final double progress1;
   final double progress2;
   final double progress3;
-  final FlightSettings settings;
+  final FlightSettings defaultSettings;
+  final FlightSettings customSettings;
 
   PlaneItem({
     required this.imageUrl,
@@ -16,6 +17,7 @@ class PlaneItem {
     required this.progress1,
     required this.progress2,
     required this.progress3,
-    required this.settings,
+    required this.defaultSettings,
+    required this.customSettings,
   });
 }

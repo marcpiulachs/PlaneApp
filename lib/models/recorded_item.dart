@@ -1,10 +1,13 @@
-// Modelo
-import 'package:flutter/material.dart';
-
 class RecordedFlight {
-  final Icon icon;
   final String time;
-  final List<Icon> additionalIcons;
+  final bool hasIcon1;
+  final bool hasIcon2;
+  final bool hasIcon3;
 
-  RecordedFlight(this.icon, this.time, this.additionalIcons);
+  RecordedFlight({
+    required this.time,
+    required this.hasIcon1,
+    required this.hasIcon2,
+    required this.hasIcon3,
+  });
 }

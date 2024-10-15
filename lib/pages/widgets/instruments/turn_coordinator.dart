@@ -37,10 +37,9 @@ class _TurnCoordinatorState extends State<TurnCoordinator>
             // Avión central que rota según la tasa de giro
             Transform.rotate(
               angle: widget.turnRate * pi / 4, // Rango de rotación
-              child: const Icon(
-                Icons.airplanemode_active,
-                size: 100,
-                color: Colors.white,
+              child: CustomPaint(
+                size: const Size(100, 100), // Tamaño del avión
+                painter: AirplanePainter(),
               ),
             ),
             // Bola que se mueve lateralmente para indicar deslizamiento
@@ -76,5 +75,62 @@ class _TurnCoordinatorState extends State<TurnCoordinator>
         );
       },
     );
+  }
+}
+
+class AirplanePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
+
+    // Dibujar la bola en el centro (cuerpo del avión)
+    double radius = 10.0; // Radio de la bola
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), radius, paint);
+
+    // Dibujar las alas
+    paint.color = Colors.white; // Color de las alas
+    double wingLength = 80.0; // Longitud de las alas
+    double wingHeight = 5.0; // Altura de las alas
+
+    // Alas izquierda
+    canvas.drawRect(
+      Rect.fromLTWH(size.width / 2 - wingLength,
+          size.height / 2 - wingHeight / 2, wingLength, wingHeight),
+      paint,
+    );
+
+    // Alas derecha
+    canvas.drawRect(
+      Rect.fromLTWH(size.width / 2, size.height / 2 - wingHeight / 2,
+          wingLength, wingHeight),
+      paint,
+    );
+
+    // Dibujar la cola (una línea vertical en el centro hacia arriba)
+    double tailHeight = 20.0; // Altura de la cola
+    canvas.drawRect(
+      Rect.fromLTWH(size.width / 2 - 2.5, size.height / 2 - radius - tailHeight,
+          5, tailHeight), // Ajustar la posición
+      paint,
+    );
+
+    // Dibujar la cola (una línea vertical en el centro hacia arriba)
+    //double tailHeight = 20.0; // Altura de la cola
+    double tailWidth = 5.0; // Ancho de la cola
+    canvas.drawRect(
+      Rect.fromLTWH(
+          size.width / 2 - tailWidth / 2,
+          size.height / 2 - radius - tailHeight,
+          tailWidth,
+          tailHeight), // Ajustar la posición
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false; // No necesita repintarse
   }
 }
