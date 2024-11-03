@@ -6,10 +6,11 @@ abstract class IPlaneClient {
   Future<void> disconnect();
 
   Future<void> sendArmed(bool armed);
-  Future<void> sendThrottle(int throttle);
+  Future<void> sendThrottle(
+      int throttle); /*
   Future<void> sendYaw(int yaw);
   Future<void> sendRoll(int roll);
-  Future<void> sendPitch(int pitch);
+  Future<void> sendPitch(int pitch);*/
   Future<void> sendManeuver(int maneuver);
 
   bool get isConnected;
@@ -36,6 +37,9 @@ abstract class IPlaneClient {
   TelemetryCallback? onAccelerometerX;
   TelemetryCallback? onAccelerometerY;
   TelemetryCallback? onAccelerometerZ;
+  TelemetryCallback? onPitch;
+  TelemetryCallback? onRoll;
+  TelemetryCallback? onYaw;
 
   // Stream que emite los cambios de conexión
   Stream<bool> get connectedStream;

@@ -165,6 +165,12 @@ class TcpPlaneClient implements IPlaneClient {
   TelemetryCallback? onAccelerometerY;
   @override
   TelemetryCallback? onAccelerometerZ;
+  @override
+  TelemetryCallback? onPitch;
+  @override
+  TelemetryCallback? onRoll;
+  @override
+  TelemetryCallback? onYaw;
 
   // Exponer el Stream público
   @override
@@ -319,6 +325,15 @@ class TcpPlaneClient implements IPlaneClient {
       case Packet.ACCEL_Z:
         onAccelerometerZ?.call(packet.payload);
         break;
+      case Packet.PITCH:
+        onPitch?.call(packet.payload);
+        break;
+      case Packet.ROLL:
+        onRoll?.call(packet.payload);
+        break;
+      case Packet.YAW:
+        onYaw?.call(packet.payload);
+        break;
       default:
         developer.log('Unknown function: ${packet.function}');
         break;
@@ -362,6 +377,7 @@ class TcpPlaneClient implements IPlaneClient {
     await sendPacket(packet);
   }
 
+/*
   @override
   Future<void> sendYaw(int yaw) async {
     Packet packet = Packet.forInt(Packet.YAW, yaw);
@@ -379,7 +395,7 @@ class TcpPlaneClient implements IPlaneClient {
     Packet packet = Packet.forInt(Packet.PITCH, pitch);
     await sendPacket(packet);
   }
-
+*/
   @override
   Future<void> sendManeuver(int maneuver) async {
     Packet packet = Packet.forInt(Packet.MANEUVER, maneuver);

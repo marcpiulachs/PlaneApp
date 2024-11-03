@@ -15,6 +15,9 @@ class Telemetry {
   final int accelX;
   final int accelY;
   final int accelZ;
+  final int pitch;
+  final int roll;
+  final int yaw;
 
   Telemetry({
     this.gyroX = 0,
@@ -31,6 +34,9 @@ class Telemetry {
     this.accelX = 0,
     this.accelY = 0,
     this.accelZ = 0,
+    this.pitch = 0,
+    this.roll = 0,
+    this.yaw = 0,
   });
 
   double get degrees {
@@ -43,6 +49,26 @@ class Telemetry {
   double get altitude {
     const double seaLevelPressure = 1013.25; // Presión al nivel del mar en hPa
     return (seaLevelPressure - barometer) / 0.12;
+  }
+
+  /// Tasa de giro en grados por segundo
+  double get turnRate {
+    return gyroZ.toDouble(); // Suponiendo que gyroZ ya esté en grados/seg
+  }
+
+  /// Slip estimado basado en la aceleración lateral
+  double get slip {
+    // Calcula la aceleración lateral en función de accelX y accelY
+    double lateralAccel =
+        sqrt(pow(accelX.toDouble(), 2) + pow(accelY.toDouble(), 2));
+
+    // Si el turnRate es muy bajo, se asume que no hay slip
+    if (turnRate.abs() < 1.0) {
+      return 0.0;
+    }
+
+    // Calcular el slip ratio como una relación entre la aceleración lateral y la tasa de giro
+    return lateralAccel / turnRate;
   }
 
   Telemetry copyWith({
@@ -60,6 +86,9 @@ class Telemetry {
     int? accelX,
     int? accelY,
     int? accelZ,
+    int? pitch,
+    int? roll,
+    int? yaw,
   }) {
     return Telemetry(
       gyroX: gyroX ?? this.gyroX,
@@ -76,6 +105,9 @@ class Telemetry {
       accelX: accelX ?? this.accelX,
       accelY: accelY ?? this.accelY,
       accelZ: accelZ ?? this.accelZ,
+      pitch: pitch ?? this.pitch,
+      roll: roll ?? this.roll,
+      yaw: yaw ?? this.yaw,
     );
   }
 }

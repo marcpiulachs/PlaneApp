@@ -48,6 +48,12 @@ class MockPlaneClient implements IPlaneClient {
   TelemetryCallback? onAccelerometerY;
   @override
   TelemetryCallback? onAccelerometerZ;
+  @override
+  TelemetryCallback? onPitch;
+  @override
+  TelemetryCallback? onRoll;
+  @override
+  TelemetryCallback? onYaw;
 
   // Controlador del stream para la propiedad booleana
   final _connectedStreamController = StreamController<bool>.broadcast();
@@ -98,15 +104,6 @@ class MockPlaneClient implements IPlaneClient {
   Future<void> sendThrottle(int throttle) async {
     _throttle = throttle;
   }
-
-  @override
-  Future<void> sendPitch(int pitch) async {}
-
-  @override
-  Future<void> sendYaw(int yaw) async {}
-
-  @override
-  Future<void> sendRoll(int roll) async {}
 
   @override
   Future<void> sendManeuver(int maneuver) async {}

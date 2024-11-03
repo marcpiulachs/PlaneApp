@@ -11,13 +11,13 @@ class AltimeterWidget extends StatefulWidget {
   final double maxAltitude; // Altitud máxima
 
   const AltimeterWidget({
-    Key? key,
+    super.key,
     required this.altitude,
     required this.pressure,
     this.unit = AltitudeUnit.feet, // Pies por defecto
     this.minAltitude = 0.0, // Valor mínimo por defecto
     this.maxAltitude = 10000.0, // Valor máximo por defecto
-  }) : super(key: key);
+  });
 
   @override
   _AltimeterWidgetState createState() => _AltimeterWidgetState();

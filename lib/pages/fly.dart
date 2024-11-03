@@ -103,17 +103,17 @@ class _FlyState extends State<Fly> {
                           ),
                         ),
                         AttitudeIndicator(
-                          roll: state.direction.roll.toDouble(),
-                          pitch: state.direction.pitch.toDouble(),
+                          roll: state.telemetry.roll.toDouble(),
+                          pitch: state.telemetry.pitch.toDouble(),
                         ),
                         Altimeter(
                           altitude: state.telemetry.altitude,
                         ),
-                        const TurnCoordinator(
+                        TurnCoordinator(
                           // 0: sin giro, 1: giro completo derecha
-                          turnRate: 0.5,
+                          turnRate: state.telemetry.turnRate,
                           // 0: sin deslizamiento, valores negativos/positivos indican deslizamiento
-                          slip: 0.3,
+                          slip: state.telemetry.slip,
                         ),
                         PlaneDirection(
                           direction: state.direction,

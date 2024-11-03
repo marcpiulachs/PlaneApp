@@ -83,6 +83,15 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     client.onAccelerometerZ = (value) {
       add(AccelerometerZUpdated(value));
     };
+    client.onPitch = (value) {
+      add(PitchUpdated(value));
+    };
+    client.onRoll = (value) {
+      add(RollUpdated(value));
+    };
+    client.onYaw = (value) {
+      add(YawUpdated(value));
+    };
 
     // Configuración de FlightRecorder
     flightRecorder = FlightRecorder(
@@ -297,31 +306,28 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
 
     on<YawUpdated>((event, emit) async {
       if (state is FlyLoadedState) {
-        await client.sendYaw(event.value);
         final loadedState = state as FlyLoadedState;
-        final updatedDirection =
-            loadedState.direction.copyWith(yaw: event.value);
-        emit(loadedState.copyWith(direction: updatedDirection));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(yaw: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 
     on<PitchUpdated>((event, emit) async {
       if (state is FlyLoadedState) {
-        await client.sendPitch(event.value);
         final loadedState = state as FlyLoadedState;
-        final updatedDirection =
-            loadedState.direction.copyWith(pitch: event.value);
-        emit(loadedState.copyWith(direction: updatedDirection));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(pitch: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 
     on<RollUpdated>((event, emit) async {
       if (state is FlyLoadedState) {
-        await client.sendRoll(event.value);
         final loadedState = state as FlyLoadedState;
-        final updatedDirection =
-            loadedState.direction.copyWith(roll: event.value);
-        emit(loadedState.copyWith(direction: updatedDirection));
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(roll: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 
