@@ -101,6 +101,11 @@ class FlightRecorderUpdated extends FlyEvent {
   FlightRecorderUpdated();
 }
 
+class SendYoke extends FlyEvent {
+  final int value;
+  SendYoke(this.value);
+}
+
 class YawUpdated extends FlyEvent {
   final int value;
   YawUpdated(this.value);

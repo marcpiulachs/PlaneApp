@@ -47,8 +47,7 @@ class Telemetry {
   }
 
   double get altitude {
-    const double seaLevelPressure = 1013.25; // Presión al nivel del mar en hPa
-    return (seaLevelPressure - barometer) / 0.12;
+    return 0;
   }
 
   /// Tasa de giro en grados por segundo

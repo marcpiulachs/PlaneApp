@@ -5,9 +5,7 @@ import 'package:paperwings/bloc/fly_bloc/fly_event.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
 import 'package:paperwings/models/flight_settings.dart';
 import 'package:paperwings/pages/connect.dart';
-import 'package:paperwings/pages/widgets/instruments/altimeterwidget.dart';
 import 'package:paperwings/pages/widgets/maneuvers.dart';
-import 'package:paperwings/pages/widgets/instruments/altimeter.dart';
 import 'package:paperwings/pages/widgets/instruments/attitude.dart';
 import 'package:paperwings/pages/widgets/engine_settings.dart';
 import 'package:paperwings/pages/widgets/recording_indicator.dart';
@@ -106,9 +104,6 @@ class _FlyState extends State<Fly> {
                           roll: state.telemetry.roll.toDouble(),
                           pitch: state.telemetry.pitch.toDouble(),
                         ),
-                        Altimeter(
-                          altitude: state.telemetry.altitude,
-                        ),
                         TurnCoordinator(
                           // 0: sin giro, 1: giro completo derecha
                           turnRate: state.telemetry.turnRate,
@@ -124,12 +119,6 @@ class _FlyState extends State<Fly> {
                             context.read<FlyBloc>().add(SendManeuver(index));
                           },
                         ),
-                        const AltimeterWidget(
-                          minAltitude: 0,
-                          maxAltitude: 20, //unit: AltitudeUnit.,
-                          altitude: 2,
-                          pressure: 3,
-                        )
                       ],
                       indicatorSize: 10.0,
                     ),
@@ -148,7 +137,7 @@ class _FlyState extends State<Fly> {
                             child: CircularProgressBar(
                               progress: state.telemetry.motor1Speed / 100.0,
                               icon: Icons.rotate_right,
-                              text: 'Engine',
+                              text: '${state.telemetry.motor1Speed}%',
                               backgroundColor: Colors.white,
                               size: 100.0,
                             ),
@@ -194,7 +183,7 @@ class _FlyState extends State<Fly> {
                             child: CircularProgressBar(
                               progress: state.telemetry.motor2Speed / 100.0,
                               icon: Icons.rotate_left,
-                              text: 'Engine',
+                              text: '${state.telemetry.motor2Speed}%',
                               backgroundColor: Colors.white,
                               size: 100,
                             ),

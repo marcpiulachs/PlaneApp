@@ -26,7 +26,7 @@ class _MyHomePageState extends State<MyHomePage>
     MenuItem(
       title: "HANGAR",
       color: Colors.purple.shade800,
-      icon: Icons.flight,
+      icon: Icons.home,
     ),
     MenuItem(
       title: "COPKIT",

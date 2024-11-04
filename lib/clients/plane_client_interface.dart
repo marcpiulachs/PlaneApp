@@ -6,11 +6,8 @@ abstract class IPlaneClient {
   Future<void> disconnect();
 
   Future<void> sendArmed(bool armed);
-  Future<void> sendThrottle(
-      int throttle); /*
-  Future<void> sendYaw(int yaw);
-  Future<void> sendRoll(int roll);
-  Future<void> sendPitch(int pitch);*/
+  Future<void> sendThrottle(int throttle);
+  Future<void> sendYoke(int yoke);
   Future<void> sendManeuver(int maneuver);
 
   bool get isConnected;

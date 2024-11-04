@@ -37,6 +37,7 @@ class Packet {
   static const int ROLL = 0x63;
   static const int YAW = 0x64;
   static const int MANEUVER = 0x65;
+  static const int YOKE = 0x66;
 
   // Definiciones de tipo de datos
   static const int dataTypeInt = 0x01;
@@ -83,7 +84,7 @@ class Packet {
     int dataType = byteData.getUint8(2);
 
     // Leer el payload como un entero de 16 bits en little-endian
-    int payload = byteData.getInt16(3, Endian.little);
+    int payload = byteData.getInt16(3, Endian.big);
 
     // Crear el paquete en función del tipo de dato
     switch (dataType) {
@@ -377,25 +378,12 @@ class TcpPlaneClient implements IPlaneClient {
     await sendPacket(packet);
   }
 
-/*
   @override
-  Future<void> sendYaw(int yaw) async {
-    Packet packet = Packet.forInt(Packet.YAW, yaw);
+  Future<void> sendYoke(int yoke) async {
+    Packet packet = Packet.forInt(Packet.YOKE, yoke);
     await sendPacket(packet);
   }
 
-  @override
-  Future<void> sendRoll(int roll) async {
-    Packet packet = Packet.forInt(Packet.ROLL, roll);
-    await sendPacket(packet);
-  }
-
-  @override
-  Future<void> sendPitch(int pitch) async {
-    Packet packet = Packet.forInt(Packet.PITCH, pitch);
-    await sendPacket(packet);
-  }
-*/
   @override
   Future<void> sendManeuver(int maneuver) async {
     Packet packet = Packet.forInt(Packet.MANEUVER, maneuver);

@@ -18,9 +18,16 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     flightOrientation = FlightOrientation(
-      onPitchChanged: (pitch) => add(PitchUpdated(pitch)),
-      onRollChanged: (roll) => add(RollUpdated(roll)),
-      onYawChanged: (yaw) => add(YawUpdated(yaw)),
+      onPitchChanged: (pitch) => {
+        //developer.log('Inclinado hacia la izquierda: $degrees°');
+      },
+      onRollChanged: (roll) => {
+        add(SendYoke(roll)),
+        developer.log('Inclinado : $roll'),
+      },
+      onYawChanged: (yaw) => {
+        //developer.log('Inclinado hacia la izquierda: $degrees°');
+      },
       onLeftChanged: (degrees) {
         //developer.log('Inclinado hacia la izquierda: $degrees°');
       },
@@ -159,9 +166,25 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       }
     });
 
+    on<SendYoke>((event, emit) async {
+      if (state is FlyLoadedState) {
+        await client.sendYoke(event.value);
+        final loadedState = state as FlyLoadedState;
+        emit(loadedState);
+      }
+    });
+
     on<SendThrottle>((event, emit) async {
       if (state is FlyLoadedState) {
         await client.sendThrottle(event.value);
+        final loadedState = state as FlyLoadedState;
+        emit(loadedState);
+      }
+    });
+
+    on<SendManeuver>((event, emit) async {
+      if (state is FlyLoadedState) {
+        await client.sendManeuver(event.maneuver);
         final loadedState = state as FlyLoadedState;
         emit(loadedState);
       }
@@ -304,15 +327,6 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       }
     });
 
-    on<YawUpdated>((event, emit) async {
-      if (state is FlyLoadedState) {
-        final loadedState = state as FlyLoadedState;
-        final updatedTelemetry =
-            loadedState.telemetry.copyWith(yaw: event.value);
-        emit(loadedState.copyWith(telemetry: updatedTelemetry));
-      }
-    });
-
     on<PitchUpdated>((event, emit) async {
       if (state is FlyLoadedState) {
         final loadedState = state as FlyLoadedState;
@@ -331,11 +345,12 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       }
     });
 
-    on<SendManeuver>((event, emit) async {
+    on<YawUpdated>((event, emit) async {
       if (state is FlyLoadedState) {
-        await client.sendManeuver(event.maneuver);
         final loadedState = state as FlyLoadedState;
-        emit(loadedState);
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(yaw: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });
 

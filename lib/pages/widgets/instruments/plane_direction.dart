@@ -77,7 +77,7 @@ class PlaneDirection extends StatelessWidget {
                 const SizedBox(
                     height: 10), // Espacio entre 'Direction' y los valores
                 Text(
-                  'Pitch: ${telemetry.pitch.round()}°', // Convierte a entero si es necesario
+                  'Pitch: ${telemetry.pitch.round()}°',
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
@@ -86,6 +86,18 @@ class PlaneDirection extends StatelessWidget {
                 ),
                 Text(
                   'Yaw: ${telemetry.yaw.round()}°',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                Text(
+                  'Gyro X: ${telemetry.gyroX.round()}°/s',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                Text(
+                  'Gyro Y: ${telemetry.gyroY.round()}°/s',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                Text(
+                  'Giro Z: ${telemetry.gyroZ.round()}°/s',
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
