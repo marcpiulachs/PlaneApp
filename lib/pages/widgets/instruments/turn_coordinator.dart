@@ -57,7 +57,7 @@ class _TurnCoordinatorState extends State<TurnCoordinator>
                     // Bola
                     Positioned(
                       // Posición de la bola
-                      left: (widget.slip + 1) * 0.5 * 100,
+                      left: ((widget.slip + 1) / 2) * 100 - 10,
                       child: Container(
                         width: 20,
                         height: 20,
@@ -91,7 +91,7 @@ class AirplanePainter extends CustomPainter {
 
     // Dibujar las alas
     paint.color = Colors.white; // Color de las alas
-    double wingLength = 80.0; // Longitud de las alas
+    double wingLength = 60.0; // Longitud de las alas
     double wingHeight = 5.0; // Altura de las alas
 
     // Alas izquierda

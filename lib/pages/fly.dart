@@ -106,7 +106,7 @@ class _FlyState extends State<Fly> {
                         ),
                         TurnCoordinator(
                           // 0: sin giro, 1: giro completo derecha
-                          turnRate: state.telemetry.turnRate,
+                          turnRate: state.telemetry.turnRate / 100,
                           // 0: sin deslizamiento, valores negativos/positivos indican deslizamiento
                           slip: state.telemetry.slip,
                         ),

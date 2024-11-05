@@ -35,70 +35,144 @@ class PlaneDirection extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Row(
+      child:
+          // Segunda columna con los valores de pitch, roll y yaw
+          Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Primera columna con Yaw y Punto Cardinal
-          SizedBox(
-            width: 100, // Ancho fijo para la primera columna
+          // Primera columna
+          Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '$yawDegrees°',
-                  style: const TextStyle(
-                    fontSize: 40, // Grado en grande
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  children: [
+                    Icon(Icons.rotate_90_degrees_ccw, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Pitch: ${telemetry.pitch.round()}°',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
-                Text(
-                  cardinalDirection,
-                  style: const TextStyle(
-                    fontSize: 60, // Punto cardinal en grande
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                Row(
+                  children: [
+                    Icon(Icons.rotate_left, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Roll: ${telemetry.roll.round()}°',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.navigation, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Yaw: ${telemetry.yaw.round()}°',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.speed, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Gyro X: ${telemetry.gyroX.round()}°/s',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.speed, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Gyro Y: ${telemetry.gyroY.round()}°/s',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.speed, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Gyro Z: ${telemetry.gyroZ.round()}°/s',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 20), // Separación entre las columnas
-
-          // Segunda columna con los valores de pitch, roll y yaw
-          SizedBox(
-            width: 100, // Ancho fijo para la segunda columna
+          SizedBox(width: 20),
+          // Segunda columna
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Direction:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Row(
+                  children: [
+                    Icon(Icons.trending_up, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Acc X: ${telemetry.accelX.round()}°/s',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                    height: 10), // Espacio entre 'Direction' y los valores
-                Text(
-                  'Pitch: ${telemetry.pitch.round()}°',
-                  style: const TextStyle(fontSize: 16),
+                Row(
+                  children: [
+                    Icon(Icons.trending_up, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Acc Y: ${telemetry.accelY.round()}°/s',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Roll: ${telemetry.roll.round()}°',
-                  style: const TextStyle(fontSize: 16),
+                Row(
+                  children: [
+                    Icon(Icons.trending_up, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Acc Z: ${telemetry.accelZ.round()}°/s',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Yaw: ${telemetry.yaw.round()}°',
-                  style: const TextStyle(fontSize: 16),
+                Row(
+                  children: [
+                    Icon(Icons.explore, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Mag X: ${telemetry.magX.round()}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Gyro X: ${telemetry.gyroX.round()}°/s',
-                  style: const TextStyle(fontSize: 16),
+                Row(
+                  children: [
+                    Icon(Icons.explore, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Mag Y: ${telemetry.magY.round()}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Gyro Y: ${telemetry.gyroY.round()}°/s',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                Text(
-                  'Giro Z: ${telemetry.gyroZ.round()}°/s',
-                  style: const TextStyle(fontSize: 16),
+                Row(
+                  children: [
+                    Icon(Icons.explore, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Mag Z: ${telemetry.magZ.round()}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
               ],
             ),
