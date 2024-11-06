@@ -6,6 +6,7 @@ import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
 import 'package:paperwings/models/flight_settings.dart';
 import 'package:paperwings/pages/connect.dart';
 import 'package:paperwings/pages/widgets/maneuvers.dart';
+import 'package:paperwings/pages/widgets/instruments/paperPlane3D.dart';
 import 'package:paperwings/pages/widgets/instruments/attitude.dart';
 import 'package:paperwings/pages/widgets/engine_settings.dart';
 import 'package:paperwings/pages/widgets/recording_indicator.dart';
@@ -89,6 +90,10 @@ class _FlyState extends State<Fly> {
                     padding: const EdgeInsets.all(16.0),
                     child: CarouselWidget(
                       items: [
+                        PaperPlane3D(
+                          roll: state.telemetry.roll.toDouble(),
+                          pitch: state.telemetry.pitch.toDouble(),
+                        ),
                         CompassWidget(
                           degrees: state.telemetry.degrees,
                           textColor: Colors.white,
