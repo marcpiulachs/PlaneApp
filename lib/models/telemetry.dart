@@ -10,7 +10,8 @@ class Telemetry {
   final int barometer;
   final int motor1Speed;
   final int motor2Speed;
-  final int battery;
+  final int batterySoc;
+  final int batteryVol;
   final int signal;
   final int accelX;
   final int accelY;
@@ -29,7 +30,8 @@ class Telemetry {
     this.barometer = 0,
     this.motor1Speed = 0,
     this.motor2Speed = 0,
-    this.battery = 0,
+    this.batterySoc = 0,
+    this.batteryVol = 0,
     this.signal = 0,
     this.accelX = 0,
     this.accelY = 0,
@@ -70,7 +72,8 @@ class Telemetry {
     int? barometer,
     int? motor1Speed,
     int? motor2Speed,
-    int? battery,
+    int? batterySoc,
+    int? batteryVol,
     int? signal,
     int? accelX,
     int? accelY,
@@ -89,7 +92,8 @@ class Telemetry {
       barometer: barometer ?? this.barometer,
       motor1Speed: motor1Speed ?? this.motor1Speed,
       motor2Speed: motor2Speed ?? this.motor2Speed,
-      battery: battery ?? this.battery,
+      batterySoc: batterySoc ?? this.batterySoc,
+      batteryVol: batteryVol ?? this.batteryVol,
       signal: signal ?? this.signal,
       accelX: accelX ?? this.accelX,
       accelY: accelY ?? this.accelY,

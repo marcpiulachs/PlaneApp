@@ -6,7 +6,7 @@ import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
 import 'package:paperwings/models/flight_settings.dart';
 import 'package:paperwings/pages/connect.dart';
 import 'package:paperwings/pages/widgets/maneuvers.dart';
-import 'package:paperwings/pages/widgets/instruments/paperPlane3D.dart';
+import 'package:paperwings/pages/widgets/instruments/paper_plane.dart';
 import 'package:paperwings/pages/widgets/instruments/attitude.dart';
 import 'package:paperwings/pages/widgets/engine_settings.dart';
 import 'package:paperwings/pages/widgets/recording_indicator.dart';
@@ -14,7 +14,7 @@ import 'package:paperwings/pages/widgets/instruments/turn_coordinator.dart';
 import 'package:paperwings/widgets/carousel.dart';
 import 'package:paperwings/widgets/circular.dart';
 import 'package:paperwings/pages/widgets/instruments/compass.dart';
-import 'package:paperwings/pages/widgets/instruments/plane_direction.dart';
+import 'package:paperwings/pages/widgets/instruments/sensors_data.dart';
 import 'package:paperwings/widgets/throttle.dart';
 import 'dart:developer' as developer;
 
@@ -55,7 +55,7 @@ class _FlyState extends State<Fly> {
                         CircularProgressBar(
                           progress: 0.7,
                           icon: Icons.radar,
-                          text: '${state.telemetry.battery}dBI',
+                          text: '${state.telemetry.signal}dBI',
                           backgroundColor: Colors.white,
                         ),
                       ],
@@ -64,10 +64,10 @@ class _FlyState extends State<Fly> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CircularProgressBar(
-                          progress: 0.7,
-                          icon: Icons.height,
+                          progress: state.telemetry.batterySoc.toDouble(),
+                          icon: Icons.battery_full_outlined,
                           text:
-                              "${(state.telemetry.altitude).toStringAsFixed(2)} m.",
+                              "${(state.telemetry.batteryVol).toStringAsFixed(2)} V",
                           backgroundColor: Colors.white,
                         ),
                       ],
@@ -76,9 +76,9 @@ class _FlyState extends State<Fly> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CircularProgressBar(
-                          progress: 0.7,
+                          progress: state.telemetry.batterySoc.toDouble(),
                           icon: Icons.local_gas_station,
-                          text: '${state.telemetry.battery}%',
+                          text: '${state.telemetry.batterySoc}%',
                           backgroundColor: Colors.white,
                         ),
                       ],
@@ -115,7 +115,7 @@ class _FlyState extends State<Fly> {
                           // 0: sin deslizamiento, valores negativos/positivos indican deslizamiento
                           slip: state.telemetry.slip,
                         ),
-                        PlaneDirection(
+                        SensorsData(
                           direction: state.direction,
                           telemetry: state.telemetry,
                         ),

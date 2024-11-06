@@ -25,7 +25,8 @@ class Packet {
   static const int BAROMETER = 0x40;
   static const int MOTOR_1_SPEED = 0x50;
   static const int MOTOR_2_SPEED = 0x51;
-  static const int BATTERY = 0x70;
+  static const int BATTERY_VOL = 0x70;
+  static const int BATTERY_SOC = 0x83;
   static const int SIGNAL = 0x71;
   static const int ACCEL_X = 0x80;
   static const int ACCEL_Y = 0x81;
@@ -157,7 +158,9 @@ class TcpPlaneClient implements IPlaneClient {
   @override
   TelemetryCallback? onMotor2Speed;
   @override
-  TelemetryCallback? onBattery;
+  TelemetryCallback? onBatterySoc;
+  @override
+  TelemetryCallback? onBatteryVol;
   @override
   TelemetryCallback? onSignal;
   @override
@@ -311,8 +314,11 @@ class TcpPlaneClient implements IPlaneClient {
       case Packet.MOTOR_2_SPEED:
         onMotor2Speed?.call(packet.payload);
         break;
-      case Packet.BATTERY:
-        onBattery?.call(packet.payload);
+      case Packet.BATTERY_VOL:
+        onBatteryVol?.call(packet.payload);
+        break;
+      case Packet.BATTERY_SOC:
+        onBatterySoc?.call(packet.payload);
         break;
       case Packet.SIGNAL:
         onSignal?.call(packet.payload);

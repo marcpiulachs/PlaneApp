@@ -29,7 +29,8 @@ abstract class IPlaneClient {
   TelemetryCallback? onBarometer;
   TelemetryCallback? onMotor1Speed;
   TelemetryCallback? onMotor2Speed;
-  TelemetryCallback? onBattery;
+  TelemetryCallback? onBatterySoc;
+  TelemetryCallback? onBatteryVol;
   TelemetryCallback? onSignal;
   TelemetryCallback? onAccelerometerX;
   TelemetryCallback? onAccelerometerY;

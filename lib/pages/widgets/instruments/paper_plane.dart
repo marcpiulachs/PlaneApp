@@ -48,11 +48,12 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Stack(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Stack(
           alignment: Alignment.center, // Centra los elementos
           children: [
-            Container(
+            SizedBox(
               height: constraints.maxHeight - 60,
               width: constraints.maxHeight - 60,
               child: Transform(
@@ -73,8 +74,10 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
                 ),
               ),
             )
-          ]);
-    });
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -94,15 +97,6 @@ class PaperPlanePainter extends CustomPainter {
     final linePaint = Paint()
       ..color = Colors.grey
       ..strokeWidth = 2;
-
-    // Cambiar el color dependiendo de pitch
-    if (pitch > 0) {
-      paint.color = Colors.white; // Blanco si pitch es positivo
-      linePaint.color = Colors.grey;
-    } else {
-      paint.color = Colors.grey[300]!; // Gris claro si pitch es negativo
-      linePaint.color = Colors.black;
-    }
 
     final path = Path();
     path.moveTo(size.width * 0.5, 0); // Punta del avión

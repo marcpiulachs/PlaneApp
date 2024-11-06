@@ -75,8 +75,11 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     client.onMotor2Speed = (value) {
       add(Motor2SpeedUpdated(value));
     };
-    client.onBattery = (value) {
-      add(BatteryUpdated(value));
+    client.onBatterySoc = (value) {
+      add(BatterySocUpdated(value));
+    };
+    client.onBatteryVol = (value) {
+      add(BatteryVolUpdated(value));
     };
     client.onSignal = (value) {
       add(SignalUpdated(value));
@@ -299,11 +302,20 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       }
     });
 
-    on<BatteryUpdated>((event, emit) {
+    on<BatterySocUpdated>((event, emit) {
       if (state is FlyLoadedState) {
         final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
-            loadedState.telemetry.copyWith(battery: event.value);
+            loadedState.telemetry.copyWith(batterySoc: event.value);
+        emit(loadedState.copyWith(telemetry: updatedTelemetry));
+      }
+    });
+
+    on<BatteryVolUpdated>((event, emit) {
+      if (state is FlyLoadedState) {
+        final loadedState = state as FlyLoadedState;
+        final updatedTelemetry =
+            loadedState.telemetry.copyWith(batteryVol: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });

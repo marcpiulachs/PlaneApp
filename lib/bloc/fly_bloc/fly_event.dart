@@ -69,9 +69,14 @@ class Motor2SpeedUpdated extends FlyEvent {
   Motor2SpeedUpdated(this.value);
 }
 
-class BatteryUpdated extends FlyEvent {
+class BatterySocUpdated extends FlyEvent {
   final int value;
-  BatteryUpdated(this.value);
+  BatterySocUpdated(this.value);
+}
+
+class BatteryVolUpdated extends FlyEvent {
+  final int value;
+  BatteryVolUpdated(this.value);
 }
 
 class SignalUpdated extends FlyEvent {

@@ -39,7 +39,9 @@ class MockPlaneClient implements IPlaneClient {
   @override
   TelemetryCallback? onMotor2Speed;
   @override
-  TelemetryCallback? onBattery;
+  TelemetryCallback? onBatterySoc;
+  @override
+  TelemetryCallback? onBatteryVol;
   @override
   TelemetryCallback? onSignal;
   @override
