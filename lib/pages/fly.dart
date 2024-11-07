@@ -64,10 +64,11 @@ class _FlyState extends State<Fly> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CircularProgressBar(
-                          progress: state.telemetry.batterySoc.toDouble(),
+                          progress: state.telemetry.batterySoc
+                            ..toStringAsPrecision(2),
                           icon: Icons.battery_full_outlined,
                           text:
-                              "${(state.telemetry.batteryVol).toStringAsFixed(2)} V",
+                              "${state.telemetry.batteryVol.toStringAsPrecision(3)} V",
                           backgroundColor: Colors.white,
                         ),
                       ],
@@ -78,7 +79,8 @@ class _FlyState extends State<Fly> {
                         CircularProgressBar(
                           progress: state.telemetry.batterySoc.toDouble(),
                           icon: Icons.local_gas_station,
-                          text: '${state.telemetry.batterySoc}%',
+                          text:
+                              '${state.telemetry.batterySoc.toStringAsPrecision(2)}%',
                           backgroundColor: Colors.white,
                         ),
                       ],

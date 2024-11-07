@@ -62,7 +62,7 @@ class SensorsData extends StatelessWidget {
                     const Icon(Icons.speed, color: Colors.white),
                     const SizedBox(width: 5),
                     Text(
-                      'Gyro X: ${telemetry.gyroX.round()}°/s',
+                      'Gyro X: ${telemetry.gyroX.toStringAsPrecision(2)}°/s',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ],
@@ -72,7 +72,7 @@ class SensorsData extends StatelessWidget {
                     const Icon(Icons.speed, color: Colors.white),
                     const SizedBox(width: 5),
                     Text(
-                      'Gyro Y: ${telemetry.gyroY.round()}°/s',
+                      'Gyro Y: ${telemetry.gyroY.toStringAsPrecision(2)}°/s',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ],
@@ -82,7 +82,7 @@ class SensorsData extends StatelessWidget {
                     const Icon(Icons.speed, color: Colors.white),
                     const SizedBox(width: 5),
                     Text(
-                      'Gyro Z: ${telemetry.gyroZ.round()}°/s',
+                      'Gyro Z: ${telemetry.gyroZ.toStringAsPrecision(2)}°/s',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ],
@@ -101,7 +101,7 @@ class SensorsData extends StatelessWidget {
                     const Icon(Icons.trending_up, color: Colors.white),
                     const SizedBox(width: 5),
                     Text(
-                      'Acc X: ${telemetry.accelX.round()}°/s',
+                      'Acc X: ${telemetry.accelX.toStringAsPrecision(2)}°/s',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ],
@@ -111,7 +111,7 @@ class SensorsData extends StatelessWidget {
                     const Icon(Icons.trending_up, color: Colors.white),
                     const SizedBox(width: 5),
                     Text(
-                      'Acc Y: ${telemetry.accelY.round()}°/s',
+                      'Acc Y: ${telemetry.accelY.toStringAsPrecision(2)}°/s',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ],
@@ -121,7 +121,7 @@ class SensorsData extends StatelessWidget {
                     const Icon(Icons.trending_up, color: Colors.white),
                     const SizedBox(width: 5),
                     Text(
-                      'Acc Z: ${telemetry.accelZ.round()}°/s',
+                      'Acc Z: ${telemetry.accelZ.toStringAsPrecision(2)}°/s',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ],

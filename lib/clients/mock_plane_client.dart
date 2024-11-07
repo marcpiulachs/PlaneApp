@@ -142,8 +142,8 @@ class MockPlaneClient implements IPlaneClient {
   void _simulateMotorData() {
     int motorSpeed1 = (_throttle * 1).clamp(0, 100);
     int motorSpeed2 = (_throttle * 2).clamp(0, 100);
-    onMotor1Speed?.call(motorSpeed1);
-    onMotor2Speed?.call(motorSpeed2);
+    onMotor1Speed?.call(motorSpeed1.toDouble());
+    onMotor2Speed?.call(motorSpeed2.toDouble());
   }
 
   void _simulateBattery() {
@@ -154,7 +154,7 @@ class MockPlaneClient implements IPlaneClient {
     onBarometer?.call(_generateRandomInt(12, 60)); // hPa
   }
 
-  int _generateRandomInt(int min, int max) {
+  double _generateRandomInt(double min, int max) {
     return min +
         (max - min) * (DateTime.now().millisecondsSinceEpoch % 100) ~/ 100;
   }

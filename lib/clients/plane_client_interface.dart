@@ -1,4 +1,4 @@
-typedef TelemetryCallback = void Function(int value);
+typedef TelemetryCallback = void Function(double value);
 typedef ConnectionCallback = void Function();
 
 abstract class IPlaneClient {

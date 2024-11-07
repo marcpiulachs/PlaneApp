@@ -1,24 +1,24 @@
 import 'dart:math';
 
 class Telemetry {
-  final int gyroX;
-  final int gyroY;
-  final int gyroZ;
-  final int magX;
-  final int magY;
-  final int magZ;
-  final int barometer;
-  final int motor1Speed;
-  final int motor2Speed;
-  final int batterySoc;
-  final int batteryVol;
-  final int signal;
-  final int accelX;
-  final int accelY;
-  final int accelZ;
-  final int pitch;
-  final int roll;
-  final int yaw;
+  final double gyroX;
+  final double gyroY;
+  final double gyroZ;
+  final double magX;
+  final double magY;
+  final double magZ;
+  final double barometer;
+  final double motor1Speed;
+  final double motor2Speed;
+  final double batterySoc;
+  final double batteryVol;
+  final double signal;
+  final double accelX;
+  final double accelY;
+  final double accelZ;
+  final double pitch;
+  final double roll;
+  final double yaw;
 
   Telemetry({
     this.gyroX = 0,
@@ -63,24 +63,24 @@ class Telemetry {
   }
 
   Telemetry copyWith({
-    int? gyroX,
-    int? gyroY,
-    int? gyroZ,
-    int? magX,
-    int? magY,
-    int? magZ,
-    int? barometer,
-    int? motor1Speed,
-    int? motor2Speed,
-    int? batterySoc,
-    int? batteryVol,
-    int? signal,
-    int? accelX,
-    int? accelY,
-    int? accelZ,
-    int? pitch,
-    int? roll,
-    int? yaw,
+    double? gyroX,
+    double? gyroY,
+    double? gyroZ,
+    double? magX,
+    double? magY,
+    double? magZ,
+    double? barometer,
+    double? motor1Speed,
+    double? motor2Speed,
+    double? batterySoc,
+    double? batteryVol,
+    double? signal,
+    double? accelX,
+    double? accelY,
+    double? accelZ,
+    double? pitch,
+    double? roll,
+    double? yaw,
   }) {
     return Telemetry(
       gyroX: gyroX ?? this.gyroX,

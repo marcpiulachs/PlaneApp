@@ -9,7 +9,7 @@ import 'package:paperwings/clients/plane_client_interface.dart';
 // Definición de la clase Packet con el método toBytes()
 class Packet {
   // Tamaño mínimo del paquete (por ejemplo, start, function, dataType, intData, end)
-  static const int length = 6;
+  static const int length = 8;
 
   // Bytes de inicio y fin
   static const int startByte = 0x02;
@@ -43,10 +43,11 @@ class Packet {
   // Definiciones de tipo de datos
   static const int dataTypeInt = 0x01;
   static const int dataTypeBool = 0x03;
+  static const int dataTypeDouble = 0x06;
 
   final int function;
   final int dataType;
-  final int payload;
+  final double payload;
 
   // Payload para booleanos
   static const int boolTrue = 0x01;
@@ -58,12 +59,16 @@ class Packet {
   // Constructor adicional para booleanos
   Packet.forBool(this.function, bool value)
       : dataType = dataTypeBool,
-        payload = value ? boolTrue : boolFalse;
+        payload = value ? 1 : 0;
 
   // Constructor adicional para int
   Packet.forInt(this.function, int value)
       : dataType = dataTypeInt,
-        payload = value;
+        payload = value.toDouble();
+
+  Packet.forDouble(this.function, double value)
+      : dataType = dataTypeInt,
+        payload = value;        
 
   // Método para convertir un array de bytes en un Packet
   static Packet? fromBytes(Uint8List data) {
@@ -85,12 +90,14 @@ class Packet {
     int dataType = byteData.getUint8(2);
 
     // Leer el payload como un entero de 16 bits en little-endian
-    int payload = byteData.getInt16(3, Endian.big);
+    double payload = byteData.getFloat32(3, Endian.big);
 
     // Crear el paquete en función del tipo de dato
     switch (dataType) {
+       case Packet.dataTypeDouble:
+        return Packet.forDouble(function, payload);
       case Packet.dataTypeInt:
-        return Packet.forInt(function, payload);
+        return Packet.forInt(function, payload.toInt());
       case Packet.dataTypeBool:
         return Packet.forBool(function, payload == Packet.boolTrue);
       default: // Tipo de dato desconocido
@@ -105,15 +112,17 @@ class Packet {
       startByte, // Byte de inicio
       function, // Función
       dataType, // Tipo de dato
-      ...intToBytes(payload),
+      ...floatToBytes(payload),
       endByte // Byte de fin
     ]);
   }
 
   // Conversión de int a bytes
-  static List<int> intToBytes(int value) {
-    ByteData byteData = ByteData(2);
-    byteData.setInt16(0, value, Endian.big);
+  static List<int> floatToBytes(double value) {
+    // 4 bytes para un float de 32 bits
+    ByteData byteData = ByteData(4);
+    // Usar setFloat32 en lugar de setInt16
+    byteData.setFloat32(0, value, Endian.big);
     return byteData.buffer.asUint8List();
   }
 }
