@@ -40,10 +40,22 @@ class Packet {
   static const int MANEUVER = 0x65;
   static const int YOKE = 0x66;
 
+  static const int LOG_IMU = 0x90;
+  static const int LOG_THRUST = 0x91;
+  static const int LOG_BATT = 0x92;
+  static const int LOG_MOTOR = 0x93;
+  static const int CALIBRATE_IMU = 0x94;
+  static const int CALIBRATE_MAG = 0x95;
+  static const int KP = 0x96;
+  static const int KI = 0x97;
+  static const int KD = 0x98;
+  static const int SHUTDOWN = 0x99;
+  static const int BEACON = 0x100;
+
   // Definiciones de tipo de datos
   static const int dataTypeInt = 0x01;
   static const int dataTypeBool = 0x03;
-  static const int dataTypeDouble = 0x06;
+  static const int dataTypeDouble = 0x04;
 
   final int function;
   final int dataType;
@@ -68,7 +80,12 @@ class Packet {
 
   Packet.forDouble(this.function, double value)
       : dataType = dataTypeInt,
-        payload = value;        
+        payload = value;
+
+  // Constructor adicional para booleanos
+  Packet.forEmpty(this.function)
+      : dataType = dataTypeInt,
+        payload = 0;
 
   // Método para convertir un array de bytes en un Packet
   static Packet? fromBytes(Uint8List data) {
@@ -94,7 +111,7 @@ class Packet {
 
     // Crear el paquete en función del tipo de dato
     switch (dataType) {
-       case Packet.dataTypeDouble:
+      case Packet.dataTypeDouble:
         return Packet.forDouble(function, payload);
       case Packet.dataTypeInt:
         return Packet.forInt(function, payload.toInt());
@@ -402,6 +419,48 @@ class TcpPlaneClient implements IPlaneClient {
   @override
   Future<void> sendManeuver(int maneuver) async {
     Packet packet = Packet.forInt(Packet.MANEUVER, maneuver);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendBeacon(int beacon) async {
+    Packet packet = Packet.forInt(Packet.BEACON, beacon);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendShutdown() async {
+    Packet packet = Packet.forEmpty(Packet.SHUTDOWN);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendKD(double value) async {
+    Packet packet = Packet.forDouble(Packet.KD, value);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendKP(double value) async {
+    Packet packet = Packet.forDouble(Packet.KP, value);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendKI(double value) async {
+    Packet packet = Packet.forDouble(Packet.KI, value);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendCalibrateIMU() async {
+    Packet packet = Packet.forEmpty(Packet.CALIBRATE_IMU);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendCalibrateMAG() async {
+    Packet packet = Packet.forEmpty(Packet.CALIBRATE_MAG);
     await sendPacket(packet);
   }
 

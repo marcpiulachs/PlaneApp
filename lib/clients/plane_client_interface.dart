@@ -9,6 +9,13 @@ abstract class IPlaneClient {
   Future<void> sendThrottle(int throttle);
   Future<void> sendYoke(int yoke);
   Future<void> sendManeuver(int maneuver);
+  Future<void> sendBeacon(int beacon);
+  Future<void> sendShutdown();
+  Future<void> sendKD(double value);
+  Future<void> sendKP(double value);
+  Future<void> sendKI(double value);
+  Future<void> sendCalibrateIMU();
+  Future<void> sendCalibrateMAG();
 
   bool get isConnected;
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'plane_client_interface.dart';
 
 class MockPlaneClient implements IPlaneClient {
@@ -6,6 +7,10 @@ class MockPlaneClient implements IPlaneClient {
   Timer? _timer;
   bool _armed = false;
   int _throttle = 0;
+
+  int beacon = 0;
+
+  double kp = 0, ki = 0, kd = 0;
 
   // Implementación de los getters para las estadísticas
   @override
@@ -170,5 +175,40 @@ class MockPlaneClient implements IPlaneClient {
   // Método de limpieza para cerrar el StreamController cuando no se use
   void dispose() {
     _connectedStreamController.close();
+  }
+
+  @override
+  Future<void> sendBeacon(int beacon) async {
+    beacon = beacon;
+  }
+
+  @override
+  Future<void> sendCalibrateIMU() async {
+    developer.log("Send Calibration IMU called");
+  }
+
+  @override
+  Future<void> sendKD(double value) async {
+    kd = value;
+  }
+
+  @override
+  Future<void> sendKI(double value) async {
+    ki = value;
+  }
+
+  @override
+  Future<void> sendKP(double value) async {
+    kp = value;
+  }
+
+  @override
+  Future<void> sendShutdown() async {
+    developer.log("Send Shutdown called");
+  }
+
+  @override
+  Future<void> sendCalibrateMAG() async {
+    developer.log("Send Calibration MAG called");
   }
 }
