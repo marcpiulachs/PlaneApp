@@ -54,12 +54,12 @@ class Telemetry {
 
   /// Tasa de giro en grados por segundo
   double get turnRate {
-    return gyroZ.toDouble(); // Suponiendo que gyroZ ya esté en grados/seg
+    return gyroZ; // Suponiendo que gyroZ ya esté en grados/seg
   }
 
   /// Slip estimado basado en la aceleración lateral
   double get slip {
-    return accelX.toDouble();
+    return accelX;
   }
 
   Telemetry copyWith({
