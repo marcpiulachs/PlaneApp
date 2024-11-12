@@ -242,19 +242,5 @@ class _SettingsState extends State<Settings> {
         },
       ),
     );
-    // const SizedBox(height: 24),
-    // const Text(
-    //   'Información Genérica:',
-    //   style: TextStyle(
-    //     fontWeight: FontWeight.bold,
-    //     fontSize: 18,
-    //     color: Colors.white,
-    //   ),
-    // ),
-    // const SizedBox(height: 8),
-    // const Text(
-    //   'www.pagina.com',
-    //   style: TextStyle(fontSize: 16),
-    // ),
   }
 }

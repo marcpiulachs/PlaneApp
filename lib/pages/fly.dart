@@ -5,6 +5,7 @@ import 'package:paperwings/bloc/fly_bloc/fly_event.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
 import 'package:paperwings/models/flight_settings.dart';
 import 'package:paperwings/pages/connect.dart';
+import 'package:paperwings/pages/widgets/line_chart.dart';
 import 'package:paperwings/pages/widgets/maneuvers.dart';
 import 'package:paperwings/pages/widgets/instruments/paper_plane.dart';
 import 'package:paperwings/pages/widgets/instruments/attitude.dart';
@@ -120,6 +121,12 @@ class _FlyState extends State<Fly> {
                         SensorsData(
                           direction: state.direction,
                           telemetry: state.telemetry,
+                        ),
+                        LineChartWidget(
+                          title: "Engines",
+                          xValue: state.telemetry.motor1Speed,
+                          yValue: state.telemetry.motor2Speed,
+                          zValue: 0,
                         ),
                         Maneuvers(
                           onManeuverSelected: (int index) {

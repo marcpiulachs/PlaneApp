@@ -17,29 +17,23 @@ class FlightSettingsBloc
               yawKp: 0.5,
               yawRateKp: 0.2,
               angleOfAttack: 0.0,
-            ), /*
-            engineSettings: EngineSettings(
-              throttle: 0.5,
-              maxPower: 1000.0,
-              efficiency: 85.0,
-              rpm: 2000,
-              isRunning: false,
-            ),*/
+            ),
           ),
         ) {
     on<ResetFactorySettings>((event, emit) {
       emit(
         state.copyWith(
-            flightSettings: FlightSettings(
-          steeringAngle: 5,
-          pitchKp: 1.0,
-          pitchRateKp: 0.5,
-          rollKp: 0.5,
-          rollRateKp: 0.2,
-          yawKp: 0.5,
-          yawRateKp: 0.2,
-          angleOfAttack: 0.0,
-        )),
+          flightSettings: FlightSettings(
+            steeringAngle: 5,
+            pitchKp: 1.0,
+            pitchRateKp: 0.5,
+            rollKp: 0.5,
+            rollRateKp: 0.2,
+            yawKp: 0.5,
+            yawRateKp: 0.2,
+            angleOfAttack: 0.0,
+          ),
+        ),
       );
     });
 
