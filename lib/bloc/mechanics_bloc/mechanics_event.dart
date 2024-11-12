@@ -21,3 +21,7 @@ class SelectSettingsPageEvent extends MechanicsEvent {
 
   SelectSettingsPageEvent(this.page);
 }
+
+class BackToMainSettingsEvent extends MechanicsEvent {
+  BackToMainSettingsEvent();
+}

@@ -1,5 +1,10 @@
 abstract class FlightSettingsEvent {}
 
+class UpdateBeacon extends FlightSettingsEvent {
+  final int value;
+  UpdateBeacon(this.value);
+}
+
 class UpdateSteeringAngle extends FlightSettingsEvent {
   final double value;
   UpdateSteeringAngle(this.value);

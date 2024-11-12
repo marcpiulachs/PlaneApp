@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage>
     ),
     MenuItem(
       title: "MECHANICS",
-      color: Colors.cyan.shade900,
+      color: Colors.teal.shade700,
       icon: Icons.handyman,
     ),
     MenuItem(

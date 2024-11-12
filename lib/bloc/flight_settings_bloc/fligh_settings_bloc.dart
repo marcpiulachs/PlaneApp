@@ -1,11 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_event.dart';
 import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_state.dart';
+import 'package:paperwings/clients/plane_client_interface.dart';
 import 'package:paperwings/models/flight_settings.dart';
 
 class FlightSettingsBloc
     extends Bloc<FlightSettingsEvent, FlightSettingsState> {
-  FlightSettingsBloc()
+  final IPlaneClient client;
+  FlightSettingsBloc({required this.client})
       : super(
           FlightSettingsState(
             flightSettings: FlightSettings(
@@ -17,6 +19,7 @@ class FlightSettingsBloc
               yawKp: 0.5,
               yawRateKp: 0.2,
               angleOfAttack: 0.0,
+              beacon: 0,
             ),
           ),
         ) {
@@ -32,9 +35,17 @@ class FlightSettingsBloc
             yawKp: 0.5,
             yawRateKp: 0.2,
             angleOfAttack: 0.0,
+            beacon: 0,
           ),
         ),
       );
+    });
+
+    on<UpdateBeacon>((event, emit) {
+      client.sendBeacon(event.value);
+      emit(state.copyWith(
+        flightSettings: state.flightSettings.copyWith(beacon: event.value),
+      ));
     });
 
     on<UpdateSteeringAngle>((event, emit) {

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:paperwings/models/settings_category.dart';
 import 'package:paperwings/models/settings_page.dart';
 
 abstract class MechanicsState extends Equatable {
@@ -36,7 +35,7 @@ class SettingsInitialState extends MechanicsState {}
 class SettingsLoadingState extends MechanicsState {}
 
 class SettingsLoadedState extends MechanicsState {
-  final List<SettingsCategory> categories;
+  final List<SettingPage> categories;
 
   SettingsLoadedState(this.categories);
 }

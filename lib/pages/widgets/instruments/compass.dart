@@ -43,8 +43,8 @@ class CompassWidget extends StatelessWidget {
               width: constraints.maxHeight,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.black,
-                border: Border.all(width: 2.0, color: Colors.grey.shade900),
+                color: backgroundColor,
+                border: Border.all(width: 2.0, color: backgroundColor),
               ),
               child: Transform.rotate(
                 angle: (degrees - 90) * pi / 180,

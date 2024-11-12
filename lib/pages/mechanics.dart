@@ -15,27 +15,22 @@ class Mechanics extends StatefulWidget {
 class _MechanicsState extends State<Mechanics> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: BlocBuilder<MechanicsBloc, MechanicsState>(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        // Verifica si está en una página seleccionada o en la pantalla principal de Mechanics
+        final bloc = BlocProvider.of<MechanicsBloc>(context);
+        if (bloc.state is SettingsPageSelectedState) {
+          // Si estamos en una página interna, vuelve al estado inicial
+          bloc.add(BackToMainSettingsEvent());
+          //return false; // Evita que el botón de retroceso cierre la pantalla
+        }
+        //return true; // Permite salir si está en la pantalla principal de Mechanics
+      },
+      child: BlocBuilder<MechanicsBloc, MechanicsState>(
         builder: (context, state) {
           if (state is MechanicsInitialState) {
             return const Center();
-          } else if (state is MechanicsLoadedVersionState) {
-            return const Column(
-              children: [
-                Center(
-                  child: Text(
-                    "Fine tune your plane",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            );
           } else if (state is SettingsLoadedState) {
             return Column(
               children: [
@@ -47,40 +42,54 @@ class _MechanicsState extends State<Mechanics> {
                     color: Colors.white,
                   ),
                 ),
+                const SizedBox(height: 16),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.builder(
+                      padding: EdgeInsets.zero,
                       itemCount: state.categories.length,
                       itemBuilder: (context, index) {
-                        final category = state.categories[index];
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                category.title,
-                                style:
-                                    Theme.of(context).textTheme.headlineMedium,
-                              ),
+                        final page = state.categories[index];
+                        return ListTile(
+                          leading: Container(
+                            width: 40, // Tamaño del círculo
+                            height: 40,
+                            decoration: const BoxDecoration(
+                              color:
+                                  Colors.black, // Fondo negro para el círculo
+                              shape: BoxShape.circle,
                             ),
-                            ...category.pages.map((page) {
-                              return ListTile(
-                                leading: Icon(
-                                  page.icon,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                title: Text(page.title),
-                                subtitle: Text(page.description),
-                                trailing: const Icon(Icons.chevron_right),
-                                onTap: () {
-                                  BlocProvider.of<MechanicsBloc>(context)
-                                      .add(SelectSettingsPageEvent(page));
-                                },
-                              );
-                            }),
-                          ],
+                            child: Icon(
+                              page.icon,
+                              color:
+                                  Colors.white, // Ícono blanco para contraste
+                              size: 24,
+                            ),
+                          ),
+                          title: Text(
+                            page.title,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          subtitle: Text(
+                            page.description,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                          trailing: const Icon(
+                            Icons.chevron_right,
+                            color: Colors.white,
+                          ),
+                          onTap: () {
+                            BlocProvider.of<MechanicsBloc>(context)
+                                .add(SelectSettingsPageEvent(page));
+                          },
                         );
                       },
                     ),

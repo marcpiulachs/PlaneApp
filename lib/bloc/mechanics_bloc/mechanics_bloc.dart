@@ -4,9 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/mechanics_bloc/mechanics_event.dart';
 import 'package:paperwings/bloc/mechanics_bloc/mechanics_state.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
-import 'package:paperwings/models/settings_category.dart';
 import 'package:paperwings/models/settings_page.dart';
+import 'package:paperwings/pages/beacon_settings.dart';
 import 'package:paperwings/pages/sensors.dart';
+import 'package:paperwings/pages/flight_settings.dart';
 
 class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
   final IPlaneClient client;
@@ -20,6 +21,10 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
     on<LoadSettingsEvent>(_onLoadSettings);
 
     add(LoadSettingsEvent());
+
+    on<BackToMainSettingsEvent>((event, emit) {
+      add(LoadSettingsEvent());
+    });
   }
 
   // Maneja el evento de verificar la versión
@@ -30,44 +35,50 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
     try {
       if (client.isConnected) {
         emit(SettingsLoadingState());
-        // Define las categorías de ajustes
         final categories = [
-          SettingsCategory(
-            title: "General",
-            pages: [
-              SettingPage(
-                title: "Profile",
-                description: "Manage your profile settings",
-                icon: Icons.person,
-                page: const SensorGraphPage(),
-              ),
-              SettingPage(
-                title: "Notifications",
-                description: "Customize notification preferences",
-                icon: Icons.notifications,
-                page: const SensorGraphPage(),
-              ),
-            ],
+          SettingPage(
+            title: "Flight Settings",
+            description: "Manage your PID profile settings",
+            icon: Icons.airplanemode_on,
+            page: const EngineSettings(),
           ),
-          SettingsCategory(
-            title: "System",
-            pages: [
-              SettingPage(
-                title: "Connectivity",
-                description: "Manage network and Bluetooth",
-                icon: Icons.wifi,
-                page: const SensorGraphPage(),
-              ),
-              SettingPage(
-                title: "Storage",
-                description: "View storage usage and settings",
-                icon: Icons.storage,
-                page: const SensorGraphPage(),
-              ),
-            ],
+          SettingPage(
+            title: "Sensors",
+            description: "Display realtime data from your plane",
+            icon: Icons.sensors,
+            page: const SensorGraphPage(),
+          ),
+          SettingPage(
+            title: "Beacon",
+            description: "Setup plane position lights",
+            icon: Icons.lightbulb,
+            page: const BeaconSettings(),
+          ),
+          SettingPage(
+            title: "Gyroscope Calibration",
+            description: "Calibrating will help improve its accuracy",
+            icon: Icons.compass_calibration,
+            page: const SensorGraphPage(),
+          ),
+          SettingPage(
+            title: "Compass Calibration",
+            description: "Calibrating will help improve its accuracy",
+            icon: Icons.compass_calibration,
+            page: const BeaconSettings(),
+          ),
+          SettingPage(
+            title: "Accelerometer Calibration",
+            description: "Calibrating will help improve its accuracy",
+            icon: Icons.compass_calibration,
+            page: const BeaconSettings(),
+          ),
+          SettingPage(
+            title: "Power Off",
+            description: "Turns off the plane",
+            icon: Icons.power,
+            page: const BeaconSettings(),
           ),
         ];
-
         emit(SettingsLoadedState(categories));
       } else {
         emit(MechanicsPlaneDisconectedState());

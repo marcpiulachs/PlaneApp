@@ -7,6 +7,7 @@ class FlightSettings {
   final double yawKp; // Coeficiente proporcional del yaw
   final double yawRateKp; // Tasa de cambio de yaw
   final double angleOfAttack; // Ángulo de ataque del avión
+  final int beacon;
 
   FlightSettings({
     required this.steeringAngle,
@@ -17,6 +18,7 @@ class FlightSettings {
     required this.yawKp,
     required this.yawRateKp,
     required this.angleOfAttack,
+    required this.beacon,
   });
 
   FlightSettings copyWith({
@@ -28,6 +30,7 @@ class FlightSettings {
     double? yawKp,
     double? yawRateKp,
     double? angleOfAttack,
+    int? beacon,
   }) {
     return FlightSettings(
       steeringAngle: steeringAngle ?? this.steeringAngle,
@@ -38,6 +41,7 @@ class FlightSettings {
       yawKp: yawKp ?? this.yawKp,
       yawRateKp: yawRateKp ?? this.yawRateKp,
       angleOfAttack: angleOfAttack ?? this.angleOfAttack,
+      beacon: beacon ?? this.beacon,
     );
   }
 }

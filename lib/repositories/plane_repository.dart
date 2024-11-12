@@ -20,6 +20,7 @@ class PlaneRepository {
           yawKp: 0.5,
           yawRateKp: 0.5,
           angleOfAttack: 5,
+          beacon: 0,
         ),
         customSettings: FlightSettings(
           steeringAngle: 110,
@@ -30,6 +31,7 @@ class PlaneRepository {
           yawKp: 0.5,
           yawRateKp: 0.5,
           angleOfAttack: 5,
+          beacon: 0,
         ),
       ),
       PlaneItem(
@@ -48,6 +50,7 @@ class PlaneRepository {
           yawKp: 0.5,
           yawRateKp: 0.5,
           angleOfAttack: 5,
+          beacon: 0,
         ),
         customSettings: FlightSettings(
           steeringAngle: 110,
@@ -58,6 +61,7 @@ class PlaneRepository {
           yawKp: 0.5,
           yawRateKp: 0.5,
           angleOfAttack: 5,
+          beacon: 0,
         ),
       ),
       PlaneItem(
@@ -76,6 +80,7 @@ class PlaneRepository {
           yawKp: 0.5,
           yawRateKp: 0.5,
           angleOfAttack: 5,
+          beacon: 0,
         ),
         customSettings: FlightSettings(
           steeringAngle: 110,
@@ -86,6 +91,7 @@ class PlaneRepository {
           yawKp: 0.5,
           yawRateKp: 0.5,
           angleOfAttack: 5,
+          beacon: 0,
         ),
       ),
     ];

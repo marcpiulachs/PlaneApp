@@ -72,7 +72,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          create: (context) => FlightSettingsBloc(),
+          create: (context) => FlightSettingsBloc(
+            client: context.read<IPlaneClient>(),
+          ),
         ),
       ],
       child: const MaterialApp(

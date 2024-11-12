@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_bloc.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_event.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
-import 'package:paperwings/models/flight_settings.dart';
+import 'package:paperwings/bloc/home_bloc/home_bloc.dart';
+import 'package:paperwings/bloc/home_bloc/home_event.dart';
 import 'package:paperwings/pages/connect.dart';
 import 'package:paperwings/pages/widgets/line_chart.dart';
 import 'package:paperwings/pages/widgets/maneuvers.dart';
 import 'package:paperwings/pages/widgets/instruments/paper_plane.dart';
 import 'package:paperwings/pages/widgets/instruments/attitude.dart';
-import 'package:paperwings/pages/widgets/engine_settings.dart';
 import 'package:paperwings/pages/widgets/recording_indicator.dart';
 import 'package:paperwings/pages/widgets/instruments/turn_coordinator.dart';
 import 'package:paperwings/widgets/carousel.dart';
@@ -101,6 +101,7 @@ class _FlyState extends State<Fly> {
                           degrees: state.telemetry.degrees,
                           textColor: Colors.white,
                           barsColor: Colors.white,
+                          backgroundColor: Colors.blue,
                           showDegrees: false,
                           child: const Icon(
                             Icons.flight,
@@ -127,6 +128,46 @@ class _FlyState extends State<Fly> {
                           xValue: state.telemetry.motor1Speed,
                           yValue: state.telemetry.motor2Speed,
                           zValue: 0,
+                          xColor: Colors.green,
+                          yColor: Colors.yellow,
+                          xDescription: "Left",
+                          yDescription: "Right",
+                          showLegend: true,
+                          showZ: false,
+                          minX: 0,
+                          maxX: 100,
+                          minY: 0,
+                          maxY: 100,
+                        ),
+                        LineChartWidget(
+                          title: "Orientation",
+                          xValue: state.telemetry.pitch,
+                          yValue: state.telemetry.roll,
+                          zValue: 0,
+                          xColor: Colors.green,
+                          yColor: Colors.yellow,
+                          xDescription: "Pitch",
+                          yDescription: "Roll",
+                          showLegend: true,
+                          showZ: false,
+                          //minX: -90,
+                          //maxX: 90,
+                          minY: -90,
+                          maxY: 90,
+                        ),
+                        LineChartWidget(
+                          title: "Battery",
+                          xValue: state.telemetry.batterySoc,
+                          yValue: 0,
+                          zValue: 0,
+                          xColor: Colors.green,
+                          xDescription: "Battery",
+                          yDescription: "Roll",
+                          showLegend: true,
+                          showY: false,
+                          showZ: false,
+                          //minX: 0,
+                          //maxX: 100,
                         ),
                         Maneuvers(
                           onManeuverSelected: (int index) {
@@ -161,8 +202,11 @@ class _FlyState extends State<Fly> {
                             color: Colors.white,
                             iconSize: 40,
                             padding: const EdgeInsets.all(10.0),
-                            onPressed: () =>
-                                _showEngineSettingsBottomSheet(context),
+                            onPressed: () => {
+                              context.read<HomeBloc>().add(
+                                    const HomeTabChangedEvent(3),
+                                  )
+                            },
                             style: ButtonStyle(
                               backgroundColor:
                                   WidgetStateProperty.all(Colors.black),
@@ -203,12 +247,15 @@ class _FlyState extends State<Fly> {
                             ),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.loop),
+                            icon: const Icon(Icons.crisis_alert),
                             color: Colors.white,
                             iconSize: 40,
                             padding: const EdgeInsets.all(10.0),
-                            onPressed: () =>
-                                _showAerobaticManeuversBottomSheet(context),
+                            onPressed: () => {
+                              context.read<HomeBloc>().add(
+                                    const HomeTabChangedEvent(2),
+                                  )
+                            },
                             style: ButtonStyle(
                               backgroundColor:
                                   WidgetStateProperty.all(Colors.black),
@@ -230,37 +277,6 @@ class _FlyState extends State<Fly> {
           );
         }
       },
-    );
-  }
-
-  void _showEngineSettingsBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) => EngineSettings(
-        onSettingsChanged: (FlightSettings updatedSettings) {
-          // Manejar los ajustes actualizados
-          developer.log('Settings changed');
-        },
-        onFactorySettings: () {
-          developer.log('Factory settings');
-        },
-        onDone: () {
-          developer.log('Done');
-        },
-      ),
-      backgroundColor: Colors.transparent,
-    );
-  }
-
-  void _showAerobaticManeuversBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) => Maneuvers(
-        onManeuverSelected: (int index) {
-          context.read<FlyBloc>().add(SendManeuver(index));
-        },
-      ),
-      backgroundColor: Colors.transparent,
     );
   }
 }
