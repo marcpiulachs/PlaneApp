@@ -6,6 +6,7 @@ import 'package:paperwings/bloc/mechanics_bloc/mechanics_state.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
 import 'package:paperwings/models/settings_page.dart';
 import 'package:paperwings/pages/beacon_settings.dart';
+import 'package:paperwings/pages/log_settings.dart';
 import 'package:paperwings/pages/sensors.dart';
 import 'package:paperwings/pages/flight_settings.dart';
 
@@ -44,7 +45,7 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
           ),
           SettingPage(
             title: "Sensors",
-            description: "Display realtime data from your plane",
+            description: "Display realtime data from sensors in your plane",
             icon: Icons.sensors,
             page: const SensorGraphPage(),
           ),
@@ -76,7 +77,7 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
             title: "Log",
             description: "Turns on/off serial output module logging",
             icon: Icons.compass_calibration,
-            page: const BeaconSettings(),
+            page: const LogSettings(),
           ),
           SettingPage(
             title: "Power Off",

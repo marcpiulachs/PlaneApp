@@ -2,14 +2,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_event.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_state.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
-import 'package:paperwings/models/flight_settings.dart';
+import 'package:paperwings/models/plane_flight_settings.dart';
+import 'package:paperwings/models/plane_log_settings.dart';
 
 class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
   final IPlaneClient client;
   PlaneSettingsBloc({required this.client})
       : super(
           PlaneSettingsState(
-            flightSettings: FlightSettings(
+            logSettings: PlaneLogSettings(
+              imu: false,
+              thrust: false,
+              battery: false,
+              motor: false,
+            ),
+            flightSettings: PlaneFlightSettings(
               steeringAngle: 5,
               pitchKp: 1.0,
               pitchRateKp: 0.5,
@@ -25,7 +32,7 @@ class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
     on<ResetFactorySettings>((event, emit) {
       emit(
         state.copyWith(
-          flightSettings: FlightSettings(
+          flightSettings: PlaneFlightSettings(
             steeringAngle: 5,
             pitchKp: 1.0,
             pitchRateKp: 0.5,
@@ -94,6 +101,30 @@ class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
       emit(state.copyWith(
         flightSettings:
             state.flightSettings.copyWith(angleOfAttack: event.value),
+      ));
+    });
+
+    on<UpdateIMULogEvent>((event, emit) {
+      emit(state.copyWith(
+        logSettings: state.logSettings.copyWith(imu: event.value),
+      ));
+    });
+
+    on<UpdateBatteryLogEvent>((event, emit) {
+      emit(state.copyWith(
+        logSettings: state.logSettings.copyWith(battery: event.value),
+      ));
+    });
+
+    on<UpdateMotorLogEvent>((event, emit) {
+      emit(state.copyWith(
+        logSettings: state.logSettings.copyWith(motor: event.value),
+      ));
+    });
+
+    on<UpdateThrustLogEvent>((event, emit) {
+      emit(state.copyWith(
+        logSettings: state.logSettings.copyWith(thrust: event.value),
       ));
     });
   }

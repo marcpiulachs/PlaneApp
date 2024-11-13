@@ -46,3 +46,23 @@ class UpdateAngleOfAttack extends PlaneSettingsEvent {
 }
 
 class ResetFactorySettings extends PlaneSettingsEvent {}
+
+class UpdateIMULogEvent extends PlaneSettingsEvent {
+  final bool value;
+  UpdateIMULogEvent(this.value);
+}
+
+class UpdateMotorLogEvent extends PlaneSettingsEvent {
+  final bool value;
+  UpdateMotorLogEvent(this.value);
+}
+
+class UpdateThrustLogEvent extends PlaneSettingsEvent {
+  final bool value;
+  UpdateThrustLogEvent(this.value);
+}
+
+class UpdateBatteryLogEvent extends PlaneSettingsEvent {
+  final bool value;
+  UpdateBatteryLogEvent(this.value);
+}

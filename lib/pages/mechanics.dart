@@ -45,7 +45,7 @@ class _MechanicsState extends State<Mechanics> {
                 const SizedBox(height: 16),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
                     child: ListView.builder(
                       padding: EdgeInsets.zero,
                       itemCount: state.categories.length,
@@ -84,7 +84,7 @@ class _MechanicsState extends State<Mechanics> {
                           ),
                           trailing: const Icon(
                             Icons.chevron_right,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                           onTap: () {
                             BlocProvider.of<MechanicsBloc>(context)

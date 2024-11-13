@@ -1,4 +1,4 @@
-class FlightSettings {
+class PlaneFlightSettings {
   final double steeringAngle; // Ángulo de dirección del avión
   final double pitchKp; // Coeficiente proporcional del pitch
   final double pitchRateKp; // Tasa de cambio de pitch
@@ -9,7 +9,7 @@ class FlightSettings {
   final double angleOfAttack; // Ángulo de ataque del avión
   final int beacon;
 
-  FlightSettings({
+  PlaneFlightSettings({
     required this.steeringAngle,
     required this.pitchKp,
     required this.pitchRateKp,
@@ -21,7 +21,7 @@ class FlightSettings {
     required this.beacon,
   });
 
-  FlightSettings copyWith({
+  PlaneFlightSettings copyWith({
     double? steeringAngle,
     double? pitchKp,
     double? pitchRateKp,
@@ -32,7 +32,7 @@ class FlightSettings {
     double? angleOfAttack,
     int? beacon,
   }) {
-    return FlightSettings(
+    return PlaneFlightSettings(
       steeringAngle: steeringAngle ?? this.steeringAngle,
       pitchKp: pitchKp ?? this.pitchKp,
       pitchRateKp: pitchRateKp ?? this.pitchRateKp,

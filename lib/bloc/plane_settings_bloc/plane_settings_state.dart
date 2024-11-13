@@ -1,17 +1,22 @@
-import 'package:paperwings/models/flight_settings.dart';
+import 'package:paperwings/models/plane_flight_settings.dart';
+import 'package:paperwings/models/plane_log_settings.dart';
 
 class PlaneSettingsState {
-  final FlightSettings flightSettings;
+  final PlaneFlightSettings flightSettings;
+  final PlaneLogSettings logSettings;
 
   PlaneSettingsState({
     required this.flightSettings,
+    required this.logSettings,
   });
 
   PlaneSettingsState copyWith({
-    FlightSettings? flightSettings,
+    PlaneFlightSettings? flightSettings,
+    PlaneLogSettings? logSettings,
   }) {
     return PlaneSettingsState(
       flightSettings: flightSettings ?? this.flightSettings,
+      logSettings: logSettings ?? this.logSettings,
     );
   }
 }
