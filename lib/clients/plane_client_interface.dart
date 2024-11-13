@@ -27,6 +27,7 @@ abstract class IPlaneClient {
   ConnectionCallback? onConnect;
   ConnectionCallback? onDisconnect;
   ConnectionCallback? onConnectionFailed;
+
   TelemetryCallback? onGyroX;
   TelemetryCallback? onGyroY;
   TelemetryCallback? onGyroZ;

@@ -23,9 +23,7 @@ class _MechanicsState extends State<Mechanics> {
         if (bloc.state is SettingsPageSelectedState) {
           // Si estamos en una página interna, vuelve al estado inicial
           bloc.add(BackToMainSettingsEvent());
-          //return false; // Evita que el botón de retroceso cierre la pantalla
         }
-        //return true; // Permite salir si está en la pantalla principal de Mechanics
       },
       child: BlocBuilder<MechanicsBloc, MechanicsState>(
         builder: (context, state) {

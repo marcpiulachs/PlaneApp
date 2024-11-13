@@ -7,6 +7,7 @@ import 'package:paperwings/clients/plane_client_interface.dart';
 import 'package:paperwings/models/settings_page.dart';
 import 'package:paperwings/pages/beacon_settings.dart';
 import 'package:paperwings/pages/log_settings.dart';
+import 'package:paperwings/pages/power_settings.dart';
 import 'package:paperwings/pages/sensors.dart';
 import 'package:paperwings/pages/flight_settings.dart';
 
@@ -83,7 +84,7 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
             title: "Power Off",
             description: "Turns off the plane",
             icon: Icons.power,
-            page: const BeaconSettings(),
+            page: const PowerSettings(),
           ),
         ];
         emit(SettingsLoadedState(categories));

@@ -53,7 +53,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                           },
                           min: 5,
                           max: 175,
-                          divisions: 35,
+                          divisions: 170,
                         ),
                         _buildSlider(
                           "Pitch Kp",

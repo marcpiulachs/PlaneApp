@@ -66,3 +66,11 @@ class UpdateBatteryLogEvent extends PlaneSettingsEvent {
   final bool value;
   UpdateBatteryLogEvent(this.value);
 }
+
+class RebootEvent extends PlaneSettingsEvent {
+  RebootEvent();
+}
+
+class ShutdownEvent extends PlaneSettingsEvent {
+  ShutdownEvent();
+}

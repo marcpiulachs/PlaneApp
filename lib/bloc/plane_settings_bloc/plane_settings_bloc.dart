@@ -47,6 +47,20 @@ class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
       );
     });
 
+    on<ShutdownEvent>((event, emit) {
+      client.sendShutdown();
+      emit(state.copyWith(
+        flightSettings: state.flightSettings.copyWith(),
+      ));
+    });
+
+    on<RebootEvent>((event, emit) {
+      client.sendShutdown();
+      emit(state.copyWith(
+        flightSettings: state.flightSettings.copyWith(),
+      ));
+    });
+
     on<UpdateBeacon>((event, emit) {
       client.sendBeacon(event.value);
       emit(state.copyWith(
