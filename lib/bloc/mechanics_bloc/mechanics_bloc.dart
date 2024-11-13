@@ -73,6 +73,12 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
             page: const BeaconSettings(),
           ),
           SettingPage(
+            title: "Log",
+            description: "Turns on/off serial output module logging",
+            icon: Icons.compass_calibration,
+            page: const BeaconSettings(),
+          ),
+          SettingPage(
             title: "Power Off",
             description: "Turns off the plane",
             icon: Icons.power,
