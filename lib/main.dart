@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/connect_bloc/connect_bloc.dart';
-import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_bloc.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_bloc.dart';
 import 'package:paperwings/bloc/home_bloc/home_bloc.dart';
 import 'package:paperwings/bloc/mechanics_bloc/mechanics_bloc.dart';
 import 'package:paperwings/bloc/ota_bloc/ota_bloc.dart';
 import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
+import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_bloc.dart';
 import 'package:paperwings/bloc/sensor_bloc/sensor_bloc.dart';
 import 'package:paperwings/repositories/plane_repository.dart';
@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          create: (context) => FlightSettingsBloc(
+          create: (context) => PlaneSettingsBloc(
             client: context.read<IPlaneClient>(),
           ),
         ),

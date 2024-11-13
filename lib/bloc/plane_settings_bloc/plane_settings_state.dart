@@ -1,16 +1,16 @@
 import 'package:paperwings/models/flight_settings.dart';
 
-class FlightSettingsState {
+class PlaneSettingsState {
   final FlightSettings flightSettings;
 
-  FlightSettingsState({
+  PlaneSettingsState({
     required this.flightSettings,
   });
 
-  FlightSettingsState copyWith({
+  PlaneSettingsState copyWith({
     FlightSettings? flightSettings,
   }) {
-    return FlightSettingsState(
+    return PlaneSettingsState(
       flightSettings: flightSettings ?? this.flightSettings,
     );
   }

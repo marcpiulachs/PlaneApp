@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_bloc.dart';
-import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_event.dart';
-import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_state.dart';
+import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
+import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_event.dart';
+import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_state.dart';
 
 class BeaconSettings extends StatefulWidget {
   const BeaconSettings({
@@ -22,7 +22,7 @@ class _BeaconSettingsState extends State<BeaconSettings> {
   ];
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FlightSettingsBloc, FlightSettingsState>(
+    return BlocBuilder<PlaneSettingsBloc, PlaneSettingsState>(
       builder: (context, state) {
         return Column(
           children: [
@@ -69,7 +69,7 @@ class _BeaconSettingsState extends State<BeaconSettings> {
                           groupValue: state.flightSettings.beacon,
                           onChanged: (value) {
                             if (value != null) {
-                              BlocProvider.of<FlightSettingsBloc>(context).add(
+                              BlocProvider.of<PlaneSettingsBloc>(context).add(
                                 UpdateBeacon(value),
                               );
                             }
@@ -78,7 +78,7 @@ class _BeaconSettingsState extends State<BeaconSettings> {
                           activeColor: Colors.black,
                         ),
                         onTap: () {
-                          BlocProvider.of<FlightSettingsBloc>(context).add(
+                          BlocProvider.of<PlaneSettingsBloc>(context).add(
                             UpdateBeacon(index),
                           );
                         },

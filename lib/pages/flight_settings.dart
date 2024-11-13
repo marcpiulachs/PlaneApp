@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_bloc.dart';
-import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_event.dart';
-import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_state.dart';
+import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
+import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_event.dart';
+import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_state.dart';
 
 class EngineSettings extends StatefulWidget {
   const EngineSettings({
@@ -16,7 +16,7 @@ class EngineSettings extends StatefulWidget {
 class _EngineSettingsState extends State<EngineSettings> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FlightSettingsBloc, FlightSettingsState>(
+    return BlocBuilder<PlaneSettingsBloc, PlaneSettingsState>(
       builder: (context, state) {
         return Column(
           children: [
@@ -47,7 +47,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                           state.flightSettings.steeringAngle,
                           Icons.set_meal,
                           (value) {
-                            context.read<FlightSettingsBloc>().add(
+                            context.read<PlaneSettingsBloc>().add(
                                   UpdateSteeringAngle(value),
                                 );
                           },
@@ -60,7 +60,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                           state.flightSettings.pitchKp,
                           Icons.arrow_upward,
                           (value) {
-                            context.read<FlightSettingsBloc>().add(
+                            context.read<PlaneSettingsBloc>().add(
                                   UpdatePitchKp(value),
                                 );
                           },
@@ -73,7 +73,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                           state.flightSettings.pitchRateKp,
                           Icons.arrow_downward,
                           (value) {
-                            context.read<FlightSettingsBloc>().add(
+                            context.read<PlaneSettingsBloc>().add(
                                   UpdatePitchRateKp(value),
                                 );
                           },
@@ -86,7 +86,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                           state.flightSettings.rollKp,
                           Icons.arrow_forward,
                           (value) {
-                            context.read<FlightSettingsBloc>().add(
+                            context.read<PlaneSettingsBloc>().add(
                                   UpdateRollKp(value),
                                 );
                           },
@@ -99,7 +99,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                           state.flightSettings.rollRateKp,
                           Icons.arrow_back,
                           (value) {
-                            context.read<FlightSettingsBloc>().add(
+                            context.read<PlaneSettingsBloc>().add(
                                   UpdateRollRateKp(value),
                                 );
                           },
@@ -112,7 +112,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                           state.flightSettings.yawKp,
                           Icons.rotate_left,
                           (value) {
-                            context.read<FlightSettingsBloc>().add(
+                            context.read<PlaneSettingsBloc>().add(
                                   UpdateYawKp(value),
                                 );
                           },
@@ -125,7 +125,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                           state.flightSettings.yawRateKp,
                           Icons.rotate_right,
                           (value) {
-                            context.read<FlightSettingsBloc>().add(
+                            context.read<PlaneSettingsBloc>().add(
                                   UpdateYawRateKp(value),
                                 );
                           },
@@ -138,7 +138,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                           state.flightSettings.angleOfAttack,
                           Icons.accessibility,
                           (value) {
-                            context.read<FlightSettingsBloc>().add(
+                            context.read<PlaneSettingsBloc>().add(
                                   UpdateAngleOfAttack(value),
                                 );
                           },
@@ -150,7 +150,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                         const SizedBox(height: 20.0),
                         ElevatedButton(
                           onPressed: () {
-                            context.read<FlightSettingsBloc>().add(
+                            context.read<PlaneSettingsBloc>().add(
                                   ResetFactorySettings(),
                                 );
                           },

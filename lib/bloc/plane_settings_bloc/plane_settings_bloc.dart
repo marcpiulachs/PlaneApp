@@ -1,15 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_event.dart';
-import 'package:paperwings/bloc/flight_settings_bloc/fligh_settings_state.dart';
+import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_event.dart';
+import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_state.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
 import 'package:paperwings/models/flight_settings.dart';
 
-class FlightSettingsBloc
-    extends Bloc<FlightSettingsEvent, FlightSettingsState> {
+class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
   final IPlaneClient client;
-  FlightSettingsBloc({required this.client})
+  PlaneSettingsBloc({required this.client})
       : super(
-          FlightSettingsState(
+          PlaneSettingsState(
             flightSettings: FlightSettings(
               steeringAngle: 5,
               pitchKp: 1.0,
