@@ -48,60 +48,60 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       },
     );
 
-    client.onGyroX = (value) {
+    client.onGyroX.listen((value) {
       add(GyroXUpdated(value));
-    };
-    client.onGyroY = (value) {
+    });
+    client.onGyroY.listen((value) {
       add(GyroYUpdated(value));
-    };
-    client.onGyroZ = (value) {
+    });
+    client.onGyroZ.listen((value) {
       add(GyroZUpdated(value));
-    };
-    client.onMagnetometerX = (value) {
+    });
+    client.onMagnetometerX.listen((value) {
       add(MagnetometerXUpdated(value));
-    };
-    client.onMagnetometerY = (value) {
+    });
+    client.onMagnetometerY.listen((value) {
       add(MagnetometerYUpdated(value));
-    };
-    client.onMagnetometerZ = (value) {
+    });
+    client.onMagnetometerZ.listen((value) {
       add(MagnetometerZUpdated(value));
-    };
-    client.onBarometer = (value) {
+    });
+    client.onBarometer.listen((value) {
       add(BarometerUpdated(value));
-    };
-    client.onMotor1Speed = (value) {
+    });
+    client.onMotor1Speed.listen((value) {
       add(Motor1SpeedUpdated(value));
-    };
-    client.onMotor2Speed = (value) {
+    });
+    client.onMotor2Speed.listen((value) {
       add(Motor2SpeedUpdated(value));
-    };
-    client.onBatterySoc = (value) {
+    });
+    client.onBatterySoc.listen((value) {
       add(BatterySocUpdated(value));
-    };
-    client.onBatteryVol = (value) {
+    });
+    client.onBatteryVol.listen((value) {
       add(BatteryVolUpdated(value));
-    };
-    client.onSignal = (value) {
+    });
+    client.onSignal.listen((value) {
       add(SignalUpdated(value));
-    };
-    client.onAccelerometerX = (value) {
+    });
+    client.onAccelerometerX.listen((value) {
       add(AccelerometerXUpdated(value));
-    };
-    client.onAccelerometerY = (value) {
+    });
+    client.onAccelerometerY.listen((value) {
       add(AccelerometerYUpdated(value));
-    };
-    client.onAccelerometerZ = (value) {
+    });
+    client.onAccelerometerZ.listen((value) {
       add(AccelerometerZUpdated(value));
-    };
-    client.onPitch = (value) {
+    });
+    client.onPitch.listen((value) {
       add(PitchUpdated(value));
-    };
-    client.onRoll = (value) {
+    });
+    client.onRoll.listen((value) {
       add(RollUpdated(value));
-    };
-    client.onYaw = (value) {
+    });
+    client.onYaw.listen((value) {
       add(YawUpdated(value));
-    };
+    });
 
     // Configuración de FlightRecorder
     flightRecorder = FlightRecorder(

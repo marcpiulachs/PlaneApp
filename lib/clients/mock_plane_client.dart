@@ -18,62 +18,85 @@ class MockPlaneClient implements IPlaneClient {
   @override
   int get packetsWithError => 0;
 
-  // Callbacks
-  @override
-  ConnectionCallback? onConnect;
-  @override
-  ConnectionCallback? onDisconnect;
-  @override
-  ConnectionCallback? onConnectionFailed;
-  @override
-  TelemetryCallback? onGyroX;
-  @override
-  TelemetryCallback? onGyroY;
-  @override
-  TelemetryCallback? onGyroZ;
-  @override
-  TelemetryCallback? onMagnetometerX;
-  @override
-  TelemetryCallback? onMagnetometerY;
-  @override
-  TelemetryCallback? onMagnetometerZ;
-  @override
-  TelemetryCallback? onBarometer;
-  @override
-  TelemetryCallback? onMotor1Speed;
-  @override
-  TelemetryCallback? onMotor2Speed;
-  @override
-  TelemetryCallback? onBatterySoc;
-  @override
-  TelemetryCallback? onBatteryVol;
-  @override
-  TelemetryCallback? onSignal;
-  @override
-  TelemetryCallback? onAccelerometerX;
-  @override
-  TelemetryCallback? onAccelerometerY;
-  @override
-  TelemetryCallback? onAccelerometerZ;
-  @override
-  TelemetryCallback? onPitch;
-  @override
-  TelemetryCallback? onRoll;
-  @override
-  TelemetryCallback? onYaw;
-
   // Controlador del stream para la propiedad booleana
   final _connectedStreamController = StreamController<bool>.broadcast();
+  final _onConnectStreamController = StreamController.broadcast();
+  final _onDisconnectStreamController = StreamController.broadcast();
+  final _onConnectionFailedStreamController = StreamController.broadcast();
+
+  final _onGyroXController = StreamController<double>.broadcast();
+  final _onGyroYController = StreamController<double>.broadcast();
+  final _onGyroZController = StreamController<double>.broadcast();
+  final _onMagnetometerXController = StreamController<double>.broadcast();
+  final _onMagnetometerYController = StreamController<double>.broadcast();
+  final _onMagnetometerZController = StreamController<double>.broadcast();
+  final _onBarometerController = StreamController<double>.broadcast();
+  final _onMotor1SpeedController = StreamController<double>.broadcast();
+  final _onMotor2SpeedController = StreamController<double>.broadcast();
+  final _onBatterySocController = StreamController<double>.broadcast();
+  final _onBatteryVolController = StreamController<double>.broadcast();
+  final _onSignalController = StreamController<double>.broadcast();
+  final _onAccelerometerXController = StreamController<double>.broadcast();
+  final _onAccelerometerYController = StreamController<double>.broadcast();
+  final _onAccelerometerZController = StreamController<double>.broadcast();
+  final _onPitchController = StreamController<double>.broadcast();
+  final _onRollController = StreamController<double>.broadcast();
+  final _onYawController = StreamController<double>.broadcast();
+
+  // Streams para cada tipo de dato
+  @override
+  Stream<double> get onGyroX => _onGyroXController.stream;
+  @override
+  Stream<double> get onGyroY => _onGyroYController.stream;
+  @override
+  Stream<double> get onGyroZ => _onGyroZController.stream;
+  @override
+  Stream<double> get onMagnetometerX => _onMagnetometerXController.stream;
+  @override
+  Stream<double> get onMagnetometerY => _onMagnetometerYController.stream;
+  @override
+  Stream<double> get onMagnetometerZ => _onMagnetometerZController.stream;
+  @override
+  Stream<double> get onBarometer => _onBarometerController.stream;
+  @override
+  Stream<double> get onMotor1Speed => _onMotor1SpeedController.stream;
+  @override
+  Stream<double> get onMotor2Speed => _onMotor2SpeedController.stream;
+  @override
+  Stream<double> get onBatterySoc => _onBatterySocController.stream;
+  @override
+  Stream<double> get onBatteryVol => _onBatteryVolController.stream;
+  @override
+  Stream<double> get onSignal => _onSignalController.stream;
+  @override
+  Stream<double> get onAccelerometerX => _onAccelerometerXController.stream;
+  @override
+  Stream<double> get onAccelerometerY => _onAccelerometerYController.stream;
+  @override
+  Stream<double> get onAccelerometerZ => _onAccelerometerZController.stream;
+  @override
+  Stream<double> get onPitch => _onPitchController.stream;
+  @override
+  Stream<double> get onRoll => _onRollController.stream;
+  @override
+  Stream<double> get onYaw => _onYawController.stream;
 
   // Exponer el Stream público
   @override
   Stream<bool> get connectedStream => _connectedStreamController.stream;
+  @override
+  Stream<void> get onConnect => _onConnectStreamController.stream;
+  @override
+  Stream<void> get onDisconnect => _onDisconnectStreamController.stream;
+  @override
+  Stream<void> get onConnectionFailed =>
+      _onConnectionFailedStreamController.stream;
 
   @override
   Future<void> connect() async {
     await Future.delayed(const Duration(seconds: 1));
     setConnected(true);
-    onConnect?.call();
+    _onConnectStreamController.add(null);
 
     // Iniciar simulación de datos
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
@@ -92,7 +115,7 @@ class MockPlaneClient implements IPlaneClient {
   @override
   Future<void> disconnect() async {
     _timer?.cancel();
-    onDisconnect?.call();
+    _onDisconnectStreamController.add(null);
     await Future.delayed(const Duration(milliseconds: 500));
     setConnected(false);
   }
@@ -102,8 +125,8 @@ class MockPlaneClient implements IPlaneClient {
     _armed = armed;
     if (!_armed) {
       // Detener motores
-      onMotor1Speed?.call(0);
-      onMotor2Speed?.call(0);
+      _onMotor1SpeedController.add(0);
+      _onMotor2SpeedController.add(0);
     }
   }
 
@@ -123,40 +146,40 @@ class MockPlaneClient implements IPlaneClient {
 
   // Simulaciones de datos
   void _simulateGyroData() {
-    onGyroX?.call(_generateRandomInt(-1000, 1000));
-    onGyroY?.call(_generateRandomInt(-1000, 1000));
-    onGyroZ?.call(_generateRandomInt(-1000, 1000));
+    _onGyroXController.add(_generateRandomInt(-1000, 1000));
+    _onGyroYController.add(_generateRandomInt(-1000, 1000));
+    _onGyroZController.add(_generateRandomInt(-1000, 1000));
   }
 
   void _simulateAccelerometerData() {
-    onAccelerometerX?.call(_generateRandomInt(-1000, 1000));
-    onAccelerometerY?.call(_generateRandomInt(-1000, 1000));
-    onAccelerometerZ?.call(_generateRandomInt(-1000, 1000));
+    _onAccelerometerXController.add(_generateRandomInt(-1000, 1000));
+    _onAccelerometerYController.add(_generateRandomInt(-1000, 1000));
+    _onAccelerometerZController.add(_generateRandomInt(-1000, 1000));
   }
 
   void _simulateMagnetometerData() {
-    onMagnetometerX?.call(_generateRandomInt(-1000, 1000));
-    onMagnetometerY?.call(_generateRandomInt(-1000, 1000));
-    onMagnetometerZ?.call(_generateRandomInt(-1000, 1000));
+    _onMagnetometerXController.add(_generateRandomInt(-1000, 1000));
+    _onMagnetometerYController.add(_generateRandomInt(-1000, 1000));
+    _onMagnetometerZController.add(_generateRandomInt(-1000, 1000));
   }
 
   void _simulateBarometerData() {
-    onBarometer?.call(_generateRandomInt(1013, 1010)); // hPa
+    _onBarometerController.add(_generateRandomInt(1013, 1010)); // hPa
   }
 
   void _simulateMotorData() {
     int motorSpeed1 = (_throttle * 1).clamp(0, 100);
     int motorSpeed2 = (_throttle * 2).clamp(0, 100);
-    onMotor1Speed?.call(motorSpeed1.toDouble());
-    onMotor2Speed?.call(motorSpeed2.toDouble());
+    _onMotor1SpeedController.add(motorSpeed1.toDouble());
+    _onMotor2SpeedController.add(motorSpeed2.toDouble());
   }
 
   void _simulateBattery() {
-    onBarometer?.call(_generateRandomInt(0, 100)); // hPa
+    _onBarometerController.add(_generateRandomInt(0, 100)); // hPa
   }
 
   void _simulateSignal() {
-    onBarometer?.call(_generateRandomInt(12, 60)); // hPa
+    _onBarometerController.add(_generateRandomInt(12, 60)); // hPa
   }
 
   double _generateRandomInt(double min, int max) {

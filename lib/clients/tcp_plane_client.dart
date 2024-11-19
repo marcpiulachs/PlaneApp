@@ -160,47 +160,73 @@ class TcpPlaneClient implements IPlaneClient {
 
   // Callbacks para eventos
   @override
-  ConnectionCallback? onConnect;
+  Stream<void> get onConnect => _onConnectStreamController.stream;
   @override
-  ConnectionCallback? onDisconnect;
+  Stream<void> get onDisconnect => _onDisconnectStreamController.stream;
   @override
-  ConnectionCallback? onConnectionFailed;
+  Stream<void> get onConnectionFailed =>
+      _onConnectionFailedStreamController.stream;
+
+  final _onConnectStreamController = StreamController.broadcast();
+  final _onDisconnectStreamController = StreamController.broadcast();
+  final _onConnectionFailedStreamController = StreamController.broadcast();
+
+  final _onGyroXController = StreamController<double>.broadcast();
+  final _onGyroYController = StreamController<double>.broadcast();
+  final _onGyroZController = StreamController<double>.broadcast();
+  final _onMagnetometerXController = StreamController<double>.broadcast();
+  final _onMagnetometerYController = StreamController<double>.broadcast();
+  final _onMagnetometerZController = StreamController<double>.broadcast();
+  final _onBarometerController = StreamController<double>.broadcast();
+  final _onMotor1SpeedController = StreamController<double>.broadcast();
+  final _onMotor2SpeedController = StreamController<double>.broadcast();
+  final _onBatterySocController = StreamController<double>.broadcast();
+  final _onBatteryVolController = StreamController<double>.broadcast();
+  final _onSignalController = StreamController<double>.broadcast();
+  final _onAccelerometerXController = StreamController<double>.broadcast();
+  final _onAccelerometerYController = StreamController<double>.broadcast();
+  final _onAccelerometerZController = StreamController<double>.broadcast();
+  final _onPitchController = StreamController<double>.broadcast();
+  final _onRollController = StreamController<double>.broadcast();
+  final _onYawController = StreamController<double>.broadcast();
+
+  // Streams para cada tipo de dato
   @override
-  TelemetryCallback? onGyroX;
+  Stream<double> get onGyroX => _onGyroXController.stream;
   @override
-  TelemetryCallback? onGyroY;
+  Stream<double> get onGyroY => _onGyroYController.stream;
   @override
-  TelemetryCallback? onGyroZ;
+  Stream<double> get onGyroZ => _onGyroZController.stream;
   @override
-  TelemetryCallback? onMagnetometerX;
+  Stream<double> get onMagnetometerX => _onMagnetometerXController.stream;
   @override
-  TelemetryCallback? onMagnetometerY;
+  Stream<double> get onMagnetometerY => _onMagnetometerYController.stream;
   @override
-  TelemetryCallback? onMagnetometerZ;
+  Stream<double> get onMagnetometerZ => _onMagnetometerZController.stream;
   @override
-  TelemetryCallback? onBarometer;
+  Stream<double> get onBarometer => _onBarometerController.stream;
   @override
-  TelemetryCallback? onMotor1Speed;
+  Stream<double> get onMotor1Speed => _onMotor1SpeedController.stream;
   @override
-  TelemetryCallback? onMotor2Speed;
+  Stream<double> get onMotor2Speed => _onMotor2SpeedController.stream;
   @override
-  TelemetryCallback? onBatterySoc;
+  Stream<double> get onBatterySoc => _onBatterySocController.stream;
   @override
-  TelemetryCallback? onBatteryVol;
+  Stream<double> get onBatteryVol => _onBatteryVolController.stream;
   @override
-  TelemetryCallback? onSignal;
+  Stream<double> get onSignal => _onSignalController.stream;
   @override
-  TelemetryCallback? onAccelerometerX;
+  Stream<double> get onAccelerometerX => _onAccelerometerXController.stream;
   @override
-  TelemetryCallback? onAccelerometerY;
+  Stream<double> get onAccelerometerY => _onAccelerometerYController.stream;
   @override
-  TelemetryCallback? onAccelerometerZ;
+  Stream<double> get onAccelerometerZ => _onAccelerometerZController.stream;
   @override
-  TelemetryCallback? onPitch;
+  Stream<double> get onPitch => _onPitchController.stream;
   @override
-  TelemetryCallback? onRoll;
+  Stream<double> get onRoll => _onRollController.stream;
   @override
-  TelemetryCallback? onYaw;
+  Stream<double> get onYaw => _onYawController.stream;
 
   // Exponer el Stream público
   @override
@@ -225,7 +251,7 @@ class TcpPlaneClient implements IPlaneClient {
       // Actualiza el estado de conexión
       setConnected(true);
       // Emite el evento de conexión si existe
-      onConnect?.call();
+      _onConnectStreamController.add(null);
       // Escuchar mensajes del servidor
       _listenToServer();
     } catch (e) {
@@ -234,7 +260,7 @@ class TcpPlaneClient implements IPlaneClient {
       // Actualiza el estado de conexión
       setConnected(false);
       // Emite el evento de falla de conexión si existe
-      onConnectionFailed?.call();
+      _onConnectionFailedStreamController.add(null);
     }
   }
 
@@ -262,7 +288,7 @@ class TcpPlaneClient implements IPlaneClient {
   void _handleDisconnection() {
     setConnected(false);
     _socket.close(); // Cerrar el socket
-    onDisconnect?.call();
+    _onDisconnectStreamController.add(null);
   }
 
   void _processReceivedData(Uint8List data) {
@@ -314,58 +340,58 @@ class TcpPlaneClient implements IPlaneClient {
   void _handleReceivedPacket(Packet packet) {
     switch (packet.function) {
       case Packet.GYRO_X:
-        onGyroX?.call(packet.payload);
+        _onGyroXController.add(packet.payload);
         break;
       case Packet.GYRO_Y:
-        onGyroY?.call(packet.payload);
+        _onGyroYController.add(packet.payload);
         break;
       case Packet.GYRO_Z:
-        onGyroZ?.call(packet.payload);
+        _onGyroZController.add(packet.payload);
         break;
       case Packet.MAGNETOMETER_X:
-        onMagnetometerX?.call(packet.payload);
+        _onMagnetometerXController.add(packet.payload);
         break;
       case Packet.MAGNETOMETER_Y:
-        onMagnetometerY?.call(packet.payload);
+        _onMagnetometerYController.add(packet.payload);
         break;
       case Packet.MAGNETOMETER_Z:
-        onMagnetometerZ?.call(packet.payload);
+        _onMagnetometerZController.add(packet.payload);
         break;
       case Packet.BAROMETER:
-        onBarometer?.call(packet.payload);
+        _onBarometerController.add(packet.payload);
         break;
       case Packet.MOTOR_1_SPEED:
-        onMotor1Speed?.call(packet.payload);
+        _onMotor1SpeedController.add(packet.payload);
         break;
       case Packet.MOTOR_2_SPEED:
-        onMotor2Speed?.call(packet.payload);
+        _onMotor2SpeedController.add(packet.payload);
         break;
       case Packet.BATTERY_VOL:
-        onBatteryVol?.call(packet.payload);
+        _onBatteryVolController.add(packet.payload);
         break;
       case Packet.BATTERY_SOC:
-        onBatterySoc?.call(packet.payload);
+        _onBatterySocController.add(packet.payload);
         break;
       case Packet.SIGNAL:
-        onSignal?.call(packet.payload);
+        _onSignalController.add(packet.payload);
         break;
       case Packet.ACCEL_X:
-        onAccelerometerX?.call(packet.payload);
+        _onAccelerometerXController.add(packet.payload);
         break;
       case Packet.ACCEL_Y:
-        onAccelerometerY?.call(packet.payload);
+        _onAccelerometerYController.add(packet.payload);
         break;
       case Packet.ACCEL_Z:
-        onAccelerometerZ?.call(packet.payload);
+        _onAccelerometerZController.add(packet.payload);
         break;
       case Packet.PITCH:
-        onPitch?.call(packet.payload);
+        _onPitchController.add(packet.payload);
         break;
       case Packet.ROLL:
-        onRoll?.call(packet.payload);
+        _onRollController.add(packet.payload);
         break;
       case Packet.YAW:
-        onYaw?.call(packet.payload);
+        _onYawController.add(packet.payload);
         break;
       default:
         developer.log('Unknown function: ${packet.function}');
@@ -392,7 +418,7 @@ class TcpPlaneClient implements IPlaneClient {
     if (_isConnected) {
       await _socket.close();
       setConnected(false);
-      onDisconnect?.call();
+      _onDisconnectStreamController.add(null);
     }
   }
 

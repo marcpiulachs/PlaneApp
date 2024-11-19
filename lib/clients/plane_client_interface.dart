@@ -1,10 +1,9 @@
-typedef TelemetryCallback = void Function(double value);
-typedef ConnectionCallback = void Function();
-
 abstract class IPlaneClient {
+  // Estado
   Future<void> connect();
   Future<void> disconnect();
 
+  // Funciones remotas
   Future<void> sendArmed(bool armed);
   Future<void> sendThrottle(int throttle);
   Future<void> sendYoke(int yoke);
@@ -17,6 +16,7 @@ abstract class IPlaneClient {
   Future<void> sendCalibrateIMU();
   Future<void> sendCalibrateMAG();
 
+  //Campos de estado
   bool get isConnected;
 
   // Campos de estadísticas
@@ -24,29 +24,28 @@ abstract class IPlaneClient {
   int get packetsWithError;
 
   // Callbacks
-  ConnectionCallback? onConnect;
-  ConnectionCallback? onDisconnect;
-  ConnectionCallback? onConnectionFailed;
-
-  TelemetryCallback? onGyroX;
-  TelemetryCallback? onGyroY;
-  TelemetryCallback? onGyroZ;
-  TelemetryCallback? onMagnetometerX;
-  TelemetryCallback? onMagnetometerY;
-  TelemetryCallback? onMagnetometerZ;
-  TelemetryCallback? onBarometer;
-  TelemetryCallback? onMotor1Speed;
-  TelemetryCallback? onMotor2Speed;
-  TelemetryCallback? onBatterySoc;
-  TelemetryCallback? onBatteryVol;
-  TelemetryCallback? onSignal;
-  TelemetryCallback? onAccelerometerX;
-  TelemetryCallback? onAccelerometerY;
-  TelemetryCallback? onAccelerometerZ;
-  TelemetryCallback? onPitch;
-  TelemetryCallback? onRoll;
-  TelemetryCallback? onYaw;
+  Stream<double> get onGyroX;
+  Stream<double> get onGyroY;
+  Stream<double> get onGyroZ;
+  Stream<double> get onMagnetometerX;
+  Stream<double> get onMagnetometerY;
+  Stream<double> get onMagnetometerZ;
+  Stream<double> get onBarometer;
+  Stream<double> get onMotor1Speed;
+  Stream<double> get onMotor2Speed;
+  Stream<double> get onBatterySoc;
+  Stream<double> get onBatteryVol;
+  Stream<double> get onSignal;
+  Stream<double> get onAccelerometerX;
+  Stream<double> get onAccelerometerY;
+  Stream<double> get onAccelerometerZ;
+  Stream<double> get onPitch;
+  Stream<double> get onRoll;
+  Stream<double> get onYaw;
 
   // Stream que emite los cambios de conexión
   Stream<bool> get connectedStream;
+  Stream<void> get onConnect;
+  Stream<void> get onDisconnect;
+  Stream<void> get onConnectionFailed;
 }

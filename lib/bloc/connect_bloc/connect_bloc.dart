@@ -8,15 +8,15 @@ class ConnectBloc extends Bloc<ConnectEvent, ConnectState> {
 
   ConnectBloc({required this.client}) : super(ConnectInitial()) {
     // Suscripción a los callbacks del cliente
-    client.onConnect = () {
+    client.onConnect.listen((_) {
       add(PlaneClientConnected());
-    };
-    client.onDisconnect = () {
+    });
+    client.onDisconnect.listen((_) {
       add(PlaneClientDisconnected());
-    };
-    client.onConnectionFailed = () {
+    });
+    client.onConnectionFailed.listen((_) {
       add(PlaneClientDisconnected());
-    };
+    });
 
     on<PlaneClientConnect>((event, emit) async {
       emit(ConnectPlaneConnecting());

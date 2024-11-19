@@ -20,33 +20,33 @@ class SensorBloc extends Cubit<SensorState> {
             magnamometerZ: 0.0,
           ),
         ) {
-    client.onGyroX = (value) {
+    client.onGyroX.listen((value) {
       updateGyroscopeX(value);
-    };
-    client.onGyroY = (value) {
+    });
+    client.onGyroY.listen((value) {
       updateGyroscopeY(value);
-    };
-    client.onGyroZ = (value) {
+    });
+    client.onGyroZ.listen((value) {
       updateGyroscopeZ(value);
-    };
-    client.onAccelerometerX = (value) {
+    });
+    client.onAccelerometerX.listen((value) {
       updateAccelerometerX(value);
-    };
-    client.onAccelerometerY = (value) {
+    });
+    client.onAccelerometerY.listen((value) {
       updateAccelerometerY(value);
-    };
-    client.onAccelerometerZ = (value) {
+    });
+    client.onAccelerometerZ.listen((value) {
       updateAccelerometerZ(value);
-    };
-    client.onMagnetometerX = (value) {
+    });
+    client.onMagnetometerX.listen((value) {
       updateMagnetometerX(value);
-    };
-    client.onMagnetometerY = (value) {
+    });
+    client.onMagnetometerY.listen((value) {
       updateMagnetometerY(value);
-    };
-    client.onMagnetometerZ = (value) {
+    });
+    client.onMagnetometerZ.listen((value) {
       updateMagnetometerZ(value);
-    };
+    });
   }
 
   // Métodos para actualizar los valores del giroscopio

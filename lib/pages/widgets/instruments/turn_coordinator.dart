@@ -46,7 +46,7 @@ class _TurnCoordinatorState extends State<TurnCoordinator>
             Positioned(
               bottom: 30,
               child: Container(
-                width: 100,
+                width: 120,
                 height: 20,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -57,7 +57,7 @@ class _TurnCoordinatorState extends State<TurnCoordinator>
                     // Bola
                     Positioned(
                       // Posición de la bola
-                      left: ((widget.slip + 1) / 2) * 100 - 10,
+                      left: ((widget.slip + 1) / 2) * 100,
                       child: Container(
                         width: 20,
                         height: 20,
