@@ -1,4 +1,4 @@
-package com.example.paperwings
+package com.paperwings.app
 
 import io.flutter.embedding.android.FlutterActivity
 
