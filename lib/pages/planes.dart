@@ -53,7 +53,7 @@ class _PlanesState extends State<Planes> {
                   planeItems: state.planes,
                   pageController: _pageController,
                   onPageChanged: (index) {
-                    planeCarouselBloc.add(PlaneSelectedEvent(index));
+                    planeCarouselBloc.add(PlaneSelectionChangedEvent(index));
                   },
                   currentIndex: state.currentIndex,
                 ),

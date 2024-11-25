@@ -1,3 +1,4 @@
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_event.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
@@ -6,15 +7,23 @@ import 'package:paperwings/core/flight_orientation.dart';
 import 'package:paperwings/core/flight_recorder.dart';
 import 'dart:developer' as developer;
 
+import 'package:paperwings/events/plane_selected_event.dart';
+
 class FlyBloc extends Bloc<FlyEvent, FlyState> {
   final IPlaneClient client;
+  final EventBus eventBus;
   late FlightRecorder flightRecorder;
   late FlightOrientation flightOrientation;
 
-  FlyBloc({required this.client}) : super(FlyInitialState()) {
+  FlyBloc({required this.client, required this.eventBus})
+      : super(FlyInitialState()) {
     // Suscripción al Stream de cambios de la propiedad isConnected
     client.connectedStream.listen((isConnected) {
       add(FlyCheckConnectionEvent());
+    });
+
+    eventBus.on<PlaneSelectedEvent>().listen((event) {
+      developer.log('Plane selected : ${event.plane.title}');
     });
 
     flightOrientation = FlightOrientation(

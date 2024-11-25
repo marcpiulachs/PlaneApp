@@ -1,13 +1,16 @@
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_event.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_state.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
+import 'package:paperwings/events/plane_selected_event.dart';
 import 'package:paperwings/models/plane_flight_settings.dart';
 import 'package:paperwings/models/plane_log_settings.dart';
 
 class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
   final IPlaneClient client;
-  PlaneSettingsBloc({required this.client})
+  final EventBus eventBus;
+  PlaneSettingsBloc({required this.client, required this.eventBus})
       : super(
           PlaneSettingsState(
             logSettings: PlaneLogSettings(
@@ -29,6 +32,10 @@ class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
             ),
           ),
         ) {
+    eventBus.on<PlaneSelectedEvent>().listen((event) {
+      UpdateYawKp(event.plane.customSettings.yawKp);
+    });
+
     on<ResetFactorySettings>((event, emit) {
       emit(
         state.copyWith(

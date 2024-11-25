@@ -3,13 +3,13 @@ abstract class PlaneCarouselEvent {}
 
 class LoadPlanesEvent extends PlaneCarouselEvent {}
 
-class PlaneSelectedEvent extends PlaneCarouselEvent {
+class PlaneSelectionChangedEvent extends PlaneCarouselEvent {
   final int selectedIndex;
-  PlaneSelectedEvent(this.selectedIndex);
+  PlaneSelectionChangedEvent(this.selectedIndex);
 }
 
-class FlyConnectionChanged extends PlaneCarouselEvent {
+class PlaneConnectionChanged extends PlaneCarouselEvent {
   final bool isConnected;
 
-  FlyConnectionChanged(this.isConnected);
+  PlaneConnectionChanged(this.isConnected);
 }

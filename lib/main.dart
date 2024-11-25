@@ -1,3 +1,4 @@
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/connect_bloc/connect_bloc.dart';
@@ -28,15 +29,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<IPlaneClient>(
-          //create: (context) => MockPlaneClient(),
-          create: (context) => TcpPlaneClient(host: '192.168.4.1', port: 3333),
+        Provider<EventBus>(
+          create: (context) => EventBus(),
         ),
-        BlocProvider<PlaneCarouselBloc>(
-          create: (context) => PlaneCarouselBloc(
-            client: context.read<IPlaneClient>(),
-            repository: PlaneRepository(),
-          ),
+        Provider<IPlaneClient>(
+          create: (context) => MockPlaneClient(),
+          //create: (context) => TcpPlaneClient(host: '192.168.4.1', port: 3333),
         ),
         BlocProvider<SensorBloc>(
           create: (context) => SensorBloc(
@@ -46,7 +44,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<FlyBloc>(
           create: (context) => FlyBloc(
             client: context.read<IPlaneClient>(),
+            eventBus: context.read<EventBus>(),
           ),
+          lazy: false,
         ),
         BlocProvider<MechanicsBloc>(
           create: (context) => MechanicsBloc(
@@ -74,7 +74,17 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => PlaneSettingsBloc(
             client: context.read<IPlaneClient>(),
+            eventBus: context.read<EventBus>(),
           ),
+          lazy: false,
+        ),
+        BlocProvider<PlaneCarouselBloc>(
+          create: (context) => PlaneCarouselBloc(
+            client: context.read<IPlaneClient>(),
+            eventBus: context.read<EventBus>(),
+            repository: PlaneRepository(),
+          ),
+          lazy: false,
         ),
       ],
       child: const MaterialApp(
