@@ -1,4 +1,3 @@
-// Bloc o cualquier otra fuente de datos en tiempo real
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
 import 'package:paperwings/models/sensor_data.dart';
@@ -75,7 +74,7 @@ class SensorBloc extends Cubit<SensorState> {
     emit(state.copyWith(accelerometerZ: value));
   }
 
-  // Métodos para actualizar los valores del acelerómetro
+  // Métodos para actualizar los valores del magnamometro
   void updateMagnetometerX(double value) {
     emit(state.copyWith(magnamometerX: value));
   }
