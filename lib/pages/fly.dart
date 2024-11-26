@@ -7,7 +7,6 @@ import 'package:paperwings/bloc/home_bloc/home_bloc.dart';
 import 'package:paperwings/bloc/home_bloc/home_event.dart';
 import 'package:paperwings/pages/connect.dart';
 import 'package:paperwings/pages/widgets/line_chart.dart';
-import 'package:paperwings/pages/widgets/maneuvers.dart';
 import 'package:paperwings/pages/widgets/instruments/paper_plane.dart';
 import 'package:paperwings/pages/widgets/instruments/attitude.dart';
 import 'package:paperwings/pages/widgets/recording_indicator.dart';
@@ -168,11 +167,6 @@ class _FlyState extends State<Fly> {
                           showZ: false,
                           //minX: 0,
                           //maxX: 100,
-                        ),
-                        Maneuvers(
-                          onManeuverSelected: (int index) {
-                            context.read<FlyBloc>().add(SendManeuver(index));
-                          },
                         ),
                       ],
                       indicatorSize: 10.0,
