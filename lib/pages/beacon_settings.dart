@@ -39,51 +39,52 @@ class _BeaconSettingsState extends State<BeaconSettings> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: options.length,
-                    itemBuilder: (context, index) {
-                      final optionName = options[index];
-                      return ListTile(
-                        leading: Container(
-                          width: 40, // Tamaño del círculo
-                          height: 40,
-                          decoration: const BoxDecoration(
-                            color: Colors.black, // Fondo negro para el círculo
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.lightbulb,
-                            color: Colors.white, // Ícono blanco para contraste
-                            size: 24,
-                          ),
+                  padding: EdgeInsets.zero,
+                  itemCount: options.length,
+                  itemBuilder: (context, index) {
+                    final optionName = options[index];
+                    return ListTile(
+                      leading: Container(
+                        width: 40, // Tamaño del círculo
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          color: Colors.black, // Fondo negro para el círculo
+                          shape: BoxShape.circle,
                         ),
-                        title: Text(
-                          optionName,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
+                        child: const Icon(
+                          Icons.lightbulb,
+                          color: Colors.white, // Ícono blanco para contraste
+                          size: 24,
                         ),
-                        trailing: Radio<int>(
-                          value: index,
-                          groupValue: state.flightSettings.beacon,
-                          onChanged: (value) {
-                            if (value != null) {
-                              BlocProvider.of<PlaneSettingsBloc>(context).add(
-                                UpdateBeacon(value),
-                              );
-                            }
-                          },
-                          // Color del radio cuando está seleccionado
-                          activeColor: Colors.black,
+                      ),
+                      title: Text(
+                        optionName,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
                         ),
-                        onTap: () {
-                          BlocProvider.of<PlaneSettingsBloc>(context).add(
-                            UpdateBeacon(index),
-                          );
+                      ),
+                      trailing: Radio<int>(
+                        value: index,
+                        groupValue: state.flightSettings.beacon,
+                        onChanged: (value) {
+                          if (value != null) {
+                            BlocProvider.of<PlaneSettingsBloc>(context).add(
+                              UpdateBeacon(value),
+                            );
+                          }
                         },
-                      );
-                    }),
+                        // Color del radio cuando está seleccionado
+                        activeColor: Colors.black,
+                      ),
+                      onTap: () {
+                        BlocProvider.of<PlaneSettingsBloc>(context).add(
+                          UpdateBeacon(index),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],
