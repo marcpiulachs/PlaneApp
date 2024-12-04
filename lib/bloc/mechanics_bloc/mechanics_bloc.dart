@@ -7,6 +7,7 @@ import 'package:paperwings/clients/plane_client_interface.dart';
 import 'package:paperwings/models/settings_page.dart';
 import 'package:paperwings/pages/beacon_settings.dart';
 import 'package:paperwings/pages/log_settings.dart';
+import 'package:paperwings/pages/motor_settings.dart';
 import 'package:paperwings/pages/power_settings.dart';
 import 'package:paperwings/pages/sensors.dart';
 import 'package:paperwings/pages/flight_settings.dart';
@@ -73,6 +74,12 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
             description: "Calibrating will help improve its accuracy",
             icon: Icons.compass_calibration,
             page: const BeaconSettings(),
+          ),
+          SettingPage(
+            title: "Motors",
+            description: "Test motors",
+            icon: Icons.compass_calibration,
+            page: const MotorSettingsScreen(),
           ),
           SettingPage(
             title: "Log",

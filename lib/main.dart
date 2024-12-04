@@ -5,6 +5,7 @@ import 'package:paperwings/bloc/connect_bloc/connect_bloc.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_bloc.dart';
 import 'package:paperwings/bloc/home_bloc/home_bloc.dart';
 import 'package:paperwings/bloc/mechanics_bloc/mechanics_bloc.dart';
+import 'package:paperwings/bloc/motor_settings_bloc/motor_settings_bloc.dart';
 import 'package:paperwings/bloc/ota_bloc/ota_bloc.dart';
 import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
@@ -55,6 +56,11 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<OtaBloc>(
           create: (context) => OtaBloc(
+            client: context.read<IPlaneClient>(),
+          ),
+        ),
+        BlocProvider<MotorSettingsBloc>(
+          create: (context) => MotorSettingsBloc(
             client: context.read<IPlaneClient>(),
           ),
         ),
