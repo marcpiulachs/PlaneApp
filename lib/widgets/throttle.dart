@@ -113,8 +113,6 @@ class _ThrottleState extends State<Throttle>
         return Colors.green;
       case ThrottleState.armed:
         return Colors.blue;
-      default:
-        return Colors.red;
     }
   }
 
@@ -126,8 +124,6 @@ class _ThrottleState extends State<Throttle>
         return Icons.lock_open;
       case ThrottleState.armed:
         return Icons.airplanemode_active;
-      default:
-        return Icons.lock;
     }
   }
 

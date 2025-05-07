@@ -218,7 +218,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                 onChanged: onChanged,
                 divisions: divisions, // Establece los incrementos
                 activeColor: Colors.white,
-                inactiveColor: Colors.white.withOpacity(0.5),
+                inactiveColor: Colors.white.withValues(alpha: 0.5),
               ),
             ),
             Container(

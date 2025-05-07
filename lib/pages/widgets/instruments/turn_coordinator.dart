@@ -50,7 +50,7 @@ class _TurnCoordinatorState extends State<TurnCoordinator>
                 height: 20,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.3),
                 ),
                 child: Stack(
                   children: [

@@ -14,7 +14,9 @@ class Version {
     if (major == other.major && minor > other.minor) return true;
     if (major == other.major &&
         minor == other.minor &&
-        revision > other.revision) return true;
+        revision > other.revision) {
+      return true;
+    }
     return false;
   }
 

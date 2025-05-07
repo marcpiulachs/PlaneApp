@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage>
                               shape: BoxShape.circle,
                               gradient: RadialGradient(
                                 colors: [
-                                  Colors.white.withOpacity(0.3),
+                                  Colors.white.withValues(alpha: 0.3),
                                   Colors.transparent,
                                 ],
                                 radius: 0.5,

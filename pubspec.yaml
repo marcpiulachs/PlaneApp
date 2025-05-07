@@ -36,12 +36,12 @@ dependencies:
   cupertino_icons: ^1.0.8
   vector_math: ^2.1.4
   sensors_plus: ^6.0.1
-  flutter_bloc: ^8.1.6
+  flutter_bloc: ^9.1.1
   provider: ^6.1.2
   equatable: ^2.0.5
   intl: ^0.20.0
   http: ^1.2.2
-  fl_chart: ^0.69.0
+  fl_chart: ^0.71.0
   event_bus: ^2.0.1
 
 dev_dependencies:
