@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_bloc.dart';
+import 'package:paperwings/config/app_theme.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_event.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
 import 'package:paperwings/bloc/home_bloc/home_bloc.dart';
@@ -68,7 +69,7 @@ class _FlyState extends State<Fly> {
                           progress: 0.7,
                           icon: Icons.radar,
                           text: '${state.telemetry.signal}dBI',
-                          backgroundColor: Colors.white,
+                          backgroundColor: AppTheme.surfaceLight,
                         ),
                       ],
                     ),
@@ -81,7 +82,7 @@ class _FlyState extends State<Fly> {
                           icon: Icons.battery_full_outlined,
                           text:
                               "${state.telemetry.batteryVol.toStringAsPrecision(3)} V",
-                          backgroundColor: Colors.white,
+                          backgroundColor: AppTheme.surfaceLight,
                         ),
                       ],
                     ),
@@ -93,7 +94,7 @@ class _FlyState extends State<Fly> {
                           icon: Icons.local_gas_station,
                           text:
                               '${state.telemetry.batterySoc.toStringAsPrecision(2)}%',
-                          backgroundColor: Colors.white,
+                          backgroundColor: AppTheme.surfaceLight,
                         ),
                       ],
                     ),
@@ -112,7 +113,7 @@ class _FlyState extends State<Fly> {
                           degrees: state.telemetry.degrees,
                           textColor: Colors.white,
                           barsColor: Colors.white,
-                          backgroundColor: Colors.blue,
+                          backgroundColor: AppTheme.surfaceDark,
                           showDegrees: false,
                           child: const Icon(
                             Icons.flight,
@@ -138,8 +139,8 @@ class _FlyState extends State<Fly> {
                           xValue: state.telemetry.motor1Speed,
                           yValue: state.telemetry.motor2Speed,
                           zValue: 0,
-                          xColor: Colors.green,
-                          yColor: Colors.yellow,
+                          xColor: AppTheme.success,
+                          yColor: AppTheme.warning,
                           xDescription: "Left",
                           yDescription: "Right",
                           showLegend: true,
@@ -154,8 +155,8 @@ class _FlyState extends State<Fly> {
                           xValue: state.telemetry.pitch,
                           yValue: state.telemetry.roll,
                           zValue: 0,
-                          xColor: Colors.green,
-                          yColor: Colors.yellow,
+                          xColor: AppTheme.backgroundDark,
+                          yColor: AppTheme.warning,
                           xDescription: "Pitch",
                           yDescription: "Roll",
                           showLegend: true,
@@ -170,7 +171,7 @@ class _FlyState extends State<Fly> {
                           xValue: state.telemetry.batterySoc,
                           yValue: 0,
                           zValue: 0,
-                          xColor: Colors.green,
+                          xColor: AppTheme.success,
                           xDescription: "Battery",
                           yDescription: "Roll",
                           showLegend: true,
