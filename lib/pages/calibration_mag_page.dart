@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/calibration_bloc.dart';
+import 'package:paperwings/config/app_theme.dart';
+import 'package:paperwings/widgets/instruction_item.dart';
 
 class CalibrationMagPage extends StatelessWidget {
   const CalibrationMagPage({super.key});
@@ -13,11 +15,7 @@ class CalibrationMagPage extends StatelessWidget {
           children: [
             const Text(
               "Calibración Magnetómetro",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppTheme.heading3,
             ),
             const SizedBox(height: 16),
             Expanded(
@@ -42,11 +40,7 @@ class CalibrationMagPage extends StatelessWidget {
                       ),
                       title: const Text(
                         'Instrucciones',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: AppTheme.bodyLarge,
                       ),
                     ),
                     Padding(
@@ -55,20 +49,24 @@ class CalibrationMagPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildInstructionItem(
-                              '1. Presiona el botón "Iniciar Calibración".'),
+                          const InstructionItem(
+                              text:
+                                  '1. Presiona el botón "Iniciar Calibración".'),
                           const SizedBox(height: 8),
-                          _buildInstructionItem(
-                              '2. Mueve el avión lentamente en todas las direcciones.'),
+                          const InstructionItem(
+                              text:
+                                  '2. Mueve el avión lentamente en todas las direcciones.'),
                           const SizedBox(height: 8),
-                          _buildInstructionItem(
-                              '3. Realiza rotaciones completas en los 3 ejes (pitch, roll, yaw).'),
+                          const InstructionItem(
+                              text:
+                                  '3. Realiza rotaciones completas en los 3 ejes (pitch, roll, yaw).'),
                           const SizedBox(height: 8),
-                          _buildInstructionItem(
-                              '4. Continúa moviendo el avión hasta que se complete el contador.'),
+                          const InstructionItem(
+                              text:
+                                  '4. Continúa moviendo el avión hasta que se complete el contador.'),
                           const SizedBox(height: 8),
-                          _buildInstructionItem(
-                              '5. La calibración durará 10 segundos.',
+                          const InstructionItem(
+                              text: '5. La calibración durará 10 segundos.',
                               isWarning: true),
                         ],
                       ),
@@ -177,12 +175,11 @@ class CalibrationMagPage extends StatelessWidget {
                                 .add(CalibrateCompassEvent());
                           },
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
                             minimumSize: const Size(double.infinity, 50),
+                            backgroundColor: Colors.black,
                           ),
                           child: const Text(
                             'Iniciar Calibración',
-                            style: TextStyle(fontSize: 18),
                           ),
                         ),
                       ),
@@ -193,30 +190,6 @@ class CalibrationMagPage extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-
-  Widget _buildInstructionItem(String text, {bool isWarning = false}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(
-          isWarning ? Icons.warning : Icons.check,
-          color: isWarning ? Colors.orange : Colors.white,
-          size: 16,
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: 14,
-              color: isWarning ? Colors.orange : Colors.white,
-              fontWeight: isWarning ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

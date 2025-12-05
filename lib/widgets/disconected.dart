@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paperwings/config/app_theme.dart';
+import 'package:paperwings/widgets/instruction_item.dart';
 
 class Disconnected extends StatelessWidget {
   final VoidCallback onConnect; // Agregamos el callback aquí
@@ -32,47 +33,20 @@ class Disconnected extends StatelessWidget {
                   'Suggestions:',
                   style: AppTheme.heading3,
                 ),
-                SizedBox(height: 10),
-                ListTile(
-                  leading: Icon(
-                    Icons.circle,
-                    size: 8,
-                    color: Colors.white,
-                  ), // Punto
-                  title: Text(
-                    'Check your plane is turned ON.',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  contentPadding: EdgeInsets.zero, // Para alinear los textos
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.circle,
-                    size: 8,
-                    color: Colors.white,
-                  ), // Punto
-                  title: Text(
-                    'Ensure you are connected to the WiFi network created by your plane.',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.circle,
-                    size: 8,
-                    color: Colors.white,
-                  ), // Punto
-                  title: Text(
-                    'Verify you have your phone cellular data turned OFF.',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                ),
+                SizedBox(height: 16),
+                InstructionItem(text: 'Check your plane is turned ON.'),
+                SizedBox(height: 12),
+                InstructionItem(
+                    text:
+                        'Ensure you are connected to the WiFi network created by your plane.'),
+                SizedBox(height: 12),
+                InstructionItem(
+                    text:
+                        'Verify you have your phone cellular data turned OFF.'),
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 50),
           ElevatedButton(
             onPressed: onConnect,
             style: ElevatedButton.styleFrom(

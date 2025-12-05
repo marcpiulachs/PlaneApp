@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/calibration_bloc.dart';
+import 'package:paperwings/config/app_theme.dart';
+import 'package:paperwings/widgets/instruction_item.dart';
 
 class CalibrationImuPage extends StatelessWidget {
   const CalibrationImuPage({super.key});
@@ -13,11 +15,7 @@ class CalibrationImuPage extends StatelessWidget {
           children: [
             const Text(
               "Calibración Acelerómetro/Giroscopio",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppTheme.heading3,
             ),
             const SizedBox(height: 16),
             Expanded(
@@ -42,11 +40,7 @@ class CalibrationImuPage extends StatelessWidget {
                       ),
                       title: const Text(
                         'Instrucciones',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: AppTheme.bodyLarge,
                       ),
                     ),
                     Padding(
@@ -55,17 +49,21 @@ class CalibrationImuPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildInstructionItem(
-                              '1. Coloca el avión en una superficie completamente plana y nivelada.'),
+                          const InstructionItem(
+                              text:
+                                  '1. Coloca el avión en una superficie completamente plana y nivelada.'),
                           const SizedBox(height: 8),
-                          _buildInstructionItem(
-                              '2. Asegúrate de que el avión esté inmóvil.'),
+                          const InstructionItem(
+                              text:
+                                  '2. Asegúrate de que el avión esté inmóvil.'),
                           const SizedBox(height: 8),
-                          _buildInstructionItem(
-                              '3. Presiona el botón "Iniciar Calibración".'),
+                          const InstructionItem(
+                              text:
+                                  '3. Presiona el botón "Iniciar Calibración".'),
                           const SizedBox(height: 8),
-                          _buildInstructionItem(
-                              '4. No muevas el avión durante el proceso.'),
+                          const InstructionItem(
+                              text:
+                                  '4. No muevas el avión durante el proceso.'),
                         ],
                       ),
                     ),
@@ -144,12 +142,11 @@ class CalibrationImuPage extends StatelessWidget {
                                 .add(CalibrateImuEvent());
                           },
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
                             minimumSize: const Size(double.infinity, 50),
+                            backgroundColor: Colors.black,
                           ),
                           child: const Text(
                             'Iniciar Calibración',
-                            style: TextStyle(fontSize: 18),
                           ),
                         ),
                       ),
@@ -160,22 +157,6 @@ class CalibrationImuPage extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-
-  Widget _buildInstructionItem(String text) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Icon(Icons.check, color: Colors.white, size: 16),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(fontSize: 14, color: Colors.white),
-          ),
-        ),
-      ],
     );
   }
 }
