@@ -162,6 +162,26 @@ class _EngineSettingsState extends State<EngineSettings> {
                           max: 1.0,
                           divisions: 100,
                         ),
+                        ElevatedButton(
+                          onPressed: () {
+                            context
+                                .read<PlaneSettingsBloc>()
+                                .add(CommitAllPidSettings());
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.blue,
+                            minimumSize: const Size(double.infinity, 50),
+                          ),
+                          child: const Text(
+                            'GUARDAR PID',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                         const SizedBox(height: 20.0),
                         ElevatedButton(
                           onPressed: () {

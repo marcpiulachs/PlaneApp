@@ -5,27 +5,7 @@ class RecorderRepository {
   final DatabaseHelper _dbHelper = DatabaseHelper.instance;
 
   Future<List<RecordedFlight>> fetchRecordings() async {
-    final flights = await _dbHelper.getAllFlights();
-
-    // Cargar telemetría para cada vuelo
-    final flightsWithTelemetry = <RecordedFlight>[];
-    for (var flight in flights) {
-      final telemetry =
-          await _dbHelper.getTelemetryForFlight(int.parse(flight.id));
-      flightsWithTelemetry.add(RecordedFlight(
-        id: flight.id,
-        timestamp: flight.timestamp,
-        duration: flight.duration,
-        telemetryData: telemetry,
-        maxAltitude: flight.maxAltitude,
-        maxSpeed: flight.maxSpeed,
-        maxPitch: flight.maxPitch,
-        maxRoll: flight.maxRoll,
-        status: flight.status,
-      ));
-    }
-
-    return flightsWithTelemetry;
+    return await _dbHelper.getAllFlights();
   }
 
   Future<RecordedFlight?> getFlightById(String id) async {

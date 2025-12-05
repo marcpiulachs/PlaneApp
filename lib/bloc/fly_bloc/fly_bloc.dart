@@ -134,30 +134,32 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       captureData: () {
         if (state is FlyLoadedState) {
           final loadedState = state as FlyLoadedState;
-          add(CaptureData(loadedState.telemetry, loadedState.direction));
+          add(CaptureData(FlightData(
+            telemetry: loadedState.telemetry,
+            userAction: loadedState.userAction,
+          )));
         }
       },
     );
 
     on<CaptureData>((event, emit) async {
       developer.log('Telemetry Data:');
-      developer.log('GyroX: ${event.telemetry.gyroX}');
-      developer.log('GyroY: ${event.telemetry.gyroY}');
-      developer.log('GyroZ: ${event.telemetry.gyroZ}');
-      developer.log('MagneX: ${event.telemetry.magX}');
-      developer.log('MagneY: ${event.telemetry.magY}');
-      developer.log('MagneZ: ${event.telemetry.magZ}');
-      developer.log('Motor1Speed: ${event.telemetry.motor1Speed}');
-      developer.log('Motor2Speed: ${event.telemetry.motor2Speed}');
-      developer.log('AccelX: ${event.telemetry.accelX}');
-      developer.log('AccelY: ${event.telemetry.accelY}');
-      developer.log('AccelZ: ${event.telemetry.accelZ}');
-      developer.log('Pitch: ${event.direction.pitch}');
-      developer.log('Roll:  ${event.direction.roll}');
-      developer.log('Yaw:   ${event.direction.yaw}');
+      developer.log('GyroX: ${event.flightData.telemetry.gyroX}');
+      developer.log('GyroY: ${event.flightData.telemetry.gyroY}');
+      developer.log('GyroZ: ${event.flightData.telemetry.gyroZ}');
+      developer.log('MagneX: ${event.flightData.telemetry.magX}');
+      developer.log('MagneY: ${event.flightData.telemetry.magY}');
+      developer.log('MagneZ: ${event.flightData.telemetry.magZ}');
+      developer.log('Motor1Speed: ${event.flightData.telemetry.motor1Speed}');
+      developer.log('Motor2Speed: ${event.flightData.telemetry.motor2Speed}');
+      developer.log('AccelX: ${event.flightData.telemetry.accelX}');
+      developer.log('AccelY: ${event.flightData.telemetry.accelY}');
+      developer.log('AccelZ: ${event.flightData.telemetry.accelZ}');
+      developer.log('Yoke: ${event.flightData.userAction.yoke}');
+      developer.log('Throttle: ${event.flightData.userAction.throttle}');
 
       // store telemetry data
-      flightRecorder.data.add(event.telemetry);
+      flightRecorder.data.add(event.flightData);
     });
 
     on<SendArmed>((event, emit) async {
@@ -179,17 +181,25 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
 
     on<SendYoke>((event, emit) async {
       if (state is FlyLoadedState) {
-        await client.sendYoke(event.value);
         final loadedState = state as FlyLoadedState;
-        emit(loadedState);
+        await client.sendYoke(event.value);
+        final updatedAction =
+            loadedState.userAction.copyWith(yoke: event.value);
+        emit(loadedState.copyWith(
+          userAction: updatedAction,
+        ));
       }
     });
 
     on<SendThrottle>((event, emit) async {
       if (state is FlyLoadedState) {
-        await client.sendThrottle(event.value);
         final loadedState = state as FlyLoadedState;
-        emit(loadedState);
+        await client.sendThrottle(event.value);
+        final updatedAction =
+            loadedState.userAction.copyWith(throttle: event.value);
+        emit(loadedState.copyWith(
+          userAction: updatedAction,
+        ));
       }
     });
 

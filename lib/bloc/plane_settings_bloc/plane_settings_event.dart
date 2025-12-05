@@ -1,13 +1,10 @@
+class CommitAllPidSettings extends PlaneSettingsEvent {}
+
 abstract class PlaneSettingsEvent {}
 
 class UpdateBeacon extends PlaneSettingsEvent {
   final int value;
   UpdateBeacon(this.value);
-}
-
-class UpdateSteeringAngle extends PlaneSettingsEvent {
-  final double value;
-  UpdateSteeringAngle(this.value);
 }
 
 class UpdatePitchKp extends PlaneSettingsEvent {
@@ -53,11 +50,6 @@ class UpdateYawKi extends PlaneSettingsEvent {
 class UpdateYawKd extends PlaneSettingsEvent {
   final double value;
   UpdateYawKd(this.value);
-}
-
-class UpdateAngleOfAttack extends PlaneSettingsEvent {
-  final double value;
-  UpdateAngleOfAttack(this.value);
 }
 
 class ResetFactorySettings extends PlaneSettingsEvent {}

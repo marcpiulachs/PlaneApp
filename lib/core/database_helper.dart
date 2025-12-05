@@ -21,8 +21,30 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDB,
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          // Migración: eliminar columna maxAltitude
+          await db.execute('ALTER TABLE flights RENAME TO flights_old;');
+          await db.execute('''
+            CREATE TABLE flights (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              timestamp TEXT NOT NULL,
+              duration INTEGER NOT NULL,
+              maxSpeed REAL NOT NULL,
+              maxPitch REAL NOT NULL,
+              maxRoll REAL NOT NULL,
+              status TEXT NOT NULL
+            )
+          ''');
+          await db.execute('''
+            INSERT INTO flights (id, timestamp, duration, maxSpeed, maxPitch, maxRoll, status)
+            SELECT id, timestamp, duration, maxSpeed, maxPitch, maxRoll, status FROM flights_old;
+          ''');
+          await db.execute('DROP TABLE flights_old;');
+        }
+      },
     );
   }
 
@@ -37,7 +59,6 @@ class DatabaseHelper {
         id $idType,
         timestamp $textType,
         duration $integerType,
-        maxAltitude $realType,
         maxSpeed $realType,
         maxPitch $realType,
         maxRoll $realType,
@@ -127,7 +148,6 @@ class DatabaseHelper {
       timestamp: flight.timestamp,
       duration: flight.duration,
       telemetryData: telemetry,
-      maxAltitude: flight.maxAltitude,
       maxSpeed: flight.maxSpeed,
       maxPitch: flight.maxPitch,
       maxRoll: flight.maxRoll,

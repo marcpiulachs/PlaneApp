@@ -1,7 +1,7 @@
 // Definir el estado del PlaneCarouselBloc
 import 'package:equatable/equatable.dart';
-import 'package:paperwings/models/direction.dart';
 import 'package:paperwings/models/telemetry.dart';
+import 'package:paperwings/models/user_action.dart';
 
 abstract class FlyState extends Equatable {}
 
@@ -13,38 +13,38 @@ class FlyInitialState extends FlyState {
 class FlyLoadedState extends FlyState with EquatableMixin {
   final Telemetry telemetry;
   final int duration;
-  final Direction direction;
   final bool isArmed;
   final bool isRecording;
+  final UserAction userAction;
 
   FlyLoadedState({
     Telemetry? telemetry,
-    Direction? direction,
     this.duration = 0,
     this.isArmed = false,
     this.isRecording = false,
+    UserAction? userAction,
   })  : telemetry = telemetry ?? Telemetry(),
-        direction = direction ?? Direction();
+        userAction = userAction ?? const UserAction();
 
   FlyLoadedState copyWith({
     Telemetry? telemetry,
-    Direction? direction,
     int? duration,
     bool? isArmed,
     bool? isRecording,
+    UserAction? userAction,
   }) {
     return FlyLoadedState(
       telemetry: telemetry ?? this.telemetry,
       duration: duration ?? this.duration,
-      direction: direction ?? this.direction,
       isArmed: isArmed ?? this.isArmed,
       isRecording: isRecording ?? this.isRecording,
+      userAction: userAction ?? this.userAction,
     );
   }
 
   @override
   List<Object?> get props =>
-      [telemetry, duration, direction, isArmed, isRecording];
+      [telemetry, duration, isArmed, isRecording, userAction];
 }
 
 class FlyDisconnectedState extends FlyState {

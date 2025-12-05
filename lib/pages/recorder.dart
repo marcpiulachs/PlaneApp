@@ -111,7 +111,7 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                             ),
                           ),
                           subtitle: Text(
-                            'Duración: ${flight.formattedDuration} • Alt: ${flight.maxAltitude.toStringAsFixed(0)}m',
+                            'Duración: ${flight.formattedDuration}',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],

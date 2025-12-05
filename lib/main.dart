@@ -2,6 +2,7 @@ import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/connect_bloc/connect_bloc.dart';
+import 'package:paperwings/bloc/flight_detail_bloc.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_bloc.dart';
 import 'package:paperwings/bloc/home_bloc/home_bloc.dart';
 import 'package:paperwings/bloc/mechanics_bloc/mechanics_bloc.dart';
@@ -31,6 +32,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        BlocProvider<FlightDetailBloc>(
+          create: (context) => FlightDetailBloc(
+            repository: RecorderRepository(),
+          ),
+        ),
         Provider<EventBus>(
           create: (context) => EventBus(),
         ),

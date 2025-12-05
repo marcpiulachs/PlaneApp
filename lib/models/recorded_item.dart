@@ -5,7 +5,6 @@ class RecordedFlight {
   final DateTime timestamp;
   final int duration; // En segundos
   final List<Telemetry> telemetryData;
-  final double maxAltitude;
   final double maxSpeed;
   final double maxPitch;
   final double maxRoll;
@@ -16,7 +15,6 @@ class RecordedFlight {
     required this.timestamp,
     required this.duration,
     required this.telemetryData,
-    this.maxAltitude = 0,
     this.maxSpeed = 0,
     this.maxPitch = 0,
     this.maxRoll = 0,
@@ -39,10 +37,9 @@ class RecordedFlight {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': int.tryParse(id) ?? 0,
+      // 'id' intentionally omitted for auto-generation by SQLite
       'timestamp': timestamp.toIso8601String(),
       'duration': duration,
-      'maxAltitude': maxAltitude,
       'maxSpeed': maxSpeed,
       'maxPitch': maxPitch,
       'maxRoll': maxRoll,
@@ -56,7 +53,6 @@ class RecordedFlight {
       timestamp: DateTime.parse(map['timestamp'] as String),
       duration: map['duration'] as int,
       telemetryData: [],
-      maxAltitude: map['maxAltitude'] as double,
       maxSpeed: map['maxSpeed'] as double,
       maxPitch: map['maxPitch'] as double,
       maxRoll: map['maxRoll'] as double,

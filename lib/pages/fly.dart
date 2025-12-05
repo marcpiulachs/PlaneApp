@@ -18,6 +18,8 @@ import 'package:paperwings/pages/widgets/instruments/sensors_data.dart';
 import 'package:paperwings/widgets/throttle.dart';
 import 'dart:developer' as developer;
 
+import 'package:provider/provider.dart';
+
 class Fly extends StatefulWidget {
   const Fly({super.key});
 
@@ -26,6 +28,16 @@ class Fly extends StatefulWidget {
 }
 
 class _FlyState extends State<Fly> {
+  late FlyBloc flyBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    // Obtiene la instancia de FlyBloc del contexto
+    // (asegúrate de que el Bloc esté disponible en el árbol de widgets)
+    flyBloc = Provider.of<FlyBloc>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FlyBloc, FlyState>(
@@ -119,7 +131,6 @@ class _FlyState extends State<Fly> {
                           slip: state.telemetry.slip,
                         ),
                         SensorsData(
-                          direction: state.direction,
                           telemetry: state.telemetry,
                         ),
                         LineChartWidget(
@@ -215,14 +226,11 @@ class _FlyState extends State<Fly> {
                           padding: const EdgeInsets.all(8.0),
                           child: Throttle(
                             onStateChanged: (ThrottleState state) {
-                              context
-                                  .read<FlyBloc>()
+                              flyBloc
                                   .add(SendArmed(state == ThrottleState.armed));
                             },
                             onThrottleUpdated: (double value) {
-                              context
-                                  .read<FlyBloc>()
-                                  .add(SendThrottle(value.toInt()));
+                              flyBloc.add(SendThrottle(value.toInt()));
                             },
                           ),
                         ),

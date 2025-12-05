@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:developer' as developer;
-import 'package:paperwings/models/telemetry.dart';
+import 'package:paperwings/bloc/fly_bloc/fly_event.dart';
 import 'package:paperwings/models/recorded_item.dart';
 import 'package:paperwings/repositories/recorder_repository.dart';
 
@@ -10,7 +10,7 @@ class FlightRecorder {
   Timer? _captureTimer; // Timer para capturar datos
   int _duration = 0;
   bool _isRecording = false;
-  final List<Telemetry> _telemetryData = [];
+  final List<FlightData> _flightDataList = [];
 
   // Devuelve la duración en segundos
   int get duration => _duration;
@@ -19,7 +19,7 @@ class FlightRecorder {
   bool get isRecording => _isRecording;
 
   // Returns the telemetry data points
-  List<Telemetry> get data => _telemetryData;
+  List<FlightData> get data => _flightDataList;
 
   // Callback para notificar que ha pasado un segundo
   void Function(int)? timerUpdated;
@@ -72,19 +72,19 @@ class FlightRecorder {
   }
 
   Future<void> save() async {
-    if (_duration > 5 && _telemetryData.isNotEmpty) {
-      developer.log(
-          "Guardando vuelo con ${_telemetryData.length} puntos de telemetría");
+    if (_duration > 5 && _flightDataList.isNotEmpty) {
+      developer
+          .log("Guardando vuelo con ${_flightDataList.length} puntos de datos");
 
       // Calcular estadísticas del vuelo
-      final maxPitch = _telemetryData
-          .map((t) => t.pitch.abs())
+      final maxPitch = _flightDataList
+          .map((f) => f.telemetry.pitch.abs())
           .reduce((a, b) => a > b ? a : b);
-      final maxRoll = _telemetryData
-          .map((t) => t.roll.abs())
+      final maxRoll = _flightDataList
+          .map((f) => f.telemetry.roll.abs())
           .reduce((a, b) => a > b ? a : b);
-      final maxSpeed = _telemetryData
-          .map((t) => (t.accelX.abs() + t.accelY.abs()))
+      final maxSpeed = _flightDataList
+          .map((f) => (f.telemetry.accelX.abs() + f.telemetry.accelY.abs()))
           .reduce((a, b) => a > b ? a : b);
 
       // Determinar el estado del vuelo
@@ -99,8 +99,7 @@ class FlightRecorder {
         id: '0', // Se asignará automáticamente en la BD
         timestamp: DateTime.now().subtract(Duration(seconds: _duration)),
         duration: _duration,
-        telemetryData: List.from(_telemetryData),
-        maxAltitude: 0, // TODO: Implementar cálculo de altitud
+        telemetryData: _flightDataList.map((f) => f.telemetry).toList(),
         maxSpeed: maxSpeed,
         maxPitch: maxPitch,
         maxRoll: maxRoll,
@@ -110,8 +109,8 @@ class FlightRecorder {
       await _repository.saveFlight(flight);
       developer.log("Vuelo guardado correctamente");
 
-      // Limpiar datos de telemetría
-      _telemetryData.clear();
+      // Limpiar datos
+      _flightDataList.clear();
     }
   }
 
@@ -119,5 +118,10 @@ class FlightRecorder {
   void dispose() {
     _timer?.cancel();
     _captureTimer?.cancel(); // Cancelar el timer de captura
+  }
+
+  // Agrega un punto de datos de vuelo
+  void addFlightData(FlightData flightData) {
+    _flightDataList.add(flightData);
   }
 }

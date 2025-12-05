@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:paperwings/models/direction.dart';
 import 'package:paperwings/models/telemetry.dart';
 
 class SensorsData extends StatelessWidget {
   final Telemetry telemetry;
-  final Direction direction;
 
   const SensorsData({
     super.key,
     required this.telemetry,
-    required this.direction,
   });
 
   @override
