@@ -34,30 +34,103 @@ class _TurnCoordinatorState extends State<TurnCoordinator>
                 border: Border.all(color: Colors.black, width: 2),
               ),
             ),
-            // Avión central que rota según la tasa de giro (invertido para convención de aviación)
-            Transform.rotate(
-              angle: -widget.turnRate * pi / 4, // Rango de rotación
-              child: CustomPaint(
-                size: const Size(100, 100), // Tamaño del avión
-                painter: AirplanePainter(),
+            // Avión central, marcas L/R y marcas de alineación
+            Positioned(
+              top: constraints.maxHeight * 0.18,
+              child: SizedBox(
+                width: constraints.maxHeight,
+                height: 100,
+                child: Stack(
+                  children: [
+                    // Avión
+                    Align(
+                      alignment: Alignment.center,
+                      child: Transform.rotate(
+                        angle: -widget.turnRate * pi / 4,
+                        child: CustomPaint(
+                          size: const Size(100, 100),
+                          painter: AirplanePainter(),
+                        ),
+                      ),
+                    ),
+
+                    // Alignment marks estilo instrumento real (izquierda)
+                    Positioned(
+                      left: 8,
+                      top: 54,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 18,
+                            height: 3,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(height: 7),
+                          Text('L',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13)),
+                          const SizedBox(height: 7),
+                          Container(
+                            width: 18,
+                            height: 3,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Alignment marks estilo instrumento real (derecha)
+                    Positioned(
+                      right: 8,
+                      top: 54,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 18,
+                            height: 3,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(height: 7),
+                          Text('R',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13)),
+                          const SizedBox(height: 7),
+                          Container(
+                            width: 18,
+                            height: 3,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             // Bola que se mueve lateralmente para indicar deslizamiento
             Positioned(
               bottom: 30,
-              child: Container(
+              child: SizedBox(
                 width: 120,
-                height: 20,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white.withValues(alpha: 0.3),
-                ),
+                height: 24,
                 child: Stack(
                   children: [
+                    // Fondo y bola
+                    Container(
+                      width: 120,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white.withOpacity(0.3),
+                      ),
+                    ),
                     // Bola
                     Positioned(
-                      // Posición de la bola
                       left: ((widget.slip + 1) / 2) * 100,
+                      top: 0,
                       child: Container(
                         width: 20,
                         height: 20,
@@ -69,6 +142,106 @@ class _TurnCoordinatorState extends State<TurnCoordinator>
                     ),
                   ],
                 ),
+              ),
+            ),
+            // Pantallas digitales TURN y SLIP debajo del avión
+            Positioned(
+              top: constraints.maxHeight * 0.55,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 70,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.85),
+                      borderRadius: BorderRadius.circular(7),
+                      border: Border.all(color: Colors.white24, width: 1),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'TURN',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.turnRate.toStringAsFixed(2),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Icon(Icons.sync_alt,
+                                color: Colors.orange, size: 16),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Container(
+                    width: 70,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.85),
+                      borderRadius: BorderRadius.circular(7),
+                      border: Border.all(color: Colors.white24, width: 1),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'SLIP',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.slip.toStringAsFixed(2),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Icon(Icons.horizontal_rule,
+                                color: Colors.blue, size: 16),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
