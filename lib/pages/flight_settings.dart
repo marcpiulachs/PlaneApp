@@ -169,18 +169,10 @@ class _EngineSettingsState extends State<EngineSettings> {
                                 .add(CommitAllPidSettings());
                           },
                           style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.blue,
                             minimumSize: const Size(double.infinity, 50),
+                            backgroundColor: Colors.black,
                           ),
-                          child: const Text(
-                            'GUARDAR PID',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
+                          child: const Text('GUARDAR PID'),
                         ),
                         const SizedBox(height: 20.0),
                         ElevatedButton(
@@ -190,18 +182,10 @@ class _EngineSettingsState extends State<EngineSettings> {
                                 );
                           },
                           style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.black,
-                            backgroundColor: Colors.white,
                             minimumSize: const Size(double.infinity, 50),
+                            backgroundColor: Colors.black,
                           ),
-                          child: const Text(
-                            'FACTORY SETTINGS',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
+                          child: const Text('FACTORY SETTINGS'),
                         ),
                       ],
                     ),

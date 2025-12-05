@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_bloc.dart';
+import 'package:paperwings/config/app_theme.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_events.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_states.dart';
 import 'package:paperwings/pages/flight_detail_page.dart';
@@ -33,14 +34,17 @@ class _RecordedFlightsState extends State<RecordedFlights> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.flight_takeoff, size: 80, color: Colors.grey[600]),
-                  const SizedBox(height: 16),
+                  Icon(Icons.flight_takeoff,
+                      size: 100, color: Colors.white.withOpacity(0.3)),
+                  const SizedBox(height: 24),
                   Text(
                     'No hay vuelos grabados',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[400],
-                    ),
+                    style: AppTheme.heading2.copyWith(color: Colors.white70),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Tus vuelos aparecerán aquí',
+                    style: AppTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -49,15 +53,34 @@ class _RecordedFlightsState extends State<RecordedFlights> {
 
           return Column(
             children: [
-              const Text(
-                "Análisis de Vuelos",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    const Icon(Icons.analytics, color: Colors.white, size: 24),
+                    const SizedBox(width: 12),
+                    const Text(
+                      "Análisis de Vuelos",
+                      style: AppTheme.heading2,
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primary.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white, width: 1),
+                      ),
+                      child: Text(
+                        '${state.flights.length} vuelos',
+                        style:
+                            AppTheme.bodyMedium.copyWith(color: Colors.white),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -67,13 +90,22 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                     itemBuilder: (context, index) {
                       final flight = state.flights[index];
                       return Card(
-                        color: Colors.white,
+                        color: AppTheme.surfaceDark,
+                        elevation: 2,
                         margin: const EdgeInsets.symmetric(
-                            vertical: 4.0, horizontal: 8.0),
+                            vertical: 6.0, horizontal: 12.0),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(
+                            color: flight.hasCrash
+                                ? AppTheme.error.withOpacity(0.3)
+                                : (flight.hasEmergency
+                                    ? AppTheme.warning.withOpacity(0.3)
+                                    : AppTheme.success.withOpacity(0.3)),
+                            width: 1,
+                          ),
                         ),
-                        child: ListTile(
+                        child: InkWell(
                           onTap: () {
                             Navigator.push(
                               context,
@@ -83,56 +115,129 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                               ),
                             );
                           },
-                          leading: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: flight.hasCrash
-                                  ? Colors.red
-                                  : (flight.hasEmergency
-                                      ? Colors.orange
-                                      : Colors.green),
-                              shape: BoxShape.circle,
+                          borderRadius: BorderRadius.circular(16),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 56,
+                                  height: 56,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: flight.hasCrash
+                                          ? [
+                                              AppTheme.error,
+                                              AppTheme.error.withOpacity(0.7)
+                                            ]
+                                          : (flight.hasEmergency
+                                              ? [
+                                                  AppTheme.warning,
+                                                  AppTheme.warning
+                                                      .withOpacity(0.7)
+                                                ]
+                                              : [
+                                                  AppTheme.success,
+                                                  AppTheme.success
+                                                      .withOpacity(0.7)
+                                                ]),
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: (flight.hasCrash
+                                                ? AppTheme.error
+                                                : (flight.hasEmergency
+                                                    ? AppTheme.warning
+                                                    : AppTheme.success))
+                                            .withOpacity(0.3),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Icon(
+                                    flight.hasCrash
+                                        ? Icons.warning_rounded
+                                        : (flight.hasEmergency
+                                            ? Icons.error_outline_rounded
+                                            : Icons.flight_takeoff_rounded),
+                                    color: Colors.white,
+                                    size: 28,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        flight.formattedDate,
+                                        style: AppTheme.bodyLarge.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.timer_outlined,
+                                              size: 14, color: Colors.white70),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            flight.formattedDuration,
+                                            style: AppTheme.bodyMedium,
+                                          ),
+                                          const SizedBox(width: 16),
+                                          if (flight.hasCrash ||
+                                              flight.hasEmergency ||
+                                              flight.hasWarning) ...[
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 2),
+                                              decoration: BoxDecoration(
+                                                color: flight.hasCrash
+                                                    ? AppTheme.error
+                                                        .withOpacity(0.2)
+                                                    : (flight.hasEmergency
+                                                        ? AppTheme.warning
+                                                            .withOpacity(0.2)
+                                                        : AppTheme.warning
+                                                            .withOpacity(0.2)),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              child: Text(
+                                                flight.hasCrash
+                                                    ? 'Crash'
+                                                    : (flight.hasEmergency
+                                                        ? 'Emergencia'
+                                                        : 'Advertencia'),
+                                                style:
+                                                    AppTheme.bodySmall.copyWith(
+                                                  color: flight.hasCrash
+                                                      ? AppTheme.error
+                                                      : (flight.hasEmergency
+                                                          ? AppTheme.warning
+                                                          : AppTheme.warning),
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Icon(Icons.chevron_right_rounded,
+                                    color: Colors.white54, size: 28),
+                              ],
                             ),
-                            child: Icon(
-                              flight.hasCrash
-                                  ? Icons.warning
-                                  : (flight.hasEmergency
-                                      ? Icons.error_outline
-                                      : Icons.flight),
-                              color: Colors.white,
-                            ),
-                          ),
-                          title: Text(
-                            flight.formattedDate,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                          subtitle: Text(
-                            'Duración: ${flight.formattedDuration}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (flight.hasCrash)
-                                const Icon(Icons.close,
-                                    color: Colors.red, size: 20),
-                              if (flight.hasEmergency)
-                                const Icon(Icons.warning_amber,
-                                    color: Colors.orange, size: 20),
-                              if (flight.hasWarning)
-                                const Icon(Icons.error_outline,
-                                    color: Colors.amber, size: 20),
-                              const SizedBox(width: 8),
-                              const Icon(Icons.chevron_right,
-                                  color: Colors.grey),
-                            ],
                           ),
                         ),
                       );
@@ -142,23 +247,16 @@ class _RecordedFlightsState extends State<RecordedFlights> {
               ),
               if (state.hasMore)
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(
                     onPressed: () {
                       // TODO: Cargar más vuelos
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
                       minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: Colors.black,
                     ),
-                    child: const Text(
-                      'MOSTRAR MÁS',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: const Text('MOSTRAR MÁS'),
                   ),
                 ),
             ],

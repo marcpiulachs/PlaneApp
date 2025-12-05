@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:paperwings/config/app_theme.dart';
 
 class LineChartWidget extends StatefulWidget {
   final String title;
@@ -80,11 +81,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       children: [
         Text(
           widget.title,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: AppTheme.heading3,
         ),
         const SizedBox(
           height: 10,
@@ -203,10 +200,7 @@ class LegendItem extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             text,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppTheme.bodyMedium,
           ),
         ],
       ),

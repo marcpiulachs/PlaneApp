@@ -19,6 +19,7 @@ import 'package:paperwings/clients/tcp_plane_client.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
 import 'package:paperwings/pages/home.dart';
 import 'package:paperwings/repositories/recorder_repository.dart';
+import 'package:paperwings/config/app_theme.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -105,9 +106,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: MyHomePage(),
+        theme: AppTheme.darkTheme,
+        home: const MyHomePage(),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paperwings/config/app_theme.dart';
 
 class Disconnected extends StatelessWidget {
   final VoidCallback onConnect; // Agregamos el callback aquí
@@ -19,11 +20,7 @@ class Disconnected extends StatelessWidget {
           const SizedBox(height: 10),
           const Text(
             'Disconnected',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+            style: AppTheme.heading1,
           ),
           const SizedBox(height: 40),
           const Padding(
@@ -33,11 +30,7 @@ class Disconnected extends StatelessWidget {
               children: [
                 Text(
                   'Suggestions:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  style: AppTheme.heading3,
                 ),
                 SizedBox(height: 10),
                 ListTile(
@@ -88,11 +81,7 @@ class Disconnected extends StatelessWidget {
             ),
             child: const Text(
               'CONNECT',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppTheme.heading3,
             ),
           ),
         ],

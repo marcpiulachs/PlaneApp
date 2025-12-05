@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/home_bloc/home_bloc.dart';
+import 'package:paperwings/config/app_theme.dart';
 import 'package:paperwings/bloc/home_bloc/home_event.dart';
 import 'package:paperwings/bloc/home_bloc/home_state.dart';
 import 'package:paperwings/models/menu_item.dart';
@@ -25,27 +26,27 @@ class _MyHomePageState extends State<MyHomePage>
   final List<MenuItem> menuItems = [
     MenuItem(
       title: "HANGAR",
-      color: Colors.purple.shade800,
+      color: AppTheme.hangarColor,
       icon: Icons.home,
     ),
     MenuItem(
       title: "COPKIT",
-      color: Colors.blue,
+      color: AppTheme.cockpitColor,
       icon: Icons.flight_takeoff,
     ),
     MenuItem(
       title: "FLIGHT RECORDER",
-      color: Colors.red.shade900,
+      color: AppTheme.recorderColor,
       icon: Icons.voicemail,
     ),
     MenuItem(
       title: "MECHANICS",
-      color: Colors.teal.shade700,
+      color: AppTheme.mechanicsColor,
       icon: Icons.handyman,
     ),
     MenuItem(
       title: "SETTINGS",
-      color: Colors.green.shade700,
+      color: AppTheme.settingsColor,
       icon: Icons.settings,
     ),
   ];
@@ -138,11 +139,7 @@ class _MyHomePageState extends State<MyHomePage>
                     const SizedBox(height: 125),
                     Text(
                       menuItems[state.currentTabIndex].title,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      style: AppTheme.heading1,
                     ),
                     Expanded(
                       child: TabBarView(

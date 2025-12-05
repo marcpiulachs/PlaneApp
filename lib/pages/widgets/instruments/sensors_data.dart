@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paperwings/models/telemetry.dart';
+import 'package:paperwings/config/app_theme.dart';
 
 class SensorsData extends StatelessWidget {
   final Telemetry telemetry;
@@ -30,7 +31,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Pitch: ${telemetry.pitch.round()}°',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -40,7 +41,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Roll: ${telemetry.roll.round()}°',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -50,7 +51,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Yaw: ${telemetry.yaw.round()}°',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -60,7 +61,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Gyro X: ${telemetry.gyroX.toStringAsPrecision(2)}°/s',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -70,7 +71,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Gyro Y: ${telemetry.gyroY.toStringAsPrecision(2)}°/s',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -80,7 +81,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Gyro Z: ${telemetry.gyroZ.toStringAsPrecision(2)}°/s',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -99,7 +100,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Acc X: ${telemetry.accelX.toStringAsPrecision(2)}°/s',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -109,7 +110,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Acc Y: ${telemetry.accelY.toStringAsPrecision(2)}°/s',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -119,7 +120,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Acc Z: ${telemetry.accelZ.toStringAsPrecision(2)}°/s',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -129,7 +130,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Mag X: ${telemetry.magX.round()}',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -139,7 +140,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Mag Y: ${telemetry.magY.round()}',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -149,7 +150,7 @@ class SensorsData extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       'Mag Z: ${telemetry.magZ.round()}',
-                      style: const TextStyle(fontSize: 16),
+                      style: AppTheme.bodyLarge,
                     ),
                   ],
                 ),

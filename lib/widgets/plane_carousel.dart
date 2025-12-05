@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paperwings/models/plane_item.dart';
+import 'package:paperwings/config/app_theme.dart';
 
 class PlaneCarouselWidget extends StatefulWidget {
   final List<PlaneItem> planeItems;
@@ -58,19 +59,11 @@ class _PlaneCarouselWidgetState extends State<PlaneCarouselWidget> {
                     children: [
                       Text(
                         item.title,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: AppTheme.heading2,
                       ),
                       Text(
                         item.description,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.white,
-                        ),
+                        style: AppTheme.heading3,
                       ),
                     ],
                   ),

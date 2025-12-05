@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paperwings/config/app_theme.dart';
 
 class Connecting extends StatelessWidget {
   const Connecting({super.key});
@@ -22,11 +23,7 @@ class Connecting extends StatelessWidget {
           SizedBox(height: 16),
           Text(
             'Connecting ...',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+            style: AppTheme.heading3,
           ),
         ],
       ),

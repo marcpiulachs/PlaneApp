@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paperwings/models/verison.dart';
+import 'package:paperwings/config/app_theme.dart';
 
 class Versions extends StatelessWidget {
   final Version appVersion;
@@ -17,40 +18,24 @@ class Versions extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'App version',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-            color: Colors.black,
-          ),
+          style: AppTheme.heading3.copyWith(color: Colors.black),
         ),
         const SizedBox(height: 8),
         Text(
           appVersion.toString(),
-          style: const TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: AppTheme.heading1.copyWith(fontSize: 25),
         ),
         const SizedBox(height: 16),
-        const Text(
+        Text(
           'Firmware version',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-            color: Colors.black,
-          ),
+          style: AppTheme.heading3.copyWith(color: Colors.black),
         ),
         const SizedBox(height: 8),
         Text(
           devVersion.toString(),
-          style: const TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: AppTheme.heading1.copyWith(fontSize: 25),
         )
       ],
     );

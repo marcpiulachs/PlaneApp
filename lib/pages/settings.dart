@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/ota_bloc/ota_bloc.dart';
+import 'package:paperwings/config/app_theme.dart';
 import 'package:paperwings/bloc/ota_bloc/ota_event.dart';
 import 'package:paperwings/bloc/ota_bloc/ota_state.dart';
 import 'package:paperwings/pages/connect.dart';
@@ -28,11 +29,7 @@ class _SettingsState extends State<Settings> {
                 const Center(
                   child: Text(
                     "Keep your plane updated",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: AppTheme.heading3,
                   ),
                 ),
                 const SizedBox(height: 100),
@@ -52,11 +49,7 @@ class _SettingsState extends State<Settings> {
                           const SizedBox(height: 16),
                           Text(
                             'New version ${state.appFirmware} available!',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                            style: AppTheme.bodyLarge,
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton(
@@ -71,11 +64,7 @@ class _SettingsState extends State<Settings> {
                             ),
                             child: const Text(
                               'UPDATE FIRMWARE',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                              style: AppTheme.heading3,
                             ),
                           ),
                         ],
@@ -95,11 +84,7 @@ class _SettingsState extends State<Settings> {
                             ),
                             child: Text(
                               'No update available, you are already running the lastest version',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                              style: AppTheme.heading3,
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -119,11 +104,7 @@ class _SettingsState extends State<Settings> {
                   SizedBox(height: 16),
                   Text(
                     'Getting version...',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: AppTheme.heading3,
                   ),
                 ],
               ),
@@ -140,11 +121,7 @@ class _SettingsState extends State<Settings> {
                   SizedBox(height: 16),
                   Text(
                     'Updating firmware...',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: AppTheme.heading3,
                   ),
                 ],
               ),

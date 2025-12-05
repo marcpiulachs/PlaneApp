@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paperwings/config/app_theme.dart';
 
 class ConnectedIndicator extends StatelessWidget {
   final bool isConnected;
@@ -37,11 +38,7 @@ class ConnectedIndicator extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               isConnected ? 'Connected' : 'Disconnected',
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTheme.heading3.copyWith(color: Colors.black),
             ),
           ],
         ),

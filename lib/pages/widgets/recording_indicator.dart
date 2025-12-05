@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paperwings/config/app_theme.dart';
 
 class RecordingIndicator extends StatelessWidget {
   final int duration;
@@ -34,11 +35,7 @@ class RecordingIndicator extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               Duration(seconds: duration).toString().substring(2, 7),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppTheme.heading3,
             ),
           ],
         ),
