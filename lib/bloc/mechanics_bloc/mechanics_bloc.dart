@@ -44,7 +44,7 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
           SettingPage(
             title: "Flight Settings",
             description: "Manage your PID profile settings",
-            icon: Icons.airplanemode_on,
+            icon: Icons.flight_takeoff,
             page: const EngineSettings(),
           ),
           SettingPage(
@@ -56,37 +56,37 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
           SettingPage(
             title: "Beacon",
             description: "Setup plane position lights",
-            icon: Icons.lightbulb,
+            icon: Icons.light_mode,
             page: const BeaconSettings(),
           ),
           SettingPage(
             title: "Gyroscope Calibration",
             description: "Calibrating will help improve its accuracy",
-            icon: Icons.compass_calibration,
+            icon: Icons.gps_fixed,
             page: const CalibrationImuPage(),
           ),
           SettingPage(
             title: "Compass Calibration",
             description: "Calibrating will help improve its accuracy",
-            icon: Icons.compass_calibration,
+            icon: Icons.explore,
             page: const CalibrationMagPage(),
           ),
           SettingPage(
             title: "Motors",
             description: "Test motors",
-            icon: Icons.compass_calibration,
+            icon: Icons.settings_input_component,
             page: const MotorSettingsScreen(),
           ),
           SettingPage(
             title: "Log",
             description: "Turns on/off serial output module logging",
-            icon: Icons.compass_calibration,
+            icon: Icons.list_alt,
             page: const LogSettings(),
           ),
           SettingPage(
             title: "Power Off",
             description: "Turns off the plane",
-            icon: Icons.power,
+            icon: Icons.power_settings_new,
             page: const PowerSettings(),
           ),
         ];

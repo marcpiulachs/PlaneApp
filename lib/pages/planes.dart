@@ -19,6 +19,7 @@ class Planes extends StatefulWidget {
 class _PlanesState extends State<Planes> {
   final PageController _pageController = PageController();
   late PlaneCarouselBloc planeCarouselBloc;
+
   @override
   void initState() {
     super.initState(); // Recuperar el Bloc desde el contexto
@@ -81,7 +82,7 @@ class _PlanesState extends State<Planes> {
 
   Widget _buildGoFlyButton() {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(20.0),
       child: ElevatedButton(
         onPressed: () {
           // Envía un evento para cambiar el tab activo a "COPKIT"
@@ -90,16 +91,8 @@ class _PlanesState extends State<Planes> {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.black,
           minimumSize: const Size(double.infinity, 50),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
         ),
-        child: const Text(
-          'GO FLY!',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
+        child: const Text('GO FLY!'),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'package:paperwings/config/app_theme.dart';
+
 class CompassWidget extends StatelessWidget {
   final double degrees;
   final Color backgroundColor;
@@ -110,7 +112,7 @@ class CompassPainter extends CustomPainter {
     double mediumLength = 15;
     double smallLength = 10;
 
-    // Pintar los palitos
+    // Pintar palitos principales (cada 90°), secundarios (cada 30°), terciarios (cada 15°), cuaternarios (cada 10°) y quintenarios (cada 5°)
     for (int i = 0; i < 360; i++) {
       double angle = i * pi / 180;
       Paint currentPaint;
@@ -119,12 +121,20 @@ class CompassPainter extends CustomPainter {
       if (i % 90 == 0) {
         currentPaint = linePaintLarge;
         length = largeLength;
-      } else if (i % 10 == 0) {
+      } else if (i % 30 == 0) {
         currentPaint = linePaintMedium;
         length = mediumLength;
-      } else {
+      } else if (i % 15 == 0) {
         currentPaint = linePaintSmall;
         length = smallLength;
+      } else if (i % 10 == 0) {
+        currentPaint = linePaintSmall;
+        length = smallLength * 0.7;
+      } else if (i % 5 == 0) {
+        currentPaint = linePaintSmall;
+        length = smallLength * 0.5;
+      } else {
+        continue; // No dibujar palitos menores
       }
 
       Offset start = Offset(
@@ -140,14 +150,16 @@ class CompassPainter extends CustomPainter {
     }
 
     // Dibujar grados/puntos cardinales cada 10 grados
-    for (int i = 0; i < 360; i += 10) {
+      for (int i = 0; i < 360; i += 30) {
       double angle = i * pi / 180;
-      double x = center.dx + (radius - 20) * cos(angle);
-      double y = center.dy + (radius - 20) * sin(angle);
+      // Si es cardinal, acercar más al centro
+      double offset = (i == 0 || i == 90 || i == 180 || i == 270) ? 32 : 20;
+      double x = center.dx + (radius - offset) * cos(angle);
+      double y = center.dy + (radius - offset) * sin(angle);
 
       String label;
       bool cardinal = false;
-      TextStyle textStyle = TextStyle(color: textColor, fontSize: 12);
+      TextStyle textStyle = TextStyle(color: AppTheme.warning, fontSize: 10);
 
       if (i == 0 || i == 90 || i == 180 || i == 270) {
         // Reemplazar con los puntos cardinales
@@ -172,13 +184,17 @@ class CompassPainter extends CustomPainter {
             label = i.toString();
             cardinal = false;
         }
-        textStyle = textStyle.copyWith(fontWeight: FontWeight.bold);
+        // Usar color warning y fuente más grande para los cardinales
+        textStyle = textStyle.copyWith(
+            fontWeight: FontWeight.bold, color: AppTheme.primary, fontSize: 18);
       } else {
         label = i.toString(); // Mostrar grados
         cardinal = false;
       }
 
       if (cardinal || showDegrees) {
+        // Mostrar grados si no es cardinal y showDegrees es true
+        if (!cardinal && !showDegrees) return;
         TextPainter textPainter = TextPainter(
           text: TextSpan(
             text: label,
@@ -194,7 +210,7 @@ class CompassPainter extends CustomPainter {
         double textRotationAngle = angle + pi / 2;
         canvas.rotate(textRotationAngle);
         textPainter.paint(
-            canvas, Offset(-textPainter.width / 2, textPainter.height / 2));
+            canvas, Offset(-textPainter.width / 2, -textPainter.height / 2));
         canvas.restore();
       }
     }

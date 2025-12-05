@@ -15,10 +15,9 @@ import 'package:paperwings/pages/widgets/instruments/turn_coordinator.dart';
 import 'package:paperwings/widgets/carousel.dart';
 import 'package:paperwings/widgets/circular.dart';
 import 'package:paperwings/pages/widgets/instruments/compass.dart';
+import 'package:paperwings/pages/widgets/instruments/airspeed_indicator.dart';
 import 'package:paperwings/pages/widgets/instruments/sensors_data.dart';
 import 'package:paperwings/widgets/throttle.dart';
-import 'dart:developer' as developer;
-
 import 'package:provider/provider.dart';
 
 class Fly extends StatefulWidget {
@@ -109,12 +108,18 @@ class _FlyState extends State<Fly> {
                           roll: state.telemetry.roll.toDouble(),
                           pitch: state.telemetry.pitch.toDouble(),
                         ),
+                        AirspeedIndicator(
+                          speed: state.telemetry.motor1Speed,
+                          minSpeed: 0,
+                          maxSpeed: 120,
+                          unit: 'km/h',
+                        ),
                         CompassWidget(
                           degrees: state.telemetry.degrees,
                           textColor: Colors.white,
                           barsColor: Colors.white,
                           backgroundColor: AppTheme.surfaceDark,
-                          showDegrees: false,
+                          showDegrees: true,
                           child: const Icon(
                             Icons.flight,
                             size: 150,
