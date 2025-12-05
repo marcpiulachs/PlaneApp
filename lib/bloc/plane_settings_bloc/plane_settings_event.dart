@@ -15,9 +15,14 @@ class UpdatePitchKp extends PlaneSettingsEvent {
   UpdatePitchKp(this.value);
 }
 
-class UpdatePitchRateKp extends PlaneSettingsEvent {
+class UpdatePitchKi extends PlaneSettingsEvent {
   final double value;
-  UpdatePitchRateKp(this.value);
+  UpdatePitchKi(this.value);
+}
+
+class UpdatePitchKd extends PlaneSettingsEvent {
+  final double value;
+  UpdatePitchKd(this.value);
 }
 
 class UpdateRollKp extends PlaneSettingsEvent {
@@ -25,9 +30,14 @@ class UpdateRollKp extends PlaneSettingsEvent {
   UpdateRollKp(this.value);
 }
 
-class UpdateRollRateKp extends PlaneSettingsEvent {
+class UpdateRollKi extends PlaneSettingsEvent {
   final double value;
-  UpdateRollRateKp(this.value);
+  UpdateRollKi(this.value);
+}
+
+class UpdateRollKd extends PlaneSettingsEvent {
+  final double value;
+  UpdateRollKd(this.value);
 }
 
 class UpdateYawKp extends PlaneSettingsEvent {
@@ -35,9 +45,14 @@ class UpdateYawKp extends PlaneSettingsEvent {
   UpdateYawKp(this.value);
 }
 
-class UpdateYawRateKp extends PlaneSettingsEvent {
+class UpdateYawKi extends PlaneSettingsEvent {
   final double value;
-  UpdateYawRateKp(this.value);
+  UpdateYawKi(this.value);
+}
+
+class UpdateYawKd extends PlaneSettingsEvent {
+  final double value;
+  UpdateYawKd(this.value);
 }
 
 class UpdateAngleOfAttack extends PlaneSettingsEvent {

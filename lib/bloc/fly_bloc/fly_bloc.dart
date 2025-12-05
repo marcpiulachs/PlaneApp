@@ -147,7 +147,6 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
       developer.log('MagneX: ${event.telemetry.magX}');
       developer.log('MagneY: ${event.telemetry.magY}');
       developer.log('MagneZ: ${event.telemetry.magZ}');
-      developer.log('Barometer: ${event.telemetry.barometer}');
       developer.log('Motor1Speed: ${event.telemetry.motor1Speed}');
       developer.log('Motor2Speed: ${event.telemetry.motor2Speed}');
       developer.log('AccelX: ${event.telemetry.accelX}');
@@ -280,15 +279,6 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         final loadedState = state as FlyLoadedState;
         final updatedTelemetry =
             loadedState.telemetry.copyWith(accelZ: event.value);
-        emit(loadedState.copyWith(telemetry: updatedTelemetry));
-      }
-    });
-
-    on<BarometerUpdated>((event, emit) {
-      if (state is FlyLoadedState) {
-        final loadedState = state as FlyLoadedState;
-        final updatedTelemetry =
-            loadedState.telemetry.copyWith(barometer: event.value);
         emit(loadedState.copyWith(telemetry: updatedTelemetry));
       }
     });

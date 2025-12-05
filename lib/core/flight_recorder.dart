@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:paperwings/models/telemetry.dart';
+import 'package:paperwings/models/recorded_item.dart';
+import 'package:paperwings/repositories/recorder_repository.dart';
 
 class FlightRecorder {
+  final RecorderRepository _repository = RecorderRepository();
   Timer? _timer;
   Timer? _captureTimer; // Timer para capturar datos
   int _duration = 0;
@@ -68,9 +71,47 @@ class FlightRecorder {
     stopped?.call();
   }
 
-  void save() {
-    if (_duration > 5) {
-      developer.log("Save items ${_telemetryData.length}");
+  Future<void> save() async {
+    if (_duration > 5 && _telemetryData.isNotEmpty) {
+      developer.log(
+          "Guardando vuelo con ${_telemetryData.length} puntos de telemetría");
+
+      // Calcular estadísticas del vuelo
+      final maxPitch = _telemetryData
+          .map((t) => t.pitch.abs())
+          .reduce((a, b) => a > b ? a : b);
+      final maxRoll = _telemetryData
+          .map((t) => t.roll.abs())
+          .reduce((a, b) => a > b ? a : b);
+      final maxSpeed = _telemetryData
+          .map((t) => (t.accelX.abs() + t.accelY.abs()))
+          .reduce((a, b) => a > b ? a : b);
+
+      // Determinar el estado del vuelo
+      String status = 'completed';
+      if (maxPitch > 60 || maxRoll > 60) {
+        status = 'crashed';
+      } else if (maxPitch > 45 || maxRoll > 45) {
+        status = 'emergency';
+      }
+
+      final flight = RecordedFlight(
+        id: '0', // Se asignará automáticamente en la BD
+        timestamp: DateTime.now().subtract(Duration(seconds: _duration)),
+        duration: _duration,
+        telemetryData: List.from(_telemetryData),
+        maxAltitude: 0, // TODO: Implementar cálculo de altitud
+        maxSpeed: maxSpeed,
+        maxPitch: maxPitch,
+        maxRoll: maxRoll,
+        status: status,
+      );
+
+      await _repository.saveFlight(flight);
+      developer.log("Vuelo guardado correctamente");
+
+      // Limpiar datos de telemetría
+      _telemetryData.clear();
     }
   }
 

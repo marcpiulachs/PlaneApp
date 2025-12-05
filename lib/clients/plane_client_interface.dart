@@ -16,6 +16,24 @@ abstract class IPlaneClient {
   Future<void> sendCalibrateIMU();
   Future<void> sendCalibrateMAG();
 
+  // PID Settings - Pitch
+  Future<void> sendPitchKp(double value);
+  Future<void> sendPitchKi(double value);
+  Future<void> sendPitchKd(double value);
+
+  // PID Settings - Roll
+  Future<void> sendRollKp(double value);
+  Future<void> sendRollKi(double value);
+  Future<void> sendRollKd(double value);
+
+  // PID Settings - Yaw
+  Future<void> sendYawKp(double value);
+  Future<void> sendYawKi(double value);
+  Future<void> sendYawKd(double value);
+
+  // Get PID Settings
+  Future<void> sendGetPIDSettings();
+
   //Campos de estado
   bool get isConnected;
 

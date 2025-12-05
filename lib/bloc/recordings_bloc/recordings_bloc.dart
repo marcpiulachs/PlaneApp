@@ -10,10 +10,10 @@ class RecordedFlightsBloc
   RecordedFlightsBloc({required this.repository})
       : super(RecordedFlightsInitial()) {
     on<LoadRecordedFlights>(
-      (event, emit) {
+      (event, emit) async {
         emit(RecordedFlightsLoading());
         try {
-          var flights = repository.fetchRecordings();
+          var flights = await repository.fetchRecordings();
           emit(RecordedFlightsLoaded(flights, true));
         } catch (e) {
           emit(RecordedFlightsError('Failed to load recorded flights.'));

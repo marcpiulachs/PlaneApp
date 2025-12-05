@@ -22,11 +22,14 @@ class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
             flightSettings: PlaneFlightSettings(
               steeringAngle: 5,
               pitchKp: 1.0,
-              pitchRateKp: 0.5,
+              pitchKi: 0.1,
+              pitchKd: 0.05,
               rollKp: 0.5,
-              rollRateKp: 0.2,
+              rollKi: 0.05,
+              rollKd: 0.02,
               yawKp: 0.5,
-              yawRateKp: 0.2,
+              yawKi: 0.05,
+              yawKd: 0.02,
               angleOfAttack: 0.0,
               beacon: 0,
             ),
@@ -42,11 +45,14 @@ class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
           flightSettings: PlaneFlightSettings(
             steeringAngle: 5,
             pitchKp: 1.0,
-            pitchRateKp: 0.5,
+            pitchKi: 0.1,
+            pitchKd: 0.05,
             rollKp: 0.5,
-            rollRateKp: 0.2,
+            rollKi: 0.05,
+            rollKd: 0.02,
             yawKp: 0.5,
-            yawRateKp: 0.2,
+            yawKi: 0.05,
+            yawKd: 0.02,
             angleOfAttack: 0.0,
             beacon: 0,
           ),
@@ -83,38 +89,65 @@ class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
     });
 
     on<UpdatePitchKp>((event, emit) {
+      client.sendPitchKp(event.value);
       emit(state.copyWith(
         flightSettings: state.flightSettings.copyWith(pitchKp: event.value),
       ));
     });
 
+    on<UpdatePitchKi>((event, emit) {
+      client.sendPitchKi(event.value);
+      emit(state.copyWith(
+        flightSettings: state.flightSettings.copyWith(pitchKi: event.value),
+      ));
+    });
+
+    on<UpdatePitchKd>((event, emit) {
+      client.sendPitchKd(event.value);
+      emit(state.copyWith(
+        flightSettings: state.flightSettings.copyWith(pitchKd: event.value),
+      ));
+    });
+
     on<UpdateRollKp>((event, emit) {
+      client.sendRollKp(event.value);
       emit(state.copyWith(
         flightSettings: state.flightSettings.copyWith(rollKp: event.value),
       ));
     });
 
+    on<UpdateRollKi>((event, emit) {
+      client.sendRollKi(event.value);
+      emit(state.copyWith(
+        flightSettings: state.flightSettings.copyWith(rollKi: event.value),
+      ));
+    });
+
+    on<UpdateRollKd>((event, emit) {
+      client.sendRollKd(event.value);
+      emit(state.copyWith(
+        flightSettings: state.flightSettings.copyWith(rollKd: event.value),
+      ));
+    });
+
     on<UpdateYawKp>((event, emit) {
+      client.sendYawKp(event.value);
       emit(state.copyWith(
         flightSettings: state.flightSettings.copyWith(yawKp: event.value),
       ));
     });
 
-    on<UpdatePitchRateKp>((event, emit) {
+    on<UpdateYawKi>((event, emit) {
+      client.sendYawKi(event.value);
       emit(state.copyWith(
-        flightSettings: state.flightSettings.copyWith(pitchRateKp: event.value),
+        flightSettings: state.flightSettings.copyWith(yawKi: event.value),
       ));
     });
 
-    on<UpdateRollRateKp>((event, emit) {
+    on<UpdateYawKd>((event, emit) {
+      client.sendYawKd(event.value);
       emit(state.copyWith(
-        flightSettings: state.flightSettings.copyWith(rollRateKp: event.value),
-      ));
-    });
-
-    on<UpdateYawRateKp>((event, emit) {
-      emit(state.copyWith(
-        flightSettings: state.flightSettings.copyWith(yawRateKp: event.value),
+        flightSettings: state.flightSettings.copyWith(yawKd: event.value),
       ));
     });
 

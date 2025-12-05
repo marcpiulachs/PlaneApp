@@ -57,10 +57,10 @@ class _AttitudeIndicatorPainter extends CustomPainter {
     double radius = size.width / 2;
     Offset center = Offset(radius, radius);
 
-    // Aplicar la rotación del horizonte según el roll
+    // Aplicar la rotación del horizonte según el roll (invertido para convención de aviación)
     canvas.save();
     canvas.translate(center.dx, center.dy);
-    canvas.rotate(-roll * math.pi / 180);
+    canvas.rotate(roll * math.pi / 180);
     canvas.translate(-center.dx, -center.dy);
 
     // Dibujar el fondo (cielo arriba y tierra abajo) y la línea del horizonte desplazada según el pitch

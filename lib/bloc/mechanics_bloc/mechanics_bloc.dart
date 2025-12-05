@@ -6,6 +6,8 @@ import 'package:paperwings/bloc/mechanics_bloc/mechanics_state.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
 import 'package:paperwings/models/settings_page.dart';
 import 'package:paperwings/pages/beacon_settings.dart';
+import 'package:paperwings/pages/calibration_imu_page.dart';
+import 'package:paperwings/pages/calibration_mag_page.dart';
 import 'package:paperwings/pages/log_settings.dart';
 import 'package:paperwings/pages/motor_settings.dart';
 import 'package:paperwings/pages/power_settings.dart';
@@ -61,19 +63,13 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
             title: "Gyroscope Calibration",
             description: "Calibrating will help improve its accuracy",
             icon: Icons.compass_calibration,
-            page: const SensorGraphPage(),
+            page: const CalibrationImuPage(),
           ),
           SettingPage(
             title: "Compass Calibration",
             description: "Calibrating will help improve its accuracy",
             icon: Icons.compass_calibration,
-            page: const BeaconSettings(),
-          ),
-          SettingPage(
-            title: "Accelerometer Calibration",
-            description: "Calibrating will help improve its accuracy",
-            icon: Icons.compass_calibration,
-            page: const BeaconSettings(),
+            page: const CalibrationMagPage(),
           ),
           SettingPage(
             title: "Motors",

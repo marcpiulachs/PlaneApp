@@ -1,5 +1,3 @@
-import 'dart:math';
-
 class Telemetry {
   final double gyroX;
   final double gyroY;
@@ -7,7 +5,6 @@ class Telemetry {
   final double magX;
   final double magY;
   final double magZ;
-  final double barometer;
   final double motor1Speed;
   final double motor2Speed;
   final double batterySoc;
@@ -27,7 +24,6 @@ class Telemetry {
     this.magX = 0,
     this.magY = 0,
     this.magZ = 0,
-    this.barometer = 0,
     this.motor1Speed = 0,
     this.motor2Speed = 0,
     this.batterySoc = 0,
@@ -42,10 +38,9 @@ class Telemetry {
   });
 
   double get degrees {
-    // Calcula el ángulo en grados basado en los datos del magnetómetro.
-    // La fórmula real puede variar según el tipo de magnetómetro y los datos.
-    double angle = atan2(magY.toDouble(), magX.toDouble());
-    return angle * (180 / pi);
+    // Usa el yaw calculado por el firmware que ya tiene compensación de inclinación (tilt compensation)
+    // El yaw del firmware considera pitch y roll para dar el heading correcto
+    return yaw;
   }
 
   double get altitude {
@@ -69,7 +64,6 @@ class Telemetry {
     double? magX,
     double? magY,
     double? magZ,
-    double? barometer,
     double? motor1Speed,
     double? motor2Speed,
     double? batterySoc,
@@ -89,7 +83,6 @@ class Telemetry {
       magX: magX ?? this.magX,
       magY: magY ?? this.magY,
       magZ: magZ ?? this.magZ,
-      barometer: barometer ?? this.barometer,
       motor1Speed: motor1Speed ?? this.motor1Speed,
       motor2Speed: motor2Speed ?? this.motor2Speed,
       batterySoc: batterySoc ?? this.batterySoc,
@@ -101,6 +94,44 @@ class Telemetry {
       pitch: pitch ?? this.pitch,
       roll: roll ?? this.roll,
       yaw: yaw ?? this.yaw,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'gyroX': gyroX,
+      'gyroY': gyroY,
+      'gyroZ': gyroZ,
+      'magX': magX,
+      'magY': magY,
+      'magZ': magZ,
+      'accelX': accelX,
+      'accelY': accelY,
+      'accelZ': accelZ,
+      'pitch': pitch,
+      'roll': roll,
+      'yaw': yaw,
+      'motor1Speed': motor1Speed,
+      'motor2Speed': motor2Speed,
+    };
+  }
+
+  factory Telemetry.fromMap(Map<String, dynamic> map) {
+    return Telemetry(
+      gyroX: map['gyroX'] as double,
+      gyroY: map['gyroY'] as double,
+      gyroZ: map['gyroZ'] as double,
+      magX: map['magX'] as double,
+      magY: map['magY'] as double,
+      magZ: map['magZ'] as double,
+      accelX: map['accelX'] as double,
+      accelY: map['accelY'] as double,
+      accelZ: map['accelZ'] as double,
+      pitch: map['pitch'] as double,
+      roll: map['roll'] as double,
+      yaw: map['yaw'] as double,
+      motor1Speed: map['motor1Speed'] as double,
+      motor2Speed: map['motor2Speed'] as double,
     );
   }
 }

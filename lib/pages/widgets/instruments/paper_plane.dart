@@ -40,8 +40,8 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
       setState(() {
         // Convertir pitch a radianes
         _rotationX = -widget.pitch * (math.pi / 180) + 45;
-        // Convertir roll a radianes
-        _rotationZ = -widget.roll * (math.pi / 180);
+        // Convertir roll a radianes (invertido para que coincida con la convención de aviación)
+        _rotationZ = widget.roll * (math.pi / 180);
       });
     }
   }

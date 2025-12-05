@@ -34,9 +34,9 @@ class _TurnCoordinatorState extends State<TurnCoordinator>
                 border: Border.all(color: Colors.black, width: 2),
               ),
             ),
-            // Avión central que rota según la tasa de giro
+            // Avión central que rota según la tasa de giro (invertido para convención de aviación)
             Transform.rotate(
-              angle: widget.turnRate * pi / 4, // Rango de rotación
+              angle: -widget.turnRate * pi / 4, // Rango de rotación
               child: CustomPaint(
                 size: const Size(100, 100), // Tamaño del avión
                 painter: AirplanePainter(),

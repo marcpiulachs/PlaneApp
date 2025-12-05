@@ -113,7 +113,7 @@ class _MotorSettingsScreenState extends State<MotorSettingsScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        //const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: ElevatedButton(
@@ -157,36 +157,78 @@ class _SliderColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          backgroundColor: Colors.black,
-          child: Text(
-            '${current.toInt()}%',
-            style: const TextStyle(color: Colors.white),
-          ),
-        ),
-        RotatedBox(
-          quarterTurns: -1, // Gira el slider 90 grados a la izquierda
-          child: Slider(
-            value: requested,
-            onChanged: onChanged,
-            min: 0,
-            max: 100,
-            divisions: 100,
-            activeColor: Color.lerp(Colors.green, Colors.red, requested / 100),
-            inactiveColor: Colors.grey[300],
-          ),
-        ),
-        CircleAvatar(
-          backgroundColor: Colors.black,
-          child: Text(
-            '${requested.toInt()}%',
-            style: const TextStyle(color: Colors.white),
-          ),
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final height = constraints.maxHeight;
+        final circleSize = height * 0.2;
+        final progressStroke = circleSize * 0.15;
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // Indicador circular adaptado
+            SizedBox(
+              width: circleSize,
+              height: circleSize,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    value: requested / 100,
+                    strokeWidth: progressStroke,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Color.lerp(Colors.green, Colors.red, requested / 100)!,
+                    ),
+                    backgroundColor: Colors.grey[300],
+                  ),
+                  CircularProgressIndicator(
+                    value: current / 100,
+                    strokeWidth: progressStroke / 2,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      Colors.white,
+                    ),
+                    backgroundColor: Colors.transparent,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${current.toInt()}%',
+                        style: TextStyle(
+                          fontSize: circleSize * 0.25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        '${requested.toInt()}%',
+                        style: TextStyle(
+                          fontSize: circleSize * 0.18,
+                          color: Colors.white.withOpacity(0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            // Slider rotado
+            RotatedBox(
+              quarterTurns: -1,
+              child: Slider(
+                value: requested,
+                onChanged: onChanged,
+                min: 0,
+                max: 100,
+                divisions: 100,
+                activeColor:
+                    Color.lerp(Colors.green, Colors.red, requested / 100),
+                inactiveColor: Colors.grey[300],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

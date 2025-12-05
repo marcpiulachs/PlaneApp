@@ -52,6 +52,21 @@ class Packet {
   static const int SHUTDOWN = 0x99;
   static const int BEACON = 0x100;
 
+  // PID Settings - Pitch
+  static const int SET_PITCH_KP = 0xA0;
+  static const int SET_PITCH_KI = 0xA1;
+  static const int SET_PITCH_KD = 0xA2;
+  // PID Settings - Roll
+  static const int SET_ROLL_KP = 0xA3;
+  static const int SET_ROLL_KI = 0xA4;
+  static const int SET_ROLL_KD = 0xA5;
+  // PID Settings - Yaw
+  static const int SET_YAW_KP = 0xA6;
+  static const int SET_YAW_KI = 0xA7;
+  static const int SET_YAW_KD = 0xA8;
+  // Get PID Settings
+  static const int GET_PID_SETTINGS = 0xA9;
+
   // Definiciones de tipo de datos
   static const int dataTypeInt = 0x01;
   static const int dataTypeBool = 0x03;
@@ -79,7 +94,7 @@ class Packet {
         payload = value.toDouble();
 
   Packet.forDouble(this.function, double value)
-      : dataType = dataTypeInt,
+      : dataType = dataTypeDouble,
         payload = value;
 
   // Constructor adicional para booleanos
@@ -106,16 +121,20 @@ class Packet {
     int function = byteData.getUint8(1);
     int dataType = byteData.getUint8(2);
 
-    // Leer el payload como un entero de 16 bits en little-endian
-    double payload = byteData.getFloat32(3, Endian.big);
+    // Leer el payload según el tipo de dato
+    double payload;
 
     // Crear el paquete en función del tipo de dato
     switch (dataType) {
       case Packet.dataTypeDouble:
+        payload = byteData.getFloat32(3, Endian.big);
         return Packet.forDouble(function, payload);
       case Packet.dataTypeInt:
+        // Para int, interpretar como float32 y convertir
+        payload = byteData.getFloat32(3, Endian.big);
         return Packet.forInt(function, payload.toInt());
       case Packet.dataTypeBool:
+        payload = byteData.getFloat32(3, Endian.big);
         return Packet.forBool(function, payload == Packet.boolTrue);
       default: // Tipo de dato desconocido
         developer.log('Invalid packet: unknown data type: $dataType');
@@ -487,6 +506,70 @@ class TcpPlaneClient implements IPlaneClient {
   @override
   Future<void> sendCalibrateMAG() async {
     Packet packet = Packet.forEmpty(Packet.CALIBRATE_MAG);
+    await sendPacket(packet);
+  }
+
+  // PID Settings - Pitch
+  @override
+  Future<void> sendPitchKp(double value) async {
+    Packet packet = Packet.forDouble(Packet.SET_PITCH_KP, value);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendPitchKi(double value) async {
+    Packet packet = Packet.forDouble(Packet.SET_PITCH_KI, value);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendPitchKd(double value) async {
+    Packet packet = Packet.forDouble(Packet.SET_PITCH_KD, value);
+    await sendPacket(packet);
+  }
+
+  // PID Settings - Roll
+  @override
+  Future<void> sendRollKp(double value) async {
+    Packet packet = Packet.forDouble(Packet.SET_ROLL_KP, value);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendRollKi(double value) async {
+    Packet packet = Packet.forDouble(Packet.SET_ROLL_KI, value);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendRollKd(double value) async {
+    Packet packet = Packet.forDouble(Packet.SET_ROLL_KD, value);
+    await sendPacket(packet);
+  }
+
+  // PID Settings - Yaw
+  @override
+  Future<void> sendYawKp(double value) async {
+    Packet packet = Packet.forDouble(Packet.SET_YAW_KP, value);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendYawKi(double value) async {
+    Packet packet = Packet.forDouble(Packet.SET_YAW_KI, value);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendYawKd(double value) async {
+    Packet packet = Packet.forDouble(Packet.SET_YAW_KD, value);
+    await sendPacket(packet);
+  }
+
+  // Get PID Settings
+  @override
+  Future<void> sendGetPIDSettings() async {
+    Packet packet = Packet.forEmpty(Packet.GET_PID_SETTINGS);
     await sendPacket(packet);
   }
 

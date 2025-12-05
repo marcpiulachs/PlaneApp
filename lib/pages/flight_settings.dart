@@ -42,19 +42,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        _buildSlider(
-                          "Steering Angle",
-                          state.flightSettings.steeringAngle,
-                          Icons.set_meal,
-                          (value) {
-                            context.read<PlaneSettingsBloc>().add(
-                                  UpdateSteeringAngle(value),
-                                );
-                          },
-                          min: 5,
-                          max: 175,
-                          divisions: 170,
-                        ),
+                        // Pitch PID
                         _buildSlider(
                           "Pitch Kp",
                           state.flightSettings.pitchKp,
@@ -65,22 +53,36 @@ class _EngineSettingsState extends State<EngineSettings> {
                                 );
                           },
                           min: 0,
-                          max: 2.540,
-                          divisions: 254,
+                          max: 5.0,
+                          divisions: 500,
                         ),
                         _buildSlider(
-                          "Pitch Rate Kp",
-                          state.flightSettings.pitchRateKp,
-                          Icons.arrow_downward,
+                          "Pitch Ki",
+                          state.flightSettings.pitchKi,
+                          Icons.arrow_upward,
                           (value) {
                             context.read<PlaneSettingsBloc>().add(
-                                  UpdatePitchRateKp(value),
+                                  UpdatePitchKi(value),
                                 );
                           },
                           min: 0,
-                          max: 2.540,
-                          divisions: 254,
+                          max: 1.0,
+                          divisions: 100,
                         ),
+                        _buildSlider(
+                          "Pitch Kd",
+                          state.flightSettings.pitchKd,
+                          Icons.arrow_upward,
+                          (value) {
+                            context.read<PlaneSettingsBloc>().add(
+                                  UpdatePitchKd(value),
+                                );
+                          },
+                          min: 0,
+                          max: 1.0,
+                          divisions: 100,
+                        ),
+                        // Roll PID
                         _buildSlider(
                           "Roll Kp",
                           state.flightSettings.rollKp,
@@ -91,22 +93,36 @@ class _EngineSettingsState extends State<EngineSettings> {
                                 );
                           },
                           min: 0,
-                          max: 2.540,
-                          divisions: 254,
+                          max: 5.0,
+                          divisions: 500,
                         ),
                         _buildSlider(
-                          "Roll Rate Kp",
-                          state.flightSettings.rollRateKp,
-                          Icons.arrow_back,
+                          "Roll Ki",
+                          state.flightSettings.rollKi,
+                          Icons.arrow_forward,
                           (value) {
                             context.read<PlaneSettingsBloc>().add(
-                                  UpdateRollRateKp(value),
+                                  UpdateRollKi(value),
                                 );
                           },
                           min: 0,
-                          max: 2.540,
-                          divisions: 254,
+                          max: 1.0,
+                          divisions: 100,
                         ),
+                        _buildSlider(
+                          "Roll Kd",
+                          state.flightSettings.rollKd,
+                          Icons.arrow_forward,
+                          (value) {
+                            context.read<PlaneSettingsBloc>().add(
+                                  UpdateRollKd(value),
+                                );
+                          },
+                          min: 0,
+                          max: 1.0,
+                          divisions: 100,
+                        ),
+                        // Yaw PID
                         _buildSlider(
                           "Yaw Kp",
                           state.flightSettings.yawKp,
@@ -117,36 +133,35 @@ class _EngineSettingsState extends State<EngineSettings> {
                                 );
                           },
                           min: 0,
-                          max: 2.540,
-                          divisions: 254,
+                          max: 5.0,
+                          divisions: 500,
                         ),
                         _buildSlider(
-                          "Yaw Rate Kp",
-                          state.flightSettings.yawRateKp,
-                          Icons.rotate_right,
+                          "Yaw Ki",
+                          state.flightSettings.yawKi,
+                          Icons.rotate_left,
                           (value) {
                             context.read<PlaneSettingsBloc>().add(
-                                  UpdateYawRateKp(value),
+                                  UpdateYawKi(value),
                                 );
                           },
                           min: 0,
-                          max: 2.540,
-                          divisions: 254,
+                          max: 1.0,
+                          divisions: 100,
                         ),
                         _buildSlider(
-                          "Angle of Attack",
-                          state.flightSettings.angleOfAttack,
-                          Icons.accessibility,
+                          "Yaw Kd",
+                          state.flightSettings.yawKd,
+                          Icons.rotate_left,
                           (value) {
                             context.read<PlaneSettingsBloc>().add(
-                                  UpdateAngleOfAttack(value),
+                                  UpdateYawKd(value),
                                 );
                           },
                           min: 0,
-                          max: 90,
-                          divisions: 90,
+                          max: 1.0,
+                          divisions: 100,
                         ),
-                        // Agrega los otros sliders de la misma forma...
                         const SizedBox(height: 20.0),
                         ElevatedButton(
                           onPressed: () {

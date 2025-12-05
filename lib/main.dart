@@ -11,6 +11,7 @@ import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_bloc.dart';
 import 'package:paperwings/bloc/sensor_bloc/sensor_bloc.dart';
+import 'package:paperwings/bloc/calibration_bloc.dart';
 import 'package:paperwings/repositories/plane_repository.dart';
 import 'package:paperwings/clients/mock_plane_client.dart';
 import 'package:paperwings/clients/tcp_plane_client.dart';
@@ -34,8 +35,8 @@ class MyApp extends StatelessWidget {
           create: (context) => EventBus(),
         ),
         Provider<IPlaneClient>(
-          create: (context) => MockPlaneClient(),
-          //create: (context) => TcpPlaneClient(host: '192.168.4.1', port: 3333),
+          //create: (context) => MockPlaneClient(),
+          create: (context) => TcpPlaneClient(host: '192.168.4.1', port: 3333),
         ),
         BlocProvider<SensorBloc>(
           create: (context) => SensorBloc(
@@ -91,6 +92,11 @@ class MyApp extends StatelessWidget {
             repository: PlaneRepository(),
           ),
           lazy: false,
+        ),
+        BlocProvider<CalibrationBloc>(
+          create: (context) => CalibrationBloc(
+            context.read<IPlaneClient>(),
+          ),
         ),
       ],
       child: const MaterialApp(

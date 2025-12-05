@@ -1,22 +1,35 @@
 class PlaneFlightSettings {
   final double steeringAngle; // Ángulo de dirección del avión
-  final double pitchKp; // Coeficiente proporcional del pitch
-  final double pitchRateKp; // Tasa de cambio de pitch
-  final double rollKp; // Coeficiente proporcional
-  final double rollRateKp; // Tasa de cambio de roll
-  final double yawKp; // Coeficiente proporcional del yaw
-  final double yawRateKp; // Tasa de cambio de yaw
+
+  // PID Pitch
+  final double pitchKp;
+  final double pitchKi;
+  final double pitchKd;
+
+  // PID Roll
+  final double rollKp;
+  final double rollKi;
+  final double rollKd;
+
+  // PID Yaw
+  final double yawKp;
+  final double yawKi;
+  final double yawKd;
+
   final double angleOfAttack; // Ángulo de ataque del avión
   final int beacon;
 
   PlaneFlightSettings({
     required this.steeringAngle,
     required this.pitchKp,
-    required this.pitchRateKp,
+    required this.pitchKi,
+    required this.pitchKd,
     required this.rollKp,
-    required this.rollRateKp,
+    required this.rollKi,
+    required this.rollKd,
     required this.yawKp,
-    required this.yawRateKp,
+    required this.yawKi,
+    required this.yawKd,
     required this.angleOfAttack,
     required this.beacon,
   });
@@ -24,22 +37,28 @@ class PlaneFlightSettings {
   PlaneFlightSettings copyWith({
     double? steeringAngle,
     double? pitchKp,
-    double? pitchRateKp,
+    double? pitchKi,
+    double? pitchKd,
     double? rollKp,
-    double? rollRateKp,
+    double? rollKi,
+    double? rollKd,
     double? yawKp,
-    double? yawRateKp,
+    double? yawKi,
+    double? yawKd,
     double? angleOfAttack,
     int? beacon,
   }) {
     return PlaneFlightSettings(
       steeringAngle: steeringAngle ?? this.steeringAngle,
       pitchKp: pitchKp ?? this.pitchKp,
-      pitchRateKp: pitchRateKp ?? this.pitchRateKp,
+      pitchKi: pitchKi ?? this.pitchKi,
+      pitchKd: pitchKd ?? this.pitchKd,
       rollKp: rollKp ?? this.rollKp,
-      rollRateKp: rollRateKp ?? this.rollRateKp,
+      rollKi: rollKi ?? this.rollKi,
+      rollKd: rollKd ?? this.rollKd,
       yawKp: yawKp ?? this.yawKp,
-      yawRateKp: yawRateKp ?? this.yawRateKp,
+      yawKi: yawKi ?? this.yawKi,
+      yawKd: yawKd ?? this.yawKd,
       angleOfAttack: angleOfAttack ?? this.angleOfAttack,
       beacon: beacon ?? this.beacon,
     );

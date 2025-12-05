@@ -234,4 +234,58 @@ class MockPlaneClient implements IPlaneClient {
   Future<void> sendCalibrateMAG() async {
     developer.log("Send Calibration MAG called");
   }
+
+  // PID Settings - Pitch
+  @override
+  Future<void> sendPitchKp(double value) async {
+    developer.log("Send Pitch Kp: $value");
+  }
+
+  @override
+  Future<void> sendPitchKi(double value) async {
+    developer.log("Send Pitch Ki: $value");
+  }
+
+  @override
+  Future<void> sendPitchKd(double value) async {
+    developer.log("Send Pitch Kd: $value");
+  }
+
+  // PID Settings - Roll
+  @override
+  Future<void> sendRollKp(double value) async {
+    developer.log("Send Roll Kp: $value");
+  }
+
+  @override
+  Future<void> sendRollKi(double value) async {
+    developer.log("Send Roll Ki: $value");
+  }
+
+  @override
+  Future<void> sendRollKd(double value) async {
+    developer.log("Send Roll Kd: $value");
+  }
+
+  // PID Settings - Yaw
+  @override
+  Future<void> sendYawKp(double value) async {
+    developer.log("Send Yaw Kp: $value");
+  }
+
+  @override
+  Future<void> sendYawKi(double value) async {
+    developer.log("Send Yaw Ki: $value");
+  }
+
+  @override
+  Future<void> sendYawKd(double value) async {
+    developer.log("Send Yaw Kd: $value");
+  }
+
+  // Get PID Settings
+  @override
+  Future<void> sendGetPIDSettings() async {
+    developer.log("Send Get PID Settings called");
+  }
 }

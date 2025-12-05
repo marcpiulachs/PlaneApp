@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_bloc.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_events.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_states.dart';
+import 'package:paperwings/pages/flight_detail_page.dart';
 
 class RecordedFlights extends StatefulWidget {
   const RecordedFlights({super.key});
@@ -24,21 +25,36 @@ class _RecordedFlightsState extends State<RecordedFlights> {
       builder: (context, state) {
         if (state is RecordedFlightsLoading) {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: Colors.white),
           );
         } else if (state is RecordedFlightsLoaded) {
-          return Column(
-            children: [
-              const Center(
-                child: Center(
-                  child: Text(
-                    "Investigate your crashes",
+          if (state.flights.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.flight_takeoff, size: 80, color: Colors.grey[600]),
+                  const SizedBox(height: 16),
+                  Text(
+                    'No hay vuelos grabados',
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Colors.grey[400],
                     ),
                   ),
+                ],
+              ),
+            );
+          }
+
+          return Column(
+            children: [
+              const Text(
+                "Análisis de Vuelos",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 16),
@@ -52,38 +68,70 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                       final flight = state.flights[index];
                       return Card(
                         color: Colors.white,
-                        margin: const EdgeInsets.all(8.0),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 4.0, horizontal: 8.0),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: ListTile(
-                          leading: const Icon(Icons.flight),
-                          iconColor: Colors.red,
-                          textColor: Colors.black,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    FlightDetailPage(flight: flight),
+                              ),
+                            );
+                          },
+                          leading: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: flight.hasCrash
+                                  ? Colors.red
+                                  : (flight.hasEmergency
+                                      ? Colors.orange
+                                      : Colors.green),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              flight.hasCrash
+                                  ? Icons.warning
+                                  : (flight.hasEmergency
+                                      ? Icons.error_outline
+                                      : Icons.flight),
+                              color: Colors.white,
+                            ),
+                          ),
                           title: Text(
-                            flight.time,
+                            flight.formattedDate,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Duración: ${flight.formattedDuration} • Alt: ${flight.maxAltitude.toStringAsFixed(0)}m',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
                             ),
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
-                                Icons.circle,
-                                color:
-                                    flight.hasIcon1 ? Colors.red : Colors.grey,
-                              ),
-                              Icon(
-                                Icons.circle,
-                                color:
-                                    flight.hasIcon2 ? Colors.red : Colors.grey,
-                              ),
-                              Icon(
-                                Icons.circle,
-                                color:
-                                    flight.hasIcon3 ? Colors.red : Colors.grey,
-                              ),
+                              if (flight.hasCrash)
+                                const Icon(Icons.close,
+                                    color: Colors.red, size: 20),
+                              if (flight.hasEmergency)
+                                const Icon(Icons.warning_amber,
+                                    color: Colors.orange, size: 20),
+                              if (flight.hasWarning)
+                                const Icon(Icons.error_outline,
+                                    color: Colors.amber, size: 20),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.chevron_right,
+                                  color: Colors.grey),
                             ],
                           ),
                         ),
@@ -97,14 +145,14 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      // Manejar la acción del botón aquí
+                      // TODO: Cargar más vuelos
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       minimumSize: const Size(double.infinity, 50),
                     ),
                     child: const Text(
-                      'SHOW MORE',
+                      'MOSTRAR MÁS',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -116,9 +164,19 @@ class _RecordedFlightsState extends State<RecordedFlights> {
             ],
           );
         } else if (state is RecordedFlightsError) {
-          return Center(child: Text(state.message));
+          return Center(
+            child: Text(
+              state.message,
+              style: const TextStyle(color: Colors.white),
+            ),
+          );
         } else {
-          return const Center(child: Text('No recordings yet'));
+          return const Center(
+            child: Text(
+              'No hay grabaciones',
+              style: TextStyle(color: Colors.white),
+            ),
+          );
         }
       },
     );
