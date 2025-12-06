@@ -15,15 +15,16 @@ class BeaconSettings extends StatefulWidget {
 
 class _BeaconSettingsState extends State<BeaconSettings> {
   final List<String> options = [
-    'Blinking very fast', // STROBE
-    'Blinking slow', // LONG_BLINK
-    'Blinking fast', // SHORT_BLINKS
+    'Disabled', // NONE
+    'Steady On', // STEADY_ON
+    'Steady Both', // STEADY_BOTH
+    'Short Blinks', // SHORT_BLINKS
+    'Long Blink', // LONG_BLINK
     'Alternating', // ALTERNATING
-    'Double blink', // DOUBLE_BLINK
+    'Strobe', // STROBE
+    'SOS', // SOS
     'Wigwag', // WIGWAG
     'Rotating', // ROTATING
-    'Emergency', // EMERGENCY
-    'Disabled', // NONE
   ];
   @override
   Widget build(BuildContext context) {
