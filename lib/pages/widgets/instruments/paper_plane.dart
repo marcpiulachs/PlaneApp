@@ -5,13 +5,19 @@ class PaperPlane3D extends StatefulWidget {
   final double roll; // Inclinación en el eje Z
   final double pitch; // Inclinación en el eje X
   final double yaw; // Rotación en el eje Y
+  final double pitchOffset;
+  final double yawOffset;
+  final double rollOffset;
 
-  // Constructor del widget con parámetros roll y pitch
+  // Constructor del widget con parámetros roll, pitch, yaw y offsets
   const PaperPlane3D({
     super.key,
     required this.roll,
     required this.pitch,
     this.yaw = 0,
+    this.pitchOffset = 45,
+    this.yawOffset = 0,
+    this.rollOffset = 0,
   });
 
   @override
@@ -35,13 +41,17 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
   @override
   void didUpdateWidget(PaperPlane3D oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Actualizamos las rotaciones si los valores de roll o pitch cambian
-    if (oldWidget.roll != widget.roll || oldWidget.pitch != widget.pitch) {
+    // Actualizamos las rotaciones si los valores de roll, pitch o yaw cambian
+    if (oldWidget.roll != widget.roll ||
+        oldWidget.pitch != widget.pitch ||
+        oldWidget.yaw != widget.yaw) {
       setState(() {
-        // Convertir pitch a radianes
-        _rotationX = -widget.pitch * (math.pi / 180) + 45;
-        // Convertir roll a radianes (invertido para que coincida con la convención de aviación)
-        _rotationZ = widget.roll * (math.pi / 180);
+        // Convertir pitch a radianes y aplicar offset
+        _rotationX = -widget.pitch * (math.pi / 180) + widget.pitchOffset;
+        // Convertir yaw a radianes y aplicar offset
+        _rotationZ = (widget.yaw + widget.yawOffset) * (math.pi / 180);
+        // Convertir roll a radianes y aplicar offset
+        _rotationY = (widget.roll + widget.rollOffset) * (math.pi / 180);
       });
     }
   }
