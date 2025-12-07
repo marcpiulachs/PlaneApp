@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/orientation_bloc.dart';
-
 import 'package:paperwings/pages/widgets/instruments/paper_plane.dart';
-import 'package:vector_math/vector_math_64.dart' as vmath;
 
 class SettingsOrientationPage extends StatelessWidget {
   const SettingsOrientationPage({super.key});
@@ -78,8 +76,8 @@ class _OrientationObject extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
         SizedBox(
-          width: 150,
-          height: 150,
+          width: 165,
+          height: 165,
           child: PaperPlane3D(roll: roll, pitch: pitch, yaw: yaw),
         ),
       ],
