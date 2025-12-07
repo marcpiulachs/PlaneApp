@@ -7,6 +7,7 @@ import 'package:paperwings/bloc/fly_bloc/fly_bloc.dart';
 import 'package:paperwings/bloc/home_bloc/home_bloc.dart';
 import 'package:paperwings/bloc/mechanics_bloc/mechanics_bloc.dart';
 import 'package:paperwings/bloc/motor_settings_bloc/motor_settings_bloc.dart';
+import 'package:paperwings/bloc/orientation_bloc.dart';
 import 'package:paperwings/bloc/ota_bloc/ota_bloc.dart';
 import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
@@ -104,6 +105,10 @@ class MyApp extends StatelessWidget {
           create: (context) => CalibrationBloc(
             context.read<IPlaneClient>(),
           ),
+        ),
+        BlocProvider<OrientationBloc>(
+          create: (context) =>
+              OrientationBloc(client: context.read<IPlaneClient>()),
         ),
       ],
       child: MaterialApp(

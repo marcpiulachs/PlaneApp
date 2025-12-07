@@ -13,6 +13,7 @@ import 'package:paperwings/pages/motor_settings.dart';
 import 'package:paperwings/pages/power_settings.dart';
 import 'package:paperwings/pages/sensors.dart';
 import 'package:paperwings/pages/flight_settings.dart';
+import 'package:paperwings/pages/settings_orientation_page.dart';
 
 class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
   final IPlaneClient client;
@@ -76,6 +77,12 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
             description: "Test motors",
             icon: Icons.settings_input_component,
             page: const MotorSettingsScreen(),
+          ),
+          SettingPage(
+            title: "Orientation",
+            description: "Display realtime orientation data from the plane",
+            icon: Icons.list_alt,
+            page: const SettingsOrientationPage(),
           ),
           SettingPage(
             title: "Log",
