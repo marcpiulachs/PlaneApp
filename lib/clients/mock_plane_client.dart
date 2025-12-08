@@ -288,4 +288,25 @@ class MockPlaneClient implements IPlaneClient {
   Future<void> sendGetPIDSettings() async {
     developer.log("Send Get PID Settings called");
   }
+
+  @override
+  Future<void> sendLogIMU(bool enabled) async {
+    // Simulación: solo loguea la acción
+    developer.log("Mock sendLogIMU: $enabled");
+  }
+
+  @override
+  Future<void> sendLogThrust(bool enabled) async {
+    developer.log("Mock sendLogThrust: $enabled");
+  }
+
+  @override
+  Future<void> sendLogBattery(bool enabled) async {
+    developer.log("Mock sendLogBattery: $enabled");
+  }
+
+  @override
+  Future<void> sendLogMotor(bool enabled) async {
+    developer.log("Mock sendLogMotor: $enabled");
+  }
 }

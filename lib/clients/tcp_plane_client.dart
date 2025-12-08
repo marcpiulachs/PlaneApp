@@ -573,6 +573,30 @@ class TcpPlaneClient implements IPlaneClient {
     await sendPacket(packet);
   }
 
+  @override
+  Future<void> sendLogIMU(bool enabled) async {
+    Packet packet = Packet.forBool(Packet.LOG_IMU, enabled);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendLogThrust(bool enabled) async {
+    Packet packet = Packet.forBool(Packet.LOG_THRUST, enabled);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendLogBattery(bool enabled) async {
+    Packet packet = Packet.forBool(Packet.LOG_BATT, enabled);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendLogMotor(bool enabled) async {
+    Packet packet = Packet.forBool(Packet.LOG_MOTOR, enabled);
+    await sendPacket(packet);
+  }
+
   // Método para actualizar la propiedad y emitir el cambio
   void setConnected(bool value) {
     if (_isConnected != value) {

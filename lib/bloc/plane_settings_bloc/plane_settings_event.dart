@@ -59,11 +59,6 @@ class UpdateIMULogEvent extends PlaneSettingsEvent {
   UpdateIMULogEvent(this.value);
 }
 
-class UpdateMotorLogEvent extends PlaneSettingsEvent {
-  final bool value;
-  UpdateMotorLogEvent(this.value);
-}
-
 class UpdateThrustLogEvent extends PlaneSettingsEvent {
   final bool value;
   UpdateThrustLogEvent(this.value);
@@ -72,6 +67,11 @@ class UpdateThrustLogEvent extends PlaneSettingsEvent {
 class UpdateBatteryLogEvent extends PlaneSettingsEvent {
   final bool value;
   UpdateBatteryLogEvent(this.value);
+}
+
+class UpdateMotorLogEvent extends PlaneSettingsEvent {
+  final bool value;
+  UpdateMotorLogEvent(this.value);
 }
 
 class RebootEvent extends PlaneSettingsEvent {

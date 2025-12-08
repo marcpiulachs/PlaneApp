@@ -34,6 +34,12 @@ abstract class IPlaneClient {
   // Get PID Settings
   Future<void> sendGetPIDSettings();
 
+  // Logging Settings
+  Future<void> sendLogIMU(bool enabled);
+  Future<void> sendLogThrust(bool enabled);
+  Future<void> sendLogBattery(bool enabled);
+  Future<void> sendLogMotor(bool enabled);
+
   //Campos de estado
   bool get isConnected;
 

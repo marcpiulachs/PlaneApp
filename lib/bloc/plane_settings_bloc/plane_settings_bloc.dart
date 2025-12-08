@@ -135,27 +135,31 @@ class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
       ));
     });
 
-    on<UpdateIMULogEvent>((event, emit) {
+    on<UpdateIMULogEvent>((event, emit) async {
+      await client.sendLogIMU(event.value);
       emit(state.copyWith(
         logSettings: state.logSettings.copyWith(imu: event.value),
       ));
     });
 
-    on<UpdateBatteryLogEvent>((event, emit) {
+    on<UpdateThrustLogEvent>((event, emit) async {
+      await client.sendLogThrust(event.value);
+      emit(state.copyWith(
+        logSettings: state.logSettings.copyWith(thrust: event.value),
+      ));
+    });
+
+    on<UpdateBatteryLogEvent>((event, emit) async {
+      await client.sendLogBattery(event.value);
       emit(state.copyWith(
         logSettings: state.logSettings.copyWith(battery: event.value),
       ));
     });
 
-    on<UpdateMotorLogEvent>((event, emit) {
+    on<UpdateMotorLogEvent>((event, emit) async {
+      await client.sendLogMotor(event.value);
       emit(state.copyWith(
         logSettings: state.logSettings.copyWith(motor: event.value),
-      ));
-    });
-
-    on<UpdateThrustLogEvent>((event, emit) {
-      emit(state.copyWith(
-        logSettings: state.logSettings.copyWith(thrust: event.value),
       ));
     });
 
