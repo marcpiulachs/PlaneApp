@@ -6,6 +6,7 @@ import 'package:paperwings/bloc/fly_bloc/fly_event.dart';
 import 'package:paperwings/bloc/fly_bloc/fly_state.dart';
 import 'package:paperwings/bloc/home_bloc/home_bloc.dart';
 import 'package:paperwings/bloc/home_bloc/home_event.dart';
+import 'package:paperwings/enum/maneuver_type.dart';
 import 'package:paperwings/pages/connect.dart';
 import 'package:paperwings/pages/widgets/line_chart.dart';
 import 'package:paperwings/pages/widgets/instruments/paper_plane.dart';
@@ -65,10 +66,10 @@ class _FlyState extends State<Fly> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CircularProgressBar(
-                          progress: 0.7,
+                          progress: state.wifiSignal.toDouble(),
                           icon: Icons.radar,
-                          text: '${state.telemetry.signal}dBI',
                           backgroundColor: AppTheme.surfaceLight,
+                          text: '${state.wifiSignal} dBm',
                         ),
                       ],
                     ),
@@ -107,6 +108,126 @@ class _FlyState extends State<Fly> {
                         PaperPlane3D(
                           roll: state.telemetry.roll.toDouble(),
                           pitch: state.telemetry.pitch.toDouble(),
+                        ),
+                        // Botones de maniobra
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 80,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          flyBloc.add(ManeuverSelectedEvent(
+                                              ManeuverType.loop));
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 12.0, horizontal: 16.0),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: const [
+                                            Icon(Icons.loop, size: 32),
+                                            SizedBox(height: 4),
+                                            Text('LOOP'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 12),
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 80,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          flyBloc.add(ManeuverSelectedEvent(
+                                              ManeuverType.spin));
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 12.0, horizontal: 16.0),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: const [
+                                            Icon(Icons.sync, size: 32),
+                                            SizedBox(height: 4),
+                                            Text('SPIN'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 80,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          flyBloc.add(ManeuverSelectedEvent(
+                                              ManeuverType.land));
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 12.0, horizontal: 16.0),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: const [
+                                            Icon(Icons.flight_land, size: 32),
+                                            SizedBox(height: 4),
+                                            Text('LAND'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 12),
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 80,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          flyBloc.add(ManeuverSelectedEvent(
+                                              ManeuverType.takeoff));
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 12.0, horizontal: 16.0),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: const [
+                                            Icon(Icons.flight_takeoff,
+                                                size: 32),
+                                            SizedBox(height: 4),
+                                            Text('TAKEOFF'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                         AirspeedIndicator(
                           speed: state.telemetry.motor1Speed,

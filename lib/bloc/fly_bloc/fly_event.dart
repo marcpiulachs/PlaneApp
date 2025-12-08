@@ -1,10 +1,19 @@
 import 'package:equatable/equatable.dart';
+import 'package:paperwings/enum/maneuver_type.dart';
 import 'package:paperwings/models/telemetry.dart';
 import 'package:paperwings/models/user_action.dart';
 
 abstract class FlyEvent extends Equatable {
   @override
   List<Object?> get props => [];
+}
+
+class ManeuverSelectedEvent extends FlyEvent {
+  final ManeuverType maneuverType;
+  ManeuverSelectedEvent(this.maneuverType);
+
+  @override
+  List<Object?> get props => [maneuverType];
 }
 
 class FlyCheckConnectionEvent extends FlyEvent {}

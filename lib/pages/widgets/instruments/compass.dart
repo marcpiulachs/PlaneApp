@@ -150,7 +150,7 @@ class CompassPainter extends CustomPainter {
     }
 
     // Dibujar grados/puntos cardinales cada 10 grados
-      for (int i = 0; i < 360; i += 30) {
+    for (int i = 0; i < 360; i += 30) {
       double angle = i * pi / 180;
       // Si es cardinal, acercar más al centro
       double offset = (i == 0 || i == 90 || i == 180 || i == 270) ? 32 : 20;

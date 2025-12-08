@@ -16,6 +16,7 @@ class FlyLoadedState extends FlyState with EquatableMixin {
   final bool isArmed;
   final bool isRecording;
   final UserAction userAction;
+  final int wifiSignal;
 
   FlyLoadedState({
     Telemetry? telemetry,
@@ -23,6 +24,7 @@ class FlyLoadedState extends FlyState with EquatableMixin {
     this.isArmed = false,
     this.isRecording = false,
     UserAction? userAction,
+    this.wifiSignal = 0,
   })  : telemetry = telemetry ?? Telemetry(),
         userAction = userAction ?? const UserAction();
 
@@ -32,6 +34,7 @@ class FlyLoadedState extends FlyState with EquatableMixin {
     bool? isArmed,
     bool? isRecording,
     UserAction? userAction,
+    int? wifiSignal,
   }) {
     return FlyLoadedState(
       telemetry: telemetry ?? this.telemetry,
@@ -39,6 +42,7 @@ class FlyLoadedState extends FlyState with EquatableMixin {
       isArmed: isArmed ?? this.isArmed,
       isRecording: isRecording ?? this.isRecording,
       userAction: userAction ?? this.userAction,
+      wifiSignal: wifiSignal ?? this.wifiSignal,
     );
   }
 

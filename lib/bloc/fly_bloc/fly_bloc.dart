@@ -6,10 +6,15 @@ import 'package:paperwings/clients/plane_client_interface.dart';
 import 'package:paperwings/core/flight_orientation.dart';
 import 'package:paperwings/core/flight_recorder.dart';
 import 'dart:developer' as developer;
-
 import 'package:paperwings/events/plane_selected_event.dart';
 
+class UpdateWifiSignalEvent extends FlyEvent {
+  final int signal;
+  UpdateWifiSignalEvent(this.signal);
+}
+
 class FlyBloc extends Bloc<FlyEvent, FlyState> {
+  // ...resto de la clase...
   final IPlaneClient client;
   final EventBus eventBus;
   late FlightRecorder flightRecorder;
@@ -141,6 +146,21 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
         }
       },
     );
+
+    // ...existing code...
+    on<ManeuverSelectedEvent>((event, emit) async {
+      if (state is FlyLoadedState) {
+        // Mapear el tipo de maniobra al comando del firmware
+        await client.sendManeuver(event.maneuverType.value);
+        // No cambiamos el estado, fire and forget
+      }
+    });
+
+    on<UpdateWifiSignalEvent>((event, emit) {
+      if (state is FlyLoadedState) {
+        emit((state as FlyLoadedState).copyWith(wifiSignal: event.signal));
+      }
+    });
 
     on<CaptureData>((event, emit) async {
       developer.log('Telemetry Data:');
@@ -384,6 +404,15 @@ class FlyBloc extends Bloc<FlyEvent, FlyState> {
     });
 
     add(FlyCheckConnectionEvent());
+  }
+
+  Future<void> updateWifiSignal() async {
+    try {
+      add(UpdateWifiSignalEvent(0));
+    } catch (e) {
+      // Error al obtener señal WiFi
+      add(UpdateWifiSignalEvent(0));
+    }
   }
 
   @override
