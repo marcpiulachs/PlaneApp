@@ -28,12 +28,16 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
   late double _rotationY;
   late double _rotationZ;
 
+  void _updateRotations() {
+    _rotationX = (-widget.pitch + widget.pitchOffset) * (math.pi / 180);
+    _rotationY = (widget.roll + widget.rollOffset) * (math.pi / 180);
+    _rotationZ = (widget.yaw + widget.yawOffset) * (math.pi / 180);
+  }
+
   @override
   void initState() {
     super.initState();
-    _rotationX = widget.pitch;
-    _rotationY = widget.yaw;
-    _rotationZ = widget.roll;
+    _updateRotations();
   }
 
   @override
@@ -42,11 +46,7 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
     if (oldWidget.roll != widget.roll ||
         oldWidget.pitch != widget.pitch ||
         oldWidget.yaw != widget.yaw) {
-      setState(() {
-        _rotationX = -widget.pitch * (math.pi / 180) + widget.pitchOffset;
-        _rotationZ = (widget.yaw + widget.yawOffset) * (math.pi / 180);
-        _rotationY = (widget.roll + widget.rollOffset) * (math.pi / 180);
-      });
+      setState(_updateRotations);
     }
   }
 
@@ -58,9 +58,16 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
         return Stack(
           alignment: Alignment.center,
           children: [
+            // Sombra proyectada fija (no rota con el avión)
             SizedBox(
-              height: size,
               width: size,
+              height: size,
+              child: const CustomPaint(painter: _PlaneShadowPainter()),
+            ),
+            // Avión con silueta clásica, rotado en 3D
+            SizedBox(
+              width: size,
+              height: size,
               child: Transform(
                 alignment: Alignment.center,
                 transform: Matrix4.identity()
@@ -82,6 +89,30 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
   }
 }
 
+/// Sombra suave que sugiere que el avión flota sobre una superficie.
+class _PlaneShadowPainter extends CustomPainter {
+  const _PlaneShadowPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.28)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 9);
+    canvas.drawOval(
+      Rect.fromCenter(
+        center: Offset(size.width / 2, size.height * 0.82),
+        width: size.width * 0.5,
+        height: size.width * 0.13,
+      ),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _PlaneShadowPainter oldDelegate) => false;
+}
+
+/// Silueta clásica de avión de papel con dos mitades sombreadas (pliegue).
 class PaperPlanePainter extends CustomPainter {
   final double roll;
   final double pitch;
@@ -90,24 +121,43 @@ class PaperPlanePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.fill;
+    final w = size.width;
+    final h = size.height;
+    final nose = Offset(w * 0.5, 0);
+    final tailBottom = Offset(w * 0.5, h * 0.72);
+    final leftTip = Offset(0, h);
+    final rightTip = Offset(w, h);
 
-    final linePaint = Paint()
-      ..color = Colors.grey
-      ..strokeWidth = 2;
+    // Ala derecha (lado sombreado del pliegue)
+    final rightPath = Path()
+      ..moveTo(nose.dx, nose.dy)
+      ..lineTo(rightTip.dx, rightTip.dy)
+      ..lineTo(tailBottom.dx, tailBottom.dy)
+      ..close();
+    canvas.drawPath(
+      rightPath,
+      Paint()..color = const Color(0xFFD4D4DA),
+    );
 
-    final path = Path();
-    path.moveTo(size.width * 0.5, 0);
-    path.lineTo(size.width, size.height);
-    path.lineTo(size.width * 0.5, size.height * 0.7);
-    path.lineTo(0, size.height);
-    path.close();
+    // Ala izquierda (lado más iluminado)
+    final leftPath = Path()
+      ..moveTo(nose.dx, nose.dy)
+      ..lineTo(leftTip.dx, leftTip.dy)
+      ..lineTo(tailBottom.dx, tailBottom.dy)
+      ..close();
+    canvas.drawPath(
+      leftPath,
+      Paint()..color = const Color(0xFFF2F2F5),
+    );
 
-    canvas.drawPath(path, paint);
-    canvas.drawLine(Offset(size.width * 0.5, 0),
-        Offset(size.width * 0.5, size.height * 0.7), linePaint);
+    // Pliegue central
+    canvas.drawLine(
+      nose,
+      tailBottom,
+      Paint()
+        ..color = Colors.black.withValues(alpha: 0.25)
+        ..strokeWidth = 1.5,
+    );
   }
 
   @override

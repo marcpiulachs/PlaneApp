@@ -79,18 +79,20 @@ class MockPlaneClient implements IPlaneClient {
     _m1 += (_throttle - _m1) * 0.35;
     _m2 += (_throttle * 0.98 - _m2) * 0.35;
 
-    // Actitud: vaivén suave más pronunciado con potencia
+    // Actitud: movimientos amplios y variados para ver el avión en 3D
     _prevPitch = _pitch;
     _prevRoll = _roll;
-    final activity = 0.35 + _throttle / 100;
-    final pitchTarget =
-        (_throttle / 100) * 8 + 5 * activity * sin(t * 0.04);
-    final rollTarget = 14 * activity * sin(t * 0.025);
-    _pitch += (pitchTarget.clamp(-25.0, 25.0) - _pitch) * 0.03;
-    _roll += (rollTarget.clamp(-35.0, 35.0) - _roll) * 0.03;
+    final activity = 0.5 + _throttle / 100;
+    final pitchTarget = (_throttle / 100) * 12 +
+        8 * activity * sin(t * 0.06) +
+        5 * activity * sin(t * 0.023);
+    final rollTarget = 25 * activity * sin(t * 0.05) +
+        15 * activity * sin(t * 0.021);
+    _pitch += (pitchTarget.clamp(-35.0, 35.0) - _pitch) * 0.04;
+    _roll += (rollTarget.clamp(-55.0, 55.0) - _roll) * 0.04;
 
-    // Rumbo: viraje a la derecha con la potencia (virada estándar ≈ 3 °/s)
-    final yawRate = (_throttle / 100) * (2.0 + 0.6 * sin(t * 0.02));
+    // Rumbo: giros amplios y continuos para cambiar la perspectiva
+    final yawRate = (_throttle / 100) * (28.0 + 14.0 * sin(t * 0.012));
     _yaw = (_yaw + yawRate * dt) % 360;
 
     // Altitud: sube cuando hay potencia, se mantiene si no
