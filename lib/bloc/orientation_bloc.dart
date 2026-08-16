@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
 import 'package:paperwings/models/telemetry.dart';

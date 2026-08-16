@@ -210,6 +210,16 @@ class _InstrumentsCarousel extends StatelessWidget {
                             ManeuverType.takeoff));
                       },
                     ),
+                    const SizedBox(width: 24),
+                    _CockpitButton(
+                      icon: Icons.threesixty,
+                      color: AppTheme.error,
+                      label: 'BARREL',
+                      onPressed: () {
+                        context.read<FlyBloc>().add(ManeuverSelectedEvent(
+                            ManeuverType.barrelRoll));
+                      },
+                    ),
                   ],
                 ),
               ],

@@ -51,7 +51,7 @@ class Packet {
   static const int KI = 0x97;
   static const int KD = 0x98;
   static const int SHUTDOWN = 0x99;
-  static const int BEACON = 0x100;
+  static const int BEACON = 0x9A;
 
   // PID Settings - Pitch
   static const int SET_PITCH_KP = 0xA0;

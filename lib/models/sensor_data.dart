@@ -1,3 +1,17 @@
+// Constructor named 'empty' para SensorState
+extension SensorStateEmpty on SensorState {
+  static SensorState empty() => const SensorState(
+    gyroscopeX: 0.0,
+    gyroscopeY: 0.0,
+    gyroscopeZ: 0.0,
+    accelerometerX: 0.0,
+    accelerometerY: 0.0,
+    accelerometerZ: 0.0,
+    magnamometerX: 0.0,
+    magnamometerY: 0.0,
+    magnamometerZ: 0.0,
+  );
+}
 // Estado que contiene los datos de los sensores
 class SensorState {
   final double gyroscopeX;
