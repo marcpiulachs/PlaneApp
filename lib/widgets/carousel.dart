@@ -33,7 +33,11 @@ class _CarouselWidgetState extends State<CarouselWidget> {
               });
             },
             itemBuilder: (context, index) {
-              return widget.items[index];
+              // Margen inferior para que la sombra del instrumento no se recorte
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16, top: 8),
+                child: widget.items[index],
+              );
             },
           ),
         ),
