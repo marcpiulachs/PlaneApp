@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-import 'package:paperwings/config/app_theme.dart';
-
 class PaperPlane3D extends StatefulWidget {
   final double roll;
   final double pitch;
@@ -60,14 +58,6 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
         return Stack(
           alignment: Alignment.center,
           children: [
-            // Horizonte de referencia (oscuro, estilo cabina)
-            SizedBox(
-              height: size,
-              width: size,
-              child: CustomPaint(
-                painter: _BackdropPainter(roll: widget.roll, pitch: widget.pitch),
-              ),
-            ),
             SizedBox(
               height: size,
               width: size,
@@ -90,58 +80,6 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
       },
     );
   }
-}
-
-/// Fondo oscuro con horizonte que acompaña al avión de papel.
-class _BackdropPainter extends CustomPainter {
-  final double roll;
-  final double pitch;
-
-  _BackdropPainter({required this.roll, required this.pitch});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final horizonY = center.dy + pitch * (size.height / 90);
-
-    canvas.save();
-    canvas.translate(center.dx, center.dy);
-    canvas.rotate(roll * math.pi / 180);
-    canvas.translate(-center.dx, -center.dy);
-
-    final skyRect = Rect.fromLTRB(0, 0, size.width, horizonY);
-    canvas.drawRect(
-      skyRect,
-      Paint()
-        ..shader = const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFF1A2333), Color(0xFF2E4057)],
-        ).createShader(skyRect),
-    );
-    final groundRect = Rect.fromLTRB(0, horizonY, size.width, size.height);
-    canvas.drawRect(
-      groundRect,
-      Paint()
-        ..shader = const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFF3A3A44), Color(0xFF1C1C22)],
-        ).createShader(groundRect),
-    );
-    canvas.drawLine(
-      Offset(0, horizonY),
-      Offset(size.width, horizonY),
-      Paint()
-        ..color = AppTheme.instrumentMark.withValues(alpha: 0.6)
-        ..strokeWidth = 2,
-    );
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(covariant _BackdropPainter oldDelegate) =>
-      oldDelegate.roll != roll || oldDelegate.pitch != pitch;
 }
 
 class PaperPlanePainter extends CustomPainter {

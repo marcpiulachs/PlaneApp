@@ -380,6 +380,72 @@ class _InstrumentsCarousel extends StatelessWidget {
   }
 }
 
+class _CockpitButton extends StatelessWidget {
+  const _CockpitButton({
+    required this.icon,
+    required this.color,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final Color color;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      customBorder: const CircleBorder(),
+      child: Container(
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.6),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF5A5A62),
+                AppTheme.instrumentBezel,
+                Color(0xFF1C1C20),
+              ],
+            ),
+            border: Border.all(color: Colors.black45, width: 1.5),
+          ),
+          padding: const EdgeInsets.all(3),
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color.lerp(color, Colors.white, 0.25)!,
+                  color,
+                  Color.lerp(color, Colors.black, 0.3)!,
+                ],
+              ),
+              border: Border.all(color: Colors.black, width: 1.5),
+            ),
+            child: Icon(icon, size: 24, color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _BottomControls extends StatelessWidget {
   const _BottomControls();
 
@@ -407,20 +473,14 @@ class _BottomControls extends StatelessWidget {
                   ),
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.settings),
-                color: Colors.white,
-                iconSize: 40,
-                padding: const EdgeInsets.all(10.0),
-                onPressed: () => {
+              _CockpitButton(
+                icon: Icons.settings,
+                color: AppTheme.mechanicsColor,
+                onPressed: () {
                   context.read<HomeBloc>().add(
                         const HomeTabChangedEvent(3),
-                      )
+                      );
                 },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(Colors.black),
-                  shape: WidgetStateProperty.all(const CircleBorder()),
-                ),
               ),
             ],
           ),
@@ -454,20 +514,14 @@ class _BottomControls extends StatelessWidget {
                   ),
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.crisis_alert),
-                color: Colors.white,
-                iconSize: 40,
-                padding: const EdgeInsets.all(10.0),
-                onPressed: () => {
+              _CockpitButton(
+                icon: Icons.crisis_alert,
+                color: AppTheme.recorderColor,
+                onPressed: () {
                   context.read<HomeBloc>().add(
                         const HomeTabChangedEvent(2),
-                      )
+                      );
                 },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(Colors.black),
-                  shape: WidgetStateProperty.all(const CircleBorder()),
-                ),
               ),
             ],
           ),
