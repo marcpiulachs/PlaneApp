@@ -14,6 +14,7 @@ import 'package:paperwings/pages/power_settings.dart';
 import 'package:paperwings/pages/sensors.dart';
 import 'package:paperwings/pages/flight_settings.dart';
 import 'package:paperwings/pages/settings_orientation_page.dart';
+import 'package:paperwings/pages/orientation_settings.dart';
 
 class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
   final IPlaneClient client;
@@ -53,6 +54,12 @@ class MechanicsBloc extends Bloc<MechanicsEvent, MechanicsState> {
             description: "Display realtime data from sensors in your plane",
             icon: Icons.sensors,
             page: const SensorGraphPage(),
+          ),
+          SettingPage(
+            title: "IMU Mount Orientation",
+            description: "Select how the sensor board is mounted",
+            icon: Icons.threed_rotation,
+            page: const OrientationSettings(),
           ),
           SettingPage(
             title: "Beacon",

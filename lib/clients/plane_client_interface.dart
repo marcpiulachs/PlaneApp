@@ -11,6 +11,7 @@ abstract class IPlaneClient {
   Future<void> sendYoke(int yoke);
   Future<void> sendManeuver(int maneuver);
   Future<void> sendBeacon(int beacon);
+  Future<void> sendImuOrientation(int orientation);
   Future<void> sendShutdown();
   Future<void> sendKD(double value);
   Future<void> sendKP(double value);

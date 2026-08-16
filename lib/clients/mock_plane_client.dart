@@ -12,6 +12,7 @@ class MockPlaneClient implements IPlaneClient {
   int _throttle = 0;
 
   int beacon = 0;
+  int imuOrientation = 0;
 
   double kp = 0, ki = 0, kd = 0;
 
@@ -202,6 +203,11 @@ class MockPlaneClient implements IPlaneClient {
   @override
   Future<void> sendBeacon(int beacon) async {
     beacon = beacon;
+  }
+
+  @override
+  Future<void> sendImuOrientation(int orientation) async {
+    imuOrientation = orientation;
   }
 
   @override

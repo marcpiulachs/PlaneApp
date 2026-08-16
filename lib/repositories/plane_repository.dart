@@ -24,6 +24,7 @@ class PlaneRepository {
           yawKd: 0.02,
           angleOfAttack: 5,
           beacon: 0,
+          imuOrientation: 0,
         ),
         customSettings: PlaneFlightSettings(
           steeringAngle: 110,
@@ -38,6 +39,7 @@ class PlaneRepository {
           yawKd: 0.02,
           angleOfAttack: 5,
           beacon: 0,
+          imuOrientation: 0,
         ),
       ),
       PlaneItem(
@@ -60,6 +62,7 @@ class PlaneRepository {
           yawKd: 0.02,
           angleOfAttack: 5,
           beacon: 0,
+          imuOrientation: 0,
         ),
         customSettings: PlaneFlightSettings(
           steeringAngle: 110,
@@ -74,6 +77,7 @@ class PlaneRepository {
           yawKd: 0.02,
           angleOfAttack: 5,
           beacon: 0,
+          imuOrientation: 0,
         ),
       ),
       PlaneItem(
@@ -96,6 +100,7 @@ class PlaneRepository {
           yawKd: 0.02,
           angleOfAttack: 5,
           beacon: 0,
+          imuOrientation: 0,
         ),
         customSettings: PlaneFlightSettings(
           steeringAngle: 110,
@@ -110,6 +115,7 @@ class PlaneRepository {
           yawKd: 0.02,
           angleOfAttack: 5,
           beacon: 0,
+          imuOrientation: 0,
         ),
       ),
     ];

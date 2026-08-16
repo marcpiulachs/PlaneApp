@@ -7,6 +7,11 @@ class UpdateBeacon extends PlaneSettingsEvent {
   UpdateBeacon(this.value);
 }
 
+class UpdateImuOrientation extends PlaneSettingsEvent {
+  final int value;
+  UpdateImuOrientation(this.value);
+}
+
 class UpdatePitchKp extends PlaneSettingsEvent {
   final double value;
   UpdatePitchKp(this.value);

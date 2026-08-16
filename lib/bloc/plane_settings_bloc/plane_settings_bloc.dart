@@ -32,6 +32,7 @@ class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
               yawKd: 0.02,
               angleOfAttack: 0.0,
               beacon: 0,
+              imuOrientation: 0,
             ),
           ),
         ) {
@@ -55,6 +56,7 @@ class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
             yawKd: 0.02,
             angleOfAttack: 0.0,
             beacon: 0,
+            imuOrientation: 0,
           ),
         ),
       );
@@ -78,6 +80,14 @@ class PlaneSettingsBloc extends Bloc<PlaneSettingsEvent, PlaneSettingsState> {
       client.sendBeacon(event.value);
       emit(state.copyWith(
         flightSettings: state.flightSettings.copyWith(beacon: event.value),
+      ));
+    });
+
+    on<UpdateImuOrientation>((event, emit) {
+      client.sendImuOrientation(event.value);
+      emit(state.copyWith(
+        flightSettings:
+            state.flightSettings.copyWith(imuOrientation: event.value),
       ));
     });
 

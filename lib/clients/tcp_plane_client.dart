@@ -52,6 +52,8 @@ class Packet {
   static const int KD = 0x98;
   static const int SHUTDOWN = 0x99;
   static const int BEACON = 0x9A;
+  static const int SET_IMU_ORIENTATION = 0xAA;
+  static const int GET_IMU_ORIENTATION = 0xAB;
 
   // PID Settings - Pitch
   static const int SET_PITCH_KP = 0xA0;
@@ -428,6 +430,12 @@ class TcpPlaneClient implements IPlaneClient {
   @override
   Future<void> sendBeacon(int beacon) async {
     Packet packet = Packet.forInt(Packet.BEACON, beacon);
+    await sendPacket(packet);
+  }
+
+  @override
+  Future<void> sendImuOrientation(int orientation) async {
+    Packet packet = Packet.forInt(Packet.SET_IMU_ORIENTATION, orientation);
     await sendPacket(packet);
   }
 

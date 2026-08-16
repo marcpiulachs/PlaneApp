@@ -4,70 +4,34 @@ import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_event.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_state.dart';
 import 'package:paperwings/config/app_theme.dart';
-import 'package:paperwings/models/settings_option.dart';
 import 'package:paperwings/widgets/icon_circle.dart';
 
-class BeaconSettings extends StatefulWidget {
-  const BeaconSettings({
+class OrientationSettings extends StatefulWidget {
+  const OrientationSettings({
     super.key,
   });
 
   @override
-  State<BeaconSettings> createState() => _BeaconSettingsState();
+  State<OrientationSettings> createState() => _OrientationSettingsState();
 }
 
-class _BeaconSettingsState extends State<BeaconSettings> {
-  final List<SettingsOption> options = [
-    SettingsOption(
-      title: 'Disabled',
-      description: 'Both lights off',
-      icon: Icons.lightbulb,
-    ),
-    SettingsOption(
-      title: 'Steady On',
-      description: 'LED 1 steady on',
-      icon: Icons.lightbulb,
-    ),
-    SettingsOption(
-      title: 'Steady Both',
-      description: 'Both LEDs steady on',
-      icon: Icons.lightbulb,
-    ),
-    SettingsOption(
-      title: 'Short Blinks',
-      description: '3 quick blinks',
-      icon: Icons.lightbulb,
-    ),
-    SettingsOption(
-      title: 'Long Blink',
-      description: 'Alternates with long on-times',
-      icon: Icons.lightbulb,
-    ),
-    SettingsOption(
-      title: 'Alternating',
-      description: 'Alternates between the two LEDs',
-      icon: Icons.lightbulb,
-    ),
-    SettingsOption(
-      title: 'Strobe',
-      description: 'Fast strobe burst',
-      icon: Icons.lightbulb,
-    ),
-    SettingsOption(
-      title: 'SOS',
-      description: 'International emergency pattern',
-      icon: Icons.lightbulb,
-    ),
-    SettingsOption(
-      title: 'Wigwag',
-      description: 'Fast alternating, patrol style',
-      icon: Icons.lightbulb,
-    ),
-    SettingsOption(
-      title: 'Rotating',
-      description: 'Simulates rotation between the two LEDs',
-      icon: Icons.lightbulb,
-    ),
+class _OrientationSettingsState extends State<OrientationSettings> {
+  final List<String> options = [
+    'Flat', // FLAT
+    'Rotated Right', // ROLL_RIGHT_90
+    'Rotated Left', // ROLL_LEFT_90
+  ];
+
+  final List<IconData> icons = [
+    Icons.arrow_upward, // FLAT (plano)
+    Icons.arrow_forward, // ROLL_RIGHT_90 (derecha)
+    Icons.arrow_back, // ROLL_LEFT_90 (izquierda)
+  ];
+
+  final List<String> descriptions = [
+    'PCB horizontal, components up',
+    'PCB vertical, components to the right',
+    'PCB vertical, components to the left',
   ];
   @override
   Widget build(BuildContext context) {
@@ -76,7 +40,7 @@ class _BeaconSettingsState extends State<BeaconSettings> {
         return Column(
           children: [
             const Text(
-              "Beacon settings",
+              "IMU orientation settings",
               style: AppTheme.heading3,
             ),
             const SizedBox(height: AppSpacing.spacingLg),
@@ -89,7 +53,7 @@ class _BeaconSettingsState extends State<BeaconSettings> {
                   itemBuilder: (context, index) {
                     final optionName = options[index];
                     return ListTile(
-                      leading: const IconCircle(icon: Icons.lightbulb),
+                      leading: IconCircle(icon: icons[index]),
                       title: Text(
                         optionName,
                         style: AppTheme.bodyLarge,
@@ -100,20 +64,19 @@ class _BeaconSettingsState extends State<BeaconSettings> {
                       ),
                       trailing: Radio<int>(
                         value: index,
-                        groupValue: state.flightSettings.beacon,
+                        groupValue: state.flightSettings.imuOrientation,
                         onChanged: (value) {
                           if (value != null) {
                             BlocProvider.of<PlaneSettingsBloc>(context).add(
-                              UpdateBeacon(value),
+                              UpdateImuOrientation(value),
                             );
                           }
                         },
-                        // Color del radio cuando está seleccionado
                         activeColor: Colors.black,
                       ),
                       onTap: () {
                         BlocProvider.of<PlaneSettingsBloc>(context).add(
-                          UpdateBeacon(index),
+                          UpdateImuOrientation(index),
                         );
                       },
                     );

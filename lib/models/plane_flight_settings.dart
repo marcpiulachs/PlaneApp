@@ -18,6 +18,7 @@ class PlaneFlightSettings {
 
   final double angleOfAttack; // Ángulo de ataque del avión
   final int beacon;
+  final int imuOrientation; // 0=FLAT, 1=ROLL_RIGHT_90, 2=ROLL_LEFT_90
 
   PlaneFlightSettings({
     required this.steeringAngle,
@@ -32,6 +33,7 @@ class PlaneFlightSettings {
     required this.yawKd,
     required this.angleOfAttack,
     required this.beacon,
+    required this.imuOrientation,
   });
 
   PlaneFlightSettings copyWith({
@@ -47,6 +49,7 @@ class PlaneFlightSettings {
     double? yawKd,
     double? angleOfAttack,
     int? beacon,
+    int? imuOrientation,
   }) {
     return PlaneFlightSettings(
       steeringAngle: steeringAngle ?? this.steeringAngle,
@@ -61,6 +64,7 @@ class PlaneFlightSettings {
       yawKd: yawKd ?? this.yawKd,
       angleOfAttack: angleOfAttack ?? this.angleOfAttack,
       beacon: beacon ?? this.beacon,
+      imuOrientation: imuOrientation ?? this.imuOrientation,
     );
   }
 }
