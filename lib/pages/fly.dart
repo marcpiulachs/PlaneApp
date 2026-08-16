@@ -171,8 +171,9 @@ class _InstrumentsCarousel extends StatelessWidget {
                       color: AppTheme.info,
                       label: 'LOOP',
                       onPressed: () {
-                        context.read<FlyBloc>().add(ManeuverSelectedEvent(
-                            ManeuverType.loop));
+                        context
+                            .read<FlyBloc>()
+                            .add(ManeuverSelectedEvent(ManeuverType.loop));
                       },
                     ),
                     const SizedBox(width: 24),
@@ -181,8 +182,9 @@ class _InstrumentsCarousel extends StatelessWidget {
                       color: AppTheme.warning,
                       label: 'SPIN',
                       onPressed: () {
-                        context.read<FlyBloc>().add(ManeuverSelectedEvent(
-                            ManeuverType.spin));
+                        context
+                            .read<FlyBloc>()
+                            .add(ManeuverSelectedEvent(ManeuverType.spin));
                       },
                     ),
                   ],
@@ -196,8 +198,9 @@ class _InstrumentsCarousel extends StatelessWidget {
                       color: AppTheme.success,
                       label: 'LAND',
                       onPressed: () {
-                        context.read<FlyBloc>().add(ManeuverSelectedEvent(
-                            ManeuverType.land));
+                        context
+                            .read<FlyBloc>()
+                            .add(ManeuverSelectedEvent(ManeuverType.land));
                       },
                     ),
                     const SizedBox(width: 24),
@@ -206,8 +209,9 @@ class _InstrumentsCarousel extends StatelessWidget {
                       color: AppTheme.settingsColor,
                       label: 'TAKEOFF',
                       onPressed: () {
-                        context.read<FlyBloc>().add(ManeuverSelectedEvent(
-                            ManeuverType.takeoff));
+                        context
+                            .read<FlyBloc>()
+                            .add(ManeuverSelectedEvent(ManeuverType.takeoff));
                       },
                     ),
                     const SizedBox(width: 24),
@@ -216,8 +220,8 @@ class _InstrumentsCarousel extends StatelessWidget {
                       color: AppTheme.error,
                       label: 'BARREL',
                       onPressed: () {
-                        context.read<FlyBloc>().add(ManeuverSelectedEvent(
-                            ManeuverType.barrelRoll));
+                        context.read<FlyBloc>().add(
+                            ManeuverSelectedEvent(ManeuverType.barrelRoll));
                       },
                     ),
                   ],
@@ -295,8 +299,8 @@ class _InstrumentsCarousel extends StatelessWidget {
               xValue: telemetry.pitch,
               yValue: telemetry.roll,
               zValue: 0,
-              xColor: AppTheme.backgroundDark,
-              yColor: AppTheme.warning,
+              xColor: AppTheme.chartPitch,
+              yColor: AppTheme.chartRoll,
               xDescription: "Pitch",
               yDescription: "Roll",
               showLegend: true,
@@ -424,9 +428,8 @@ class _BottomControls extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: BlocSelector<FlyBloc, FlyState, double>(
-                  selector: (state) => state is FlyLoadedState
-                      ? state.telemetry.motor1Speed
-                      : 0,
+                  selector: (state) =>
+                      state is FlyLoadedState ? state.telemetry.motor1Speed : 0,
                   builder: (context, motor1Speed) => CircularProgressBar(
                     progress: motor1Speed / 100.0,
                     icon: Icons.rotate_right,
@@ -451,7 +454,9 @@ class _BottomControls extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Throttle(
                 onStateChanged: (ThrottleState state) {
-                  context.read<FlyBloc>().add(SendArmed(state == ThrottleState.armed));
+                  context
+                      .read<FlyBloc>()
+                      .add(SendArmed(state == ThrottleState.armed));
                 },
                 onThrottleUpdated: (double value) {
                   context.read<FlyBloc>().add(SendThrottle(value.toInt()));
@@ -465,9 +470,8 @@ class _BottomControls extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: BlocSelector<FlyBloc, FlyState, double>(
-                  selector: (state) => state is FlyLoadedState
-                      ? state.telemetry.motor2Speed
-                      : 0,
+                  selector: (state) =>
+                      state is FlyLoadedState ? state.telemetry.motor2Speed : 0,
                   builder: (context, motor2Speed) => CircularProgressBar(
                     progress: motor2Speed / 100.0,
                     icon: Icons.rotate_left,
