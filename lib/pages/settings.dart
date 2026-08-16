@@ -37,7 +37,7 @@ class _SettingsState extends State<Settings> {
                   appVersion: state.appVersion,
                   devVersion: state.devFirmware,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: AppSpacing.spacingXl),
                 state.updateAvailable
                     ? Column(
                         children: [
@@ -46,20 +46,20 @@ class _SettingsState extends State<Settings> {
                             color: Colors.white,
                             size: 80,
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: AppSpacing.spacingLg),
                           Text(
                             'New version ${state.appFirmware} available!',
                             style: AppTheme.bodyLarge,
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: AppSpacing.spacingXl),
                           ElevatedButton(
                             onPressed: () {
                               context.read<OtaBloc>().add(StartUpdateEvent());
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
+                              backgroundColor: AppTheme.buttonColor,
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
+                                horizontal: AppSpacing.spacingLg,
                               ),
                             ),
                             child: const Text(
@@ -136,33 +136,28 @@ class _SettingsState extends State<Settings> {
                     color: Colors.white,
                     size: 80,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.spacingLg),
                   Text(
                     state.success
                         ? 'Update completed successfully!'
                         : 'Update failed!',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: state.success
+                        ? AppTheme.statusSuccess
+                        : AppTheme.statusError,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.spacingLg),
                   ElevatedButton(
                     onPressed: () {
                       context.read<OtaBloc>().add(CheckVersionEvent());
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      backgroundColor: AppTheme.buttonColor,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.spacingLg),
                     ),
                     child: const Text(
                       'Check Again',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      style: AppTheme.heading3,
                     ),
                   )
                 ],
@@ -179,37 +174,30 @@ class _SettingsState extends State<Settings> {
                   color: Colors.white,
                   size: 80,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.spacingLg),
                 Padding(
                   padding: const EdgeInsets.only(left: 40, right: 40),
                   child: Center(
                     child: Text(
                       state.error,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.white,
-                      ),
+                      style: AppTheme.statusMessage,
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.spacingLg),
                 ElevatedButton(
                   onPressed: () {
                     context.read<OtaBloc>().add(CheckVersionEvent());
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    backgroundColor: AppTheme.buttonColor,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.spacingLg),
                   ),
                   child: const Text(
                     'CHECK AGAIN',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: AppTheme.heading3,
                   ),
                 )
               ],

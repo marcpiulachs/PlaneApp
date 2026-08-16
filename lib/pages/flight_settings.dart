@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_event.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_state.dart';
+import 'package:paperwings/config/app_theme.dart';
 
 class EngineSettings extends StatefulWidget {
   const EngineSettings({
@@ -22,16 +23,12 @@ class _EngineSettingsState extends State<EngineSettings> {
           children: [
             const Text(
               "Fine tune your plane",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppTheme.heading3,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.spacingLg),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(AppSpacing.spacingXl),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -173,7 +170,7 @@ class _EngineSettingsState extends State<EngineSettings> {
                       description:
                           "Ganancia derivativa para yaw. Reduce oscilaciones en la dirección del avión.",
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.spacingLg),
                     ElevatedButton(
                       onPressed: () {
                         context
@@ -182,11 +179,11 @@ class _EngineSettingsState extends State<EngineSettings> {
                       },
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 50),
-                        backgroundColor: Colors.black,
+                        backgroundColor: AppTheme.buttonColor,
                       ),
                       child: const Text('GUARDAR PID'),
                     ),
-                    const SizedBox(height: 20.0),
+                    const SizedBox(height: AppSpacing.spacingXl),
                     ElevatedButton(
                       onPressed: () {
                         context.read<PlaneSettingsBloc>().add(
@@ -195,11 +192,11 @@ class _EngineSettingsState extends State<EngineSettings> {
                       },
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 50),
-                        backgroundColor: Colors.black,
+                        backgroundColor: AppTheme.buttonColor,
                       ),
                       child: const Text('FACTORY SETTINGS'),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: AppSpacing.spacingXl),
                   ],
                 ),
               ),
@@ -227,29 +224,24 @@ class _EngineSettingsState extends State<EngineSettings> {
           children: [
             Text(
               label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+              style: AppTheme.labelMedium,
             ),
             if (description != null) ...[
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSpacing.spacingSm),
               Tooltip(
                 message: description,
-                padding: const EdgeInsets.all(12),
-                margin: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.all(AppSpacing.spacingMd),
+                margin: const EdgeInsets.symmetric(horizontal: AppSpacing.spacingLg),
                 decoration: BoxDecoration(
-                  color: Colors.black87,
-                  borderRadius: BorderRadius.circular(8),
+                  color: AppTheme.backgroundDark,
+                  borderRadius: BorderRadius.circular(AppRadius.radiusSm),
                 ),
-                textStyle: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
+                textStyle: AppTheme.bodyMedium.copyWith(
+                  color: AppTheme.textPrimary,
                 ),
                 child: const Icon(
                   Icons.info_outline,
-                  color: Colors.white70,
+                  color: AppTheme.textSecondary,
                   size: 18,
                 ),
               ),
@@ -258,12 +250,12 @@ class _EngineSettingsState extends State<EngineSettings> {
         ),
         if (description != null)
           Padding(
-            padding: const EdgeInsets.only(top: 4, bottom: 4),
+            padding: const EdgeInsets.only(
+                top: AppSpacing.spacingXs, bottom: AppSpacing.spacingXs),
             child: Text(
               description,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.7),
-                fontSize: 12,
+              style: AppTheme.bodySmall.copyWith(
+                color: AppTheme.textSecondary,
               ),
             ),
           ),
@@ -273,7 +265,7 @@ class _EngineSettingsState extends State<EngineSettings> {
               width: 40, // Tamaño del círculo
               height: 40,
               decoration: const BoxDecoration(
-                color: Colors.black, // Fondo negro para el círculo
+                color: AppTheme.buttonColor, // Fondo negro para el círculo
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -297,12 +289,12 @@ class _EngineSettingsState extends State<EngineSettings> {
               width: 40,
               height: 40,
               decoration: const BoxDecoration(
-                color: Colors.black,
+                color: AppTheme.buttonColor,
                 shape: BoxShape.circle,
               ),
               child: Text(
                 value.toStringAsFixed(1), // Mantiene el formato decimal
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: AppTheme.textPrimary),
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/motor_settings_bloc/motor_settings_bloc.dart';
+import 'package:paperwings/config/app_theme.dart';
 import 'package:paperwings/pages/widgets/line_chart.dart';
 
 class MotorSettingsScreen extends StatefulWidget {
@@ -17,13 +18,9 @@ class _MotorSettingsScreenState extends State<MotorSettingsScreen> {
       children: [
         const Text(
           "Motors",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: AppTheme.heading3,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.spacingLg),
         Expanded(
           child: Row(
             children: [
@@ -35,8 +32,8 @@ class _MotorSettingsScreenState extends State<MotorSettingsScreen> {
                       xValue: state.slider1Value,
                       yValue: state.motor1Value,
                       zValue: 0,
-                      xColor: Colors.green,
-                      yColor: Colors.yellow,
+                      xColor: AppTheme.chartReq,
+                      yColor: AppTheme.chartCur,
                       xDescription: "Req.",
                       yDescription: "Current",
                       showLegend: true,
@@ -58,8 +55,8 @@ class _MotorSettingsScreenState extends State<MotorSettingsScreen> {
                       xValue: state.slider2Value,
                       yValue: state.motor2Value,
                       zValue: 0,
-                      xColor: Colors.green,
-                      yColor: Colors.yellow,
+                      xColor: AppTheme.chartReq,
+                      yColor: AppTheme.chartCur,
                       xDescription: "Req.",
                       yDescription: "Current",
                       showLegend: true,
@@ -115,25 +112,21 @@ class _MotorSettingsScreenState extends State<MotorSettingsScreen> {
         ),
         //const SizedBox(height: 16),
         Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(AppSpacing.spacingMd),
           child: ElevatedButton(
             onPressed: () {
               context.read<MotorSettingsBloc>().add(ToggleArmedState());
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
+              backgroundColor: AppTheme.buttonColor,
               minimumSize: const Size(double.infinity, 50),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.spacingLg),
             ),
             child: BlocBuilder<MotorSettingsBloc, MotorSettingsState>(
               builder: (context, state) {
                 return Text(
                   state.isArmed ? "DISARM" : "ARM",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  style: AppTheme.heading3,
                 );
               },
             ),

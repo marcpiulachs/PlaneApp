@@ -17,10 +17,10 @@ class CalibrationImuPage extends StatelessWidget {
               "Calibración Acelerómetro/Giroscopio",
               style: AppTheme.heading3,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.spacingLg),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: AppSpacing.listPadding,
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
@@ -29,7 +29,7 @@ class CalibrationImuPage extends StatelessWidget {
                         width: 40,
                         height: 40,
                         decoration: const BoxDecoration(
-                          color: Colors.black,
+                          color: AppTheme.buttonColor,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -45,22 +45,23 @@ class CalibrationImuPage extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
+                          horizontal: AppSpacing.spacingLg,
+                          vertical: AppSpacing.spacingSm),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const InstructionItem(
                               text:
                                   '1. Coloca el avión en una superficie completamente plana y nivelada.'),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: AppSpacing.spacingSm),
                           const InstructionItem(
                               text:
                                   '2. Asegúrate de que el avión esté inmóvil.'),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: AppSpacing.spacingSm),
                           const InstructionItem(
                               text:
                                   '3. Presiona el botón "Iniciar Calibración".'),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: AppSpacing.spacingSm),
                           const InstructionItem(
                               text:
                                   '4. No muevas el avión durante el proceso.'),
@@ -70,16 +71,15 @@ class CalibrationImuPage extends StatelessWidget {
                     const SizedBox(height: 24),
                     if (state is CalibrationInProgress)
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: AppSpacing.cardPadding,
                         child: Column(
                           children: [
                             const CircularProgressIndicator(
                                 color: Colors.white),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: AppSpacing.spacingLg),
                             Text(
                               state.message,
-                              style: const TextStyle(
-                                  fontSize: 16, color: Colors.white),
+                              style: AppTheme.statusMessage,
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -87,7 +87,7 @@ class CalibrationImuPage extends StatelessWidget {
                       )
                     else if (state is CalibrationSuccess)
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: AppSpacing.cardPadding,
                         child: Column(
                           children: [
                             const Icon(
@@ -95,14 +95,10 @@ class CalibrationImuPage extends StatelessWidget {
                               color: Colors.green,
                               size: 60,
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: AppSpacing.spacingLg),
                             Text(
                               state.message,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: AppTheme.statusSuccess,
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -110,7 +106,7 @@ class CalibrationImuPage extends StatelessWidget {
                       )
                     else if (state is CalibrationFailure)
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: AppSpacing.cardPadding,
                         child: Column(
                           children: [
                             const Icon(
@@ -118,23 +114,20 @@ class CalibrationImuPage extends StatelessWidget {
                               color: Colors.red,
                               size: 60,
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: AppSpacing.spacingLg),
                             Text(
                               state.error,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: AppTheme.statusError,
                               textAlign: TextAlign.center,
                             ),
                           ],
                         ),
                       ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.spacingLg),
                     if (state is! CalibrationInProgress)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.spacingLg),
                         child: ElevatedButton(
                           onPressed: () {
                             context
@@ -143,7 +136,7 @@ class CalibrationImuPage extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(double.infinity, 50),
-                            backgroundColor: Colors.black,
+                            backgroundColor: AppTheme.buttonColor,
                           ),
                           child: const Text(
                             'Iniciar Calibración',

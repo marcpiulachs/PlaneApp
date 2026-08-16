@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/mechanics_bloc/mechanics_bloc.dart';
 import 'package:paperwings/bloc/mechanics_bloc/mechanics_event.dart';
 import 'package:paperwings/bloc/mechanics_bloc/mechanics_state.dart';
+import 'package:paperwings/config/app_theme.dart';
 import 'package:paperwings/pages/connect.dart';
 
 class Mechanics extends StatefulWidget {
@@ -34,16 +35,15 @@ class _MechanicsState extends State<Mechanics> {
               children: [
                 const Text(
                   "Fine tune your plane",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  style: AppTheme.heading3,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.spacingLg),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                    padding: const EdgeInsets.only(
+                        top: AppSpacing.spacingSm,
+                        left: AppSpacing.spacingSm,
+                        right: AppSpacing.spacingSm),
                     child: ListView.builder(
                       padding: EdgeInsets.zero,
                       itemCount: state.categories.length,
@@ -54,8 +54,8 @@ class _MechanicsState extends State<Mechanics> {
                             width: 40, // Tamaño del círculo
                             height: 40,
                             decoration: const BoxDecoration(
-                              color:
-                                  Colors.black, // Fondo negro para el círculo
+                              color: AppTheme
+                                  .buttonColor, // Fondo negro para el círculo
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -67,22 +67,15 @@ class _MechanicsState extends State<Mechanics> {
                           ),
                           title: Text(
                             page.title,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                            style: AppTheme.heading3,
                           ),
                           subtitle: Text(
                             page.description,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                            ),
+                            style: AppTheme.bodyMedium,
                           ),
                           trailing: const Icon(
                             Icons.chevron_right,
-                            color: Colors.black,
+                            color: AppTheme.textTertiary,
                           ),
                           onTap: () {
                             BlocProvider.of<MechanicsBloc>(context)

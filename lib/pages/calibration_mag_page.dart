@@ -17,10 +17,10 @@ class CalibrationMagPage extends StatelessWidget {
               "Calibración Magnetómetro",
               style: AppTheme.heading3,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.spacingLg),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: AppSpacing.listPadding,
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
@@ -29,7 +29,7 @@ class CalibrationMagPage extends StatelessWidget {
                         width: 40,
                         height: 40,
                         decoration: const BoxDecoration(
-                          color: Colors.black,
+                          color: AppTheme.buttonColor,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -45,26 +45,27 @@ class CalibrationMagPage extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
+                          horizontal: AppSpacing.spacingLg,
+                          vertical: AppSpacing.spacingSm),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const InstructionItem(
                               text:
                                   '1. Presiona el botón "Iniciar Calibración".'),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: AppSpacing.spacingSm),
                           const InstructionItem(
                               text:
                                   '2. Mueve el avión lentamente en todas las direcciones.'),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: AppSpacing.spacingSm),
                           const InstructionItem(
                               text:
                                   '3. Realiza rotaciones completas en los 3 ejes (pitch, roll, yaw).'),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: AppSpacing.spacingSm),
                           const InstructionItem(
                               text:
                                   '4. Continúa moviendo el avión hasta que se complete el contador.'),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: AppSpacing.spacingSm),
                           const InstructionItem(
                               text: '5. La calibración durará 10 segundos.',
                               isWarning: true),
@@ -74,7 +75,7 @@ class CalibrationMagPage extends StatelessWidget {
                     const SizedBox(height: 24),
                     if (state is CalibrationInProgress)
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: AppSpacing.cardPadding,
                         child: Column(
                           children: [
                             Stack(
@@ -94,22 +95,17 @@ class CalibrationMagPage extends StatelessWidget {
                                 if (state.secondsRemaining != null)
                                   Text(
                                     '${state.secondsRemaining}',
-                                    style: const TextStyle(
-                                      fontSize: 48,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                                    style: AppTheme.countdown,
                                   ),
                               ],
                             ),
                             const SizedBox(height: 24),
                             Text(
                               state.message,
-                              style: const TextStyle(
-                                  fontSize: 16, color: Colors.white),
+                              style: AppTheme.statusMessage,
                               textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: AppSpacing.spacingLg),
                             const Icon(
                               Icons.rotate_right,
                               size: 60,
@@ -120,7 +116,7 @@ class CalibrationMagPage extends StatelessWidget {
                       )
                     else if (state is CalibrationSuccess)
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: AppSpacing.cardPadding,
                         child: Column(
                           children: [
                             const Icon(
@@ -128,14 +124,10 @@ class CalibrationMagPage extends StatelessWidget {
                               color: Colors.green,
                               size: 80,
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: AppSpacing.spacingLg),
                             Text(
                               state.message,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: AppTheme.statusSuccess,
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -143,7 +135,7 @@ class CalibrationMagPage extends StatelessWidget {
                       )
                     else if (state is CalibrationFailure)
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: AppSpacing.cardPadding,
                         child: Column(
                           children: [
                             const Icon(
@@ -151,23 +143,20 @@ class CalibrationMagPage extends StatelessWidget {
                               color: Colors.red,
                               size: 80,
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: AppSpacing.spacingLg),
                             Text(
                               state.error,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: AppTheme.statusError,
                               textAlign: TextAlign.center,
                             ),
                           ],
                         ),
                       ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.spacingLg),
                     if (state is! CalibrationInProgress)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.spacingLg),
                         child: ElevatedButton(
                           onPressed: () {
                             context
@@ -176,7 +165,7 @@ class CalibrationMagPage extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(double.infinity, 50),
-                            backgroundColor: Colors.black,
+                            backgroundColor: AppTheme.buttonColor,
                           ),
                           child: const Text(
                             'Iniciar Calibración',

@@ -9,11 +9,36 @@ class AppTheme {
   static const Color primary = Colors.blue;
   static const Color accent = Colors.blueAccent;
 
+  // Superficies consolidadas
+  static const Color cardColor = surfaceDark; // Tarjetas (sustituye a grey[850])
+  static const Color buttonColor = surfaceDarker; // Botones (sustituye a Colors.black)
+
+  // Texto
+  static const Color textPrimary = Colors.white;
+  static const Color textSecondary = Colors.white70;
+  static const Color textTertiary = Colors.white54;
+  static const Color textMuted = Colors.white38;
+
   // Colores de estado
   static const Color success = Colors.green;
   static const Color warning = Colors.orange;
   static const Color error = Colors.red;
   static const Color info = Colors.blue;
+
+  // Colores para series de datos/charts
+  static const Color chartPitch = Colors.red;
+  static const Color chartRoll = Colors.deepPurple;
+  static const Color chartYaw = Colors.lightBlue;
+  static const Color chartAccelX = Colors.red;
+  static const Color chartAccelY = Colors.green;
+  static const Color chartAccelZ = Colors.blue;
+  static const Color chartGyroX = Colors.pinkAccent;
+  static const Color chartGyroY = Colors.tealAccent;
+  static const Color chartGyroZ = Colors.amberAccent;
+  static const Color chartMotor1 = Colors.orange;
+  static const Color chartMotor2 = Colors.deepOrange;
+  static const Color chartReq = Colors.green;
+  static const Color chartCur = Colors.yellow;
 
   // Colores de secciones/tabs
   static final Color hangarColor = Colors.purple.shade800;
@@ -70,6 +95,63 @@ class AppTheme {
 
   static const TextStyle labelLarge = TextStyle(
     fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+
+  // Títulos de slider / campos de configuración
+  static const TextStyle labelMedium = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+
+  // Valores numéricos de stats
+  static const TextStyle statValue = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+
+  // Labels de stats
+  static const TextStyle statLabel = TextStyle(
+    fontSize: 12,
+    color: Colors.white70,
+  );
+
+  // Labels de métricas (filas label+valor)
+  static const TextStyle metricLabel = TextStyle(
+    fontSize: 13,
+    color: Colors.white70,
+  );
+
+  // Ejes de charts
+  static const TextStyle chartAxis = TextStyle(
+    fontSize: 10,
+    color: Colors.white70,
+  );
+
+  // Mensajes de estado (calibración, OTA)
+  static const TextStyle statusMessage = TextStyle(
+    fontSize: 16,
+    color: Colors.white,
+  );
+
+  static const TextStyle statusSuccess = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: Colors.green,
+  );
+
+  static const TextStyle statusError = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: Colors.red,
+  );
+
+  // Contador grande (calibración)
+  static const TextStyle countdown = TextStyle(
+    fontSize: 48,
     fontWeight: FontWeight.bold,
     color: Colors.white,
   );
@@ -140,4 +222,25 @@ class AppTheme {
       labelLarge: labelLarge,
     ),
   );
+}
+
+// Espaciados consolidados
+class AppSpacing {
+  static const double spacingXs = 4;
+  static const double spacingSm = 8;
+  static const double spacingMd = 12;
+  static const double spacingLg = 16;
+  static const double spacingXl = 20;
+
+  static const EdgeInsets pagePadding = EdgeInsets.all(spacingLg);
+  static const EdgeInsets cardPadding = EdgeInsets.all(spacingLg);
+  static const EdgeInsets listPadding = EdgeInsets.all(spacingSm);
+}
+
+// Radios consolidados
+class AppRadius {
+  static const double radiusSm = 8;
+  static const double radiusMd = 12;
+  static const double radiusLg = 16;
+  static const double radiusPill = 20;
 }

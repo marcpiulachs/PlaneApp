@@ -35,11 +35,11 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.flight_takeoff,
-                      size: 100, color: Colors.white.withOpacity(0.3)),
+                      size: 100, color: AppTheme.textMuted),
                   const SizedBox(height: 24),
                   Text(
                     'No hay vuelos grabados',
-                    style: AppTheme.heading2.copyWith(color: Colors.white70),
+                    style: AppTheme.heading2.copyWith(color: AppTheme.textSecondary),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -54,11 +54,11 @@ class _RecordedFlightsState extends State<RecordedFlights> {
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: AppSpacing.pagePadding,
                 child: Row(
                   children: [
                     const Icon(Icons.analytics, color: Colors.white, size: 24),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: AppSpacing.spacingMd),
                     const Text(
                       "Análisis de Vuelos",
                       style: AppTheme.heading2,
@@ -66,16 +66,16 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
+                          horizontal: AppSpacing.spacingMd, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppTheme.primary.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(AppRadius.radiusPill),
                         border: Border.all(color: Colors.white, width: 1),
                       ),
                       child: Text(
                         '${state.flights.length} vuelos',
                         style:
-                            AppTheme.bodyMedium.copyWith(color: Colors.white),
+                            AppTheme.bodyMedium.copyWith(color: AppTheme.textPrimary),
                       ),
                     ),
                   ],
@@ -83,7 +83,7 @@ class _RecordedFlightsState extends State<RecordedFlights> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: AppSpacing.listPadding,
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
                     itemCount: state.flights.length,
@@ -95,7 +95,7 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                         margin: const EdgeInsets.symmetric(
                             vertical: 6.0, horizontal: 12.0),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(AppRadius.radiusLg),
                           side: BorderSide(
                             color: flight.hasCrash
                                 ? AppTheme.error.withOpacity(0.3)
@@ -115,9 +115,9 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                               ),
                             );
                           },
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(AppRadius.radiusLg),
                           child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: AppSpacing.cardPadding,
                             child: Row(
                               children: [
                                 Container(
@@ -168,7 +168,7 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                                     size: 28,
                                   ),
                                 ),
-                                const SizedBox(width: 16),
+                                const SizedBox(width: AppSpacing.spacingLg),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -180,7 +180,7 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      const SizedBox(height: 4),
+                                      const SizedBox(height: AppSpacing.spacingXs),
                                       Row(
                                         children: [
                                           const Icon(Icons.timer_outlined,
@@ -209,7 +209,8 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                                                         : AppTheme.warning
                                                             .withOpacity(0.2)),
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
+                                                    BorderRadius.circular(
+                                                        AppRadius.radiusMd),
                                               ),
                                               child: Text(
                                                 flight.hasCrash
@@ -235,7 +236,7 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                                   ),
                                 ),
                                 const Icon(Icons.chevron_right_rounded,
-                                    color: Colors.white54, size: 28),
+                                    color: AppTheme.textTertiary, size: 28),
                               ],
                             ),
                           ),
@@ -247,14 +248,14 @@ class _RecordedFlightsState extends State<RecordedFlights> {
               ),
               if (state.hasMore)
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: AppSpacing.pagePadding,
                   child: ElevatedButton(
                     onPressed: () {
                       // TODO: Cargar más vuelos
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: Colors.black,
+                      backgroundColor: AppTheme.buttonColor,
                     ),
                     child: const Text('MOSTRAR MÁS'),
                   ),
@@ -265,14 +266,14 @@ class _RecordedFlightsState extends State<RecordedFlights> {
           return Center(
             child: Text(
               state.message,
-              style: const TextStyle(color: Colors.white),
+              style: AppTheme.statusMessage,
             ),
           );
         } else {
           return const Center(
             child: Text(
               'No hay grabaciones',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: AppTheme.textPrimary),
             ),
           );
         }

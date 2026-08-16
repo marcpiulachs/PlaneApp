@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paperwings/config/app_theme.dart';
 import '../bloc/flight_detail_bloc.dart';
 import '../models/recorded_item.dart';
 
@@ -34,12 +35,12 @@ class _FlightDetailPageState extends State<FlightDetailPage>
     final flightDetailBloc = BlocProvider.of<FlightDetailBloc>(context);
     flightDetailBloc.add(LoadFlightDetail(widget.flight.id));
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: AppTheme.backgroundDark,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: AppTheme.surfaceDarker,
         title: const Text(
           'Detalles del Vuelo',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: AppTheme.textPrimary),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
         bottom: TabBar(
@@ -62,7 +63,7 @@ class _FlightDetailPageState extends State<FlightDetailPage>
           } else if (state is FlightDetailError) {
             return Center(
                 child: Text(state.message,
-                    style: const TextStyle(color: Colors.red)));
+                    style: AppTheme.statusError));
           } else if (state is FlightDetailLoaded) {
             return TabBarView(
               controller: _tabController,
@@ -83,14 +84,14 @@ class _FlightDetailPageState extends State<FlightDetailPage>
 
   Widget _buildSummaryTabWithFlight(RecordedFlight flight) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: AppSpacing.pagePadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildStatusCard(flight),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.spacingLg),
           _buildStatsGrid(flight),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.spacingLg),
           _buildExtraMetrics(flight),
         ],
       ),
@@ -132,23 +133,20 @@ class _FlightDetailPageState extends State<FlightDetailPage>
             telemetry.length;
 
     return Card(
-      color: Colors.grey[850],
+      color: AppTheme.cardColor,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: AppSpacing.cardPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               'Métricas adicionales',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+              style: AppTheme.heading3,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.spacingMd),
             Wrap(
-              spacing: 16,
-              runSpacing: 12,
+              spacing: AppSpacing.spacingLg,
+              runSpacing: AppSpacing.spacingMd,
               children: [
                 _buildMetric('Aceleración máx X', maxAccelX.toStringAsFixed(2)),
                 _buildMetric('Aceleración máx Y', maxAccelY.toStringAsFixed(2)),
@@ -178,12 +176,14 @@ class _FlightDetailPageState extends State<FlightDetailPage>
         children: [
           Text(
             '$label: ',
-            style: const TextStyle(color: Colors.white70, fontSize: 13),
+            style: AppTheme.metricLabel,
           ),
           Text(
             value,
-            style: const TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+            style: AppTheme.metricLabel.copyWith(
+              color: AppTheme.textPrimary,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -193,16 +193,16 @@ class _FlightDetailPageState extends State<FlightDetailPage>
 
 Widget _buildStatusCard(RecordedFlight flight) {
   Color statusColor = flight.hasCrash
-      ? Colors.red
-      : (flight.hasEmergency ? Colors.orange : Colors.green);
+      ? AppTheme.error
+      : (flight.hasEmergency ? AppTheme.warning : AppTheme.success);
   String statusText = flight.hasCrash
       ? 'CRASH'
       : (flight.hasEmergency ? 'EMERGENCIA' : 'COMPLETADO');
 
   return Card(
-    color: Colors.grey[850],
+    color: AppTheme.cardColor,
     child: Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: AppSpacing.cardPadding,
       child: Column(
         children: [
           Row(
@@ -220,7 +220,7 @@ Widget _buildStatusCard(RecordedFlight flight) {
                   size: 30,
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: AppSpacing.spacingLg),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,19 +235,16 @@ Widget _buildStatusCard(RecordedFlight flight) {
                     ),
                     Text(
                       flight.formattedDate,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
-                      ),
+                      style: AppTheme.bodyMedium,
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Divider(color: Colors.grey[700]),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.spacingLg),
+          Divider(color: AppTheme.surfaceDarker),
+          const SizedBox(height: AppSpacing.spacingSm),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -267,22 +264,15 @@ Widget _buildStatusCard(RecordedFlight flight) {
 Widget _buildQuickStat(String label, String value, IconData icon) {
   return Column(
     children: [
-      Icon(icon, color: Colors.white70, size: 24),
-      const SizedBox(height: 4),
+      Icon(icon, color: AppTheme.textSecondary, size: 24),
+      const SizedBox(height: AppSpacing.spacingXs),
       Text(
         value,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
+        style: AppTheme.statValue,
       ),
       Text(
         label,
-        style: const TextStyle(
-          fontSize: 12,
-          color: Colors.white70,
-        ),
+        style: AppTheme.statLabel,
       ),
     ],
   );
@@ -293,48 +283,41 @@ Widget _buildStatsGrid(RecordedFlight flight) {
     crossAxisCount: 2,
     shrinkWrap: true,
     physics: const NeverScrollableScrollPhysics(),
-    mainAxisSpacing: 12,
-    crossAxisSpacing: 12,
+    mainAxisSpacing: AppSpacing.spacingMd,
+    crossAxisSpacing: AppSpacing.spacingMd,
     childAspectRatio: 1.8,
     children: [
       _buildStatCard(
           'Velocidad Máx',
           '${flight.maxSpeed.toStringAsFixed(1)} m/s',
           Icons.speed,
-          Colors.green),
+          AppTheme.success),
       _buildStatCard('Pitch Máx', '${flight.maxPitch.toStringAsFixed(1)}°',
-          Icons.swap_vert, Colors.orange),
+          Icons.swap_vert, AppTheme.warning),
       _buildStatCard('Roll Máx', '${flight.maxRoll.toStringAsFixed(1)}°',
-          Icons.swap_horiz, Colors.purple),
+          Icons.swap_horiz, AppTheme.chartRoll),
     ],
   );
 }
 
 Widget _buildStatCard(String label, String value, IconData icon, Color color) {
   return Card(
-    color: Colors.grey[850],
+    color: AppTheme.cardColor,
     child: Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(AppSpacing.spacingMd),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: color, size: 24),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.spacingSm),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+            style: AppTheme.statValue,
           ),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.white70,
-            ),
+            style: AppTheme.statLabel,
           ),
         ],
       ),
@@ -344,15 +327,15 @@ Widget _buildStatCard(String label, String value, IconData icon, Color color) {
 
 Widget _buildOrientationTabWithFlight(RecordedFlight flight) {
   return SingleChildScrollView(
-    padding: const EdgeInsets.all(16.0),
+    padding: AppSpacing.pagePadding,
     child: Column(
       children: [
-        _buildChartCard('Pitch (Cabeceo)', _getPitchData(flight), Colors.red),
-        const SizedBox(height: 16),
+        _buildChartCard('Pitch (Cabeceo)', _getPitchData(flight), AppTheme.chartPitch),
+        const SizedBox(height: AppSpacing.spacingLg),
         _buildChartCard(
-            'Roll (Alabeo)', _getRollData(flight), Colors.deepPurple),
-        const SizedBox(height: 16),
-        _buildChartCard('Yaw (Guiñada)', _getYawData(flight), Colors.lightBlue),
+            'Roll (Alabeo)', _getRollData(flight), AppTheme.chartRoll),
+        const SizedBox(height: AppSpacing.spacingLg),
+        _buildChartCard('Yaw (Guiñada)', _getYawData(flight), AppTheme.chartYaw),
       ],
     ),
   );
@@ -360,14 +343,14 @@ Widget _buildOrientationTabWithFlight(RecordedFlight flight) {
 
 Widget _buildMotionTabWithFlight(RecordedFlight flight) {
   return SingleChildScrollView(
-    padding: const EdgeInsets.all(16.0),
+    padding: AppSpacing.pagePadding,
     child: Column(
       children: [
-        _buildChartCard('Aceleración X', _getAccelXData(flight), Colors.red),
-        const SizedBox(height: 16),
-        _buildChartCard('Aceleración Y', _getAccelYData(flight), Colors.green),
-        const SizedBox(height: 16),
-        _buildChartCard('Aceleración Z', _getAccelZData(flight), Colors.blue),
+        _buildChartCard('Aceleración X', _getAccelXData(flight), AppTheme.chartAccelX),
+        const SizedBox(height: AppSpacing.spacingLg),
+        _buildChartCard('Aceleración Y', _getAccelYData(flight), AppTheme.chartAccelY),
+        const SizedBox(height: AppSpacing.spacingLg),
+        _buildChartCard('Aceleración Z', _getAccelZData(flight), AppTheme.chartAccelZ),
       ],
     ),
   );
@@ -375,21 +358,21 @@ Widget _buildMotionTabWithFlight(RecordedFlight flight) {
 
 Widget _buildSensorsTabWithFlight(RecordedFlight flight) {
   return SingleChildScrollView(
-    padding: const EdgeInsets.all(16.0),
+    padding: AppSpacing.pagePadding,
     child: Column(
       children: [
         _buildChartCard(
-            'Giroscopio X', _getGyroXData(flight), Colors.pinkAccent),
-        const SizedBox(height: 16),
+            'Giroscopio X', _getGyroXData(flight), AppTheme.chartGyroX),
+        const SizedBox(height: AppSpacing.spacingLg),
         _buildChartCard(
-            'Giroscopio Y', _getGyroYData(flight), Colors.tealAccent),
-        const SizedBox(height: 16),
+            'Giroscopio Y', _getGyroYData(flight), AppTheme.chartGyroY),
+        const SizedBox(height: AppSpacing.spacingLg),
         _buildChartCard(
-            'Giroscopio Z', _getGyroZData(flight), Colors.amberAccent),
-        const SizedBox(height: 16),
-        _buildChartCard('Motor 1', _getMotor1Data(flight), Colors.orange),
-        const SizedBox(height: 16),
-        _buildChartCard('Motor 2', _getMotor2Data(flight), Colors.deepOrange),
+            'Giroscopio Z', _getGyroZData(flight), AppTheme.chartGyroZ),
+        const SizedBox(height: AppSpacing.spacingLg),
+        _buildChartCard('Motor 1', _getMotor1Data(flight), AppTheme.chartMotor1),
+        const SizedBox(height: AppSpacing.spacingLg),
+        _buildChartCard('Motor 2', _getMotor2Data(flight), AppTheme.chartMotor2),
       ],
     ),
   );
@@ -400,21 +383,17 @@ Widget _buildChartCard(String title, List<FlSpot> data, Color color) {
       ? data.map((e) => e.x).reduce((a, b) => a > b ? a : b)
       : 10;
   return Card(
-    color: Colors.grey[850],
+    color: AppTheme.cardColor,
     child: Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: AppSpacing.cardPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+            style: AppTheme.heading3,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.spacingLg),
           SizedBox(
             height: 200,
             child: LineChart(
@@ -425,7 +404,7 @@ Widget _buildChartCard(String title, List<FlSpot> data, Color color) {
                   horizontalInterval: 1,
                   getDrawingHorizontalLine: (value) {
                     return FlLine(
-                      color: Colors.grey[700]!,
+                      color: AppTheme.surfaceDarker,
                       strokeWidth: 1,
                     );
                   },
@@ -438,8 +417,7 @@ Widget _buildChartCard(String title, List<FlSpot> data, Color color) {
                       getTitlesWidget: (value, meta) {
                         return Text(
                           value.toStringAsFixed(1),
-                          style: const TextStyle(
-                              color: Colors.white70, fontSize: 10),
+                          style: AppTheme.chartAxis,
                         );
                       },
                     ),
@@ -452,8 +430,7 @@ Widget _buildChartCard(String title, List<FlSpot> data, Color color) {
                       getTitlesWidget: (value, meta) {
                         return Text(
                           '${value.toInt()}s',
-                          style: const TextStyle(
-                              color: Colors.white70, fontSize: 10),
+                          style: AppTheme.chartAxis,
                         );
                       },
                     ),
