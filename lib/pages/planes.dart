@@ -5,8 +5,10 @@ import 'package:paperwings/bloc/home_bloc/home_event.dart';
 import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_bloc.dart';
 import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_event.dart';
 import 'package:paperwings/bloc/plane_carousel_bloc/plane_carousel_state.dart';
+import 'package:paperwings/config/app_theme.dart';
 import 'package:paperwings/pages/widgets/connected_indicator.dart';
 import 'package:paperwings/pages/widgets/plane_indicators.dart';
+import 'package:paperwings/widgets/full_width_button.dart';
 import 'package:paperwings/widgets/plane_carousel.dart';
 
 class Planes extends StatefulWidget {
@@ -41,11 +43,7 @@ class _PlanesState extends State<Planes> {
                 child: Center(
                   child: Text(
                     "Choose your aircraft",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: AppTheme.heading3,
                   ),
                 ),
               ),
@@ -70,7 +68,7 @@ class _PlanesState extends State<Planes> {
           return Center(
             child: Text(
               state.errorMessage,
-              style: const TextStyle(color: Colors.red),
+              style: AppTheme.statusError,
             ),
           );
         } else {
@@ -82,17 +80,13 @@ class _PlanesState extends State<Planes> {
 
   Widget _buildGoFlyButton() {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: ElevatedButton(
+      padding: AppSpacing.pagePadding,
+      child: FullWidthButton(
+        label: 'GO FLY!',
         onPressed: () {
           // Envía un evento para cambiar el tab activo a "COPKIT"
           context.read<HomeBloc>().add(const HomeTabChangedEvent(1));
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-          minimumSize: const Size(double.infinity, 50),
-        ),
-        child: const Text('GO FLY!'),
       ),
     );
   }

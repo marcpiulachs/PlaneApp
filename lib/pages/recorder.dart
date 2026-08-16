@@ -5,6 +5,8 @@ import 'package:paperwings/config/app_theme.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_events.dart';
 import 'package:paperwings/bloc/recordings_bloc/recordings_states.dart';
 import 'package:paperwings/pages/flight_detail_page.dart';
+import 'package:paperwings/widgets/full_width_button.dart';
+import 'package:paperwings/widgets/status_badge.dart';
 
 class RecordedFlights extends StatefulWidget {
   const RecordedFlights({super.key});
@@ -194,40 +196,15 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                                           if (flight.hasCrash ||
                                               flight.hasEmergency ||
                                               flight.hasWarning) ...[
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 2),
-                                              decoration: BoxDecoration(
-                                                color: flight.hasCrash
-                                                    ? AppTheme.error
-                                                        .withOpacity(0.2)
-                                                    : (flight.hasEmergency
-                                                        ? AppTheme.warning
-                                                            .withOpacity(0.2)
-                                                        : AppTheme.warning
-                                                            .withOpacity(0.2)),
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        AppRadius.radiusMd),
-                                              ),
-                                              child: Text(
-                                                flight.hasCrash
-                                                    ? 'Crash'
-                                                    : (flight.hasEmergency
-                                                        ? 'Emergencia'
-                                                        : 'Advertencia'),
-                                                style:
-                                                    AppTheme.bodySmall.copyWith(
-                                                  color: flight.hasCrash
-                                                      ? AppTheme.error
-                                                      : (flight.hasEmergency
-                                                          ? AppTheme.warning
-                                                          : AppTheme.warning),
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
+                                            StatusBadge(
+                                              label: flight.hasCrash
+                                                  ? 'Crash'
+                                                  : (flight.hasEmergency
+                                                      ? 'Emergencia'
+                                                      : 'Advertencia'),
+                                              color: flight.hasCrash
+                                                  ? AppTheme.error
+                                                  : AppTheme.warning,
                                             )
                                           ],
                                         ],
@@ -249,15 +226,11 @@ class _RecordedFlightsState extends State<RecordedFlights> {
               if (state.hasMore)
                 Padding(
                   padding: AppSpacing.pagePadding,
-                  child: ElevatedButton(
+                  child: FullWidthButton(
+                    label: 'MOSTRAR MÁS',
                     onPressed: () {
                       // TODO: Cargar más vuelos
                     },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: AppTheme.buttonColor,
-                    ),
-                    child: const Text('MOSTRAR MÁS'),
                   ),
                 ),
             ],

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/calibration_bloc.dart';
 import 'package:paperwings/config/app_theme.dart';
+import 'package:paperwings/widgets/full_width_button.dart';
+import 'package:paperwings/widgets/icon_circle.dart';
 import 'package:paperwings/widgets/instruction_item.dart';
 
 class CalibrationImuPage extends StatelessWidget {
@@ -25,19 +27,7 @@ class CalibrationImuPage extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   children: [
                     ListTile(
-                      leading: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: AppTheme.buttonColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.straighten,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      ),
+                      leading: const IconCircle(icon: Icons.straighten),
                       title: const Text(
                         'Instrucciones',
                         style: AppTheme.bodyLarge,
@@ -128,19 +118,13 @@ class CalibrationImuPage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: AppSpacing.spacingLg),
-                        child: ElevatedButton(
+                        child: FullWidthButton(
+                          label: 'Iniciar Calibración',
                           onPressed: () {
                             context
                                 .read<CalibrationBloc>()
                                 .add(CalibrateImuEvent());
                           },
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(double.infinity, 50),
-                            backgroundColor: AppTheme.buttonColor,
-                          ),
-                          child: const Text(
-                            'Iniciar Calibración',
-                          ),
                         ),
                       ),
                   ],

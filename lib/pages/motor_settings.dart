@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/motor_settings_bloc/motor_settings_bloc.dart';
 import 'package:paperwings/config/app_theme.dart';
 import 'package:paperwings/pages/widgets/line_chart.dart';
+import 'package:paperwings/widgets/full_width_button.dart';
 
 class MotorSettingsScreen extends StatefulWidget {
   const MotorSettingsScreen({super.key});
@@ -113,15 +114,11 @@ class _MotorSettingsScreenState extends State<MotorSettingsScreen> {
         //const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.all(AppSpacing.spacingMd),
-          child: ElevatedButton(
+          child: FullWidthButton(
+            label: '',
             onPressed: () {
               context.read<MotorSettingsBloc>().add(ToggleArmedState());
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.buttonColor,
-              minimumSize: const Size(double.infinity, 50),
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.spacingLg),
-            ),
             child: BlocBuilder<MotorSettingsBloc, MotorSettingsState>(
               builder: (context, state) {
                 return Text(

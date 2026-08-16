@@ -4,6 +4,8 @@ import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_event.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_state.dart';
 import 'package:paperwings/config/app_theme.dart';
+import 'package:paperwings/widgets/full_width_button.dart';
+import 'package:paperwings/widgets/icon_circle.dart';
 
 class EngineSettings extends StatefulWidget {
   const EngineSettings({
@@ -171,30 +173,22 @@ class _EngineSettingsState extends State<EngineSettings> {
                           "Ganancia derivativa para yaw. Reduce oscilaciones en la dirección del avión.",
                     ),
                     const SizedBox(height: AppSpacing.spacingLg),
-                    ElevatedButton(
+                    FullWidthButton(
+                      label: 'GUARDAR PID',
                       onPressed: () {
                         context
                             .read<PlaneSettingsBloc>()
                             .add(CommitAllPidSettings());
                       },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                        backgroundColor: AppTheme.buttonColor,
-                      ),
-                      child: const Text('GUARDAR PID'),
                     ),
                     const SizedBox(height: AppSpacing.spacingXl),
-                    ElevatedButton(
+                    FullWidthButton(
+                      label: 'FACTORY SETTINGS',
                       onPressed: () {
                         context.read<PlaneSettingsBloc>().add(
                               ResetFactorySettings(),
                             );
                       },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                        backgroundColor: AppTheme.buttonColor,
-                      ),
-                      child: const Text('FACTORY SETTINGS'),
                     ),
                     const SizedBox(height: AppSpacing.spacingXl),
                   ],
@@ -261,18 +255,7 @@ class _EngineSettingsState extends State<EngineSettings> {
           ),
         Row(
           children: [
-            Container(
-              width: 40, // Tamaño del círculo
-              height: 40,
-              decoration: const BoxDecoration(
-                color: AppTheme.buttonColor, // Fondo negro para el círculo
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                color: Colors.white,
-              ),
-            ),
+            IconCircle(icon: icon),
             Expanded(
               child: Slider(
                 value: value,

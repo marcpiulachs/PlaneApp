@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_event.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_state.dart';
+import 'package:paperwings/config/app_theme.dart';
+import 'package:paperwings/widgets/full_width_button.dart';
 
 class PowerSettings extends StatefulWidget {
   const PowerSettings({super.key});
@@ -20,13 +22,9 @@ class _PowerSettingsState extends State<PowerSettings> {
           children: [
             const Text(
               "Power",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppTheme.heading3,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.spacingLg),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -62,22 +60,10 @@ class _PowerSettingsState extends State<PowerSettings> {
     required VoidCallback onPressed,
   }) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: ElevatedButton(
+      padding: const EdgeInsets.all(AppSpacing.spacingMd),
+      child: FullWidthButton(
+        label: title,
         onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-          minimumSize: const Size(double.infinity, 50),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-        ),
-        child: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
       ),
     );
   }

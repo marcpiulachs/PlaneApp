@@ -5,6 +5,7 @@ import 'package:paperwings/bloc/mechanics_bloc/mechanics_event.dart';
 import 'package:paperwings/bloc/mechanics_bloc/mechanics_state.dart';
 import 'package:paperwings/config/app_theme.dart';
 import 'package:paperwings/pages/connect.dart';
+import 'package:paperwings/widgets/icon_circle.dart';
 
 class Mechanics extends StatefulWidget {
   const Mechanics({super.key});
@@ -50,21 +51,7 @@ class _MechanicsState extends State<Mechanics> {
                       itemBuilder: (context, index) {
                         final page = state.categories[index];
                         return ListTile(
-                          leading: Container(
-                            width: 40, // Tamaño del círculo
-                            height: 40,
-                            decoration: const BoxDecoration(
-                              color: AppTheme
-                                  .buttonColor, // Fondo negro para el círculo
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              page.icon,
-                              color:
-                                  Colors.white, // Ícono blanco para contraste
-                              size: 24,
-                            ),
-                          ),
+                          leading: IconCircle(icon: page.icon),
                           title: Text(
                             page.title,
                             style: AppTheme.heading3,

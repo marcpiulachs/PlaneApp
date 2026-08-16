@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_event.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_state.dart';
+import 'package:paperwings/config/app_theme.dart';
+import 'package:paperwings/widgets/icon_circle.dart';
 
 class BeaconSettings extends StatefulWidget {
   const BeaconSettings({
@@ -34,41 +36,22 @@ class _BeaconSettingsState extends State<BeaconSettings> {
           children: [
             const Text(
               "Beacon settings",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppTheme.heading3,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.spacingLg),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: AppSpacing.listPadding,
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
                   itemCount: options.length,
                   itemBuilder: (context, index) {
                     final optionName = options[index];
                     return ListTile(
-                      leading: Container(
-                        width: 40, // Tamaño del círculo
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: Colors.black, // Fondo negro para el círculo
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.lightbulb,
-                          color: Colors.white, // Ícono blanco para contraste
-                          size: 24,
-                        ),
-                      ),
+                      leading: const IconCircle(icon: Icons.lightbulb),
                       title: Text(
                         optionName,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                        style: AppTheme.bodyLarge,
                       ),
                       trailing: Radio<int>(
                         value: index,
