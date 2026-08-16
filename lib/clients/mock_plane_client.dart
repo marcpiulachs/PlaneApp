@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:developer' as developer;
+import 'dart:math';
+
+import 'package:paperwings/models/telemetry.dart';
 import 'plane_client_interface.dart';
 
 class MockPlaneClient implements IPlaneClient {
@@ -11,6 +14,18 @@ class MockPlaneClient implements IPlaneClient {
   int beacon = 0;
 
   double kp = 0, ki = 0, kd = 0;
+
+  final Random _rng = Random(42);
+
+  // Estado de la simulación de vuelo
+  double _m1 = 0, _m2 = 0;
+  double _pitch = 0, _roll = 0, _yaw = 0;
+  double _prevPitch = 0, _prevRoll = 0;
+  double _altitudeM = 0;
+  double _batterySoc = 100;
+  double _batteryVol = 8.4;
+  double _signal = 48;
+  int _tick = 0;
 
   // Implementación de los getters para las estadísticas
   @override
@@ -24,62 +39,11 @@ class MockPlaneClient implements IPlaneClient {
   final _onDisconnectStreamController = StreamController.broadcast();
   final _onConnectionFailedStreamController = StreamController.broadcast();
 
-  final _onGyroXController = StreamController<double>.broadcast();
-  final _onGyroYController = StreamController<double>.broadcast();
-  final _onGyroZController = StreamController<double>.broadcast();
-  final _onMagnetometerXController = StreamController<double>.broadcast();
-  final _onMagnetometerYController = StreamController<double>.broadcast();
-  final _onMagnetometerZController = StreamController<double>.broadcast();
-  final _onBarometerController = StreamController<double>.broadcast();
-  final _onMotor1SpeedController = StreamController<double>.broadcast();
-  final _onMotor2SpeedController = StreamController<double>.broadcast();
-  final _onBatterySocController = StreamController<double>.broadcast();
-  final _onBatteryVolController = StreamController<double>.broadcast();
-  final _onSignalController = StreamController<double>.broadcast();
-  final _onAccelerometerXController = StreamController<double>.broadcast();
-  final _onAccelerometerYController = StreamController<double>.broadcast();
-  final _onAccelerometerZController = StreamController<double>.broadcast();
-  final _onPitchController = StreamController<double>.broadcast();
-  final _onRollController = StreamController<double>.broadcast();
-  final _onYawController = StreamController<double>.broadcast();
+  final _telemetryController = StreamController<Telemetry>.broadcast();
 
-  // Streams para cada tipo de dato
+  // Stream con la telemetría del avión
   @override
-  Stream<double> get onGyroX => _onGyroXController.stream;
-  @override
-  Stream<double> get onGyroY => _onGyroYController.stream;
-  @override
-  Stream<double> get onGyroZ => _onGyroZController.stream;
-  @override
-  Stream<double> get onMagnetometerX => _onMagnetometerXController.stream;
-  @override
-  Stream<double> get onMagnetometerY => _onMagnetometerYController.stream;
-  @override
-  Stream<double> get onMagnetometerZ => _onMagnetometerZController.stream;
-  @override
-  Stream<double> get onBarometer => _onBarometerController.stream;
-  @override
-  Stream<double> get onMotor1Speed => _onMotor1SpeedController.stream;
-  @override
-  Stream<double> get onMotor2Speed => _onMotor2SpeedController.stream;
-  @override
-  Stream<double> get onBatterySoc => _onBatterySocController.stream;
-  @override
-  Stream<double> get onBatteryVol => _onBatteryVolController.stream;
-  @override
-  Stream<double> get onSignal => _onSignalController.stream;
-  @override
-  Stream<double> get onAccelerometerX => _onAccelerometerXController.stream;
-  @override
-  Stream<double> get onAccelerometerY => _onAccelerometerYController.stream;
-  @override
-  Stream<double> get onAccelerometerZ => _onAccelerometerZController.stream;
-  @override
-  Stream<double> get onPitch => _onPitchController.stream;
-  @override
-  Stream<double> get onRoll => _onRollController.stream;
-  @override
-  Stream<double> get onYaw => _onYawController.stream;
+  Stream<Telemetry> get telemetryStream => _telemetryController.stream;
 
   // Exponer el Stream público
   @override
@@ -101,15 +65,85 @@ class MockPlaneClient implements IPlaneClient {
     // Iniciar simulación de datos
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (_armed) {
-        _simulateGyroData();
-        _simulateAccelerometerData();
-        _simulateMagnetometerData();
-        _simulateBarometerData();
-        _simulateMotorData();
-        _simulateBattery();
-        _simulateSignal();
+        _telemetryController.add(_buildTelemetry());
       }
     });
+  }
+
+  Telemetry _buildTelemetry() {
+    const dt = 0.1; // 100 ms por tick
+    _tick++;
+    final t = _tick;
+
+    // Motores: rampa suave hacia el throttle
+    _m1 += (_throttle - _m1) * 0.35;
+    _m2 += (_throttle * 0.98 - _m2) * 0.35;
+
+    // Actitud: vaivén suave más pronunciado con potencia
+    _prevPitch = _pitch;
+    _prevRoll = _roll;
+    final activity = 0.35 + _throttle / 100;
+    final pitchTarget =
+        (_throttle / 100) * 8 + 5 * activity * sin(t * 0.04);
+    final rollTarget = 14 * activity * sin(t * 0.025);
+    _pitch += (pitchTarget.clamp(-25.0, 25.0) - _pitch) * 0.03;
+    _roll += (rollTarget.clamp(-35.0, 35.0) - _roll) * 0.03;
+
+    // Rumbo: viraje a la derecha con la potencia (virada estándar ≈ 3 °/s)
+    final yawRate = (_throttle / 100) * (2.0 + 0.6 * sin(t * 0.02));
+    _yaw = (_yaw + yawRate * dt) % 360;
+
+    // Altitud: sube cuando hay potencia, se mantiene si no
+    final climb = max(0.0, (_throttle / 100) * 3.0 - 0.3);
+    _altitudeM = max(0.0, _altitudeM + climb * dt);
+    final baro = 1013.25 *
+        pow(1 - _altitudeM / 44330, 1 / 0.190284).toDouble();
+
+    // Batería: descarga con el consumo de los motores
+    _batterySoc =
+        max(0.0, _batterySoc - (0.2 + _throttle / 100) * dt);
+    _batteryVol = 7.0 +
+        (_batterySoc / 100) * 1.4 +
+        _rng.nextDouble() * 0.05;
+
+    // Señal: paseo aleatorio que sube/baja
+    _signal = (_signal + (_rng.nextDouble() - 0.5) * 3).clamp(12.0, 60.0);
+
+    // Acelerómetros coherentes con el vuelo
+    final accelX = 0.3 * sin(t * 0.05); // derrape en el viraje
+    final accelY = 0.2 * cos(t * 0.04);
+    final accelZ = 500 + _pitch * 5 + _roll.abs() * 4 + 30 * sin(t * 0.05);
+
+    // Giroscopios en grados/segundo
+    final gyroX = (_roll - _prevRoll) / dt;
+    final gyroY = (_pitch - _prevPitch) / dt;
+    final gyroZ = yawRate / 3 * 100; // 0..1 = deflexión completa del TC
+
+    // Magnetómetro coherente con el rumbo
+    final magX = 1000 * cos(_yaw * pi / 180);
+    final magY = 1000 * sin(_yaw * pi / 180);
+    final magZ = _yaw;
+
+    return Telemetry(
+      gyroX: gyroX,
+      gyroY: gyroY,
+      gyroZ: gyroZ,
+      magX: magX,
+      magY: magY,
+      magZ: magZ,
+      barometer: baro,
+      motor1Speed: _m1,
+      motor2Speed: _m2,
+      batterySoc: _batterySoc,
+      batteryVol: _batteryVol,
+      signal: _signal,
+      accelX: accelX,
+      accelY: accelY,
+      accelZ: accelZ,
+      pitch: _pitch,
+      roll: _roll,
+      yaw: _yaw,
+    );
   }
 
   @override
@@ -125,8 +159,10 @@ class MockPlaneClient implements IPlaneClient {
     _armed = armed;
     if (!_armed) {
       // Detener motores
-      _onMotor1SpeedController.add(0);
-      _onMotor2SpeedController.add(0);
+      _telemetryController.add(_buildTelemetry().copyWith(
+            motor1Speed: 0,
+            motor2Speed: 0,
+          ));
     }
   }
 
@@ -144,49 +180,6 @@ class MockPlaneClient implements IPlaneClient {
   @override
   bool get isConnected => _isConnected;
 
-  // Simulaciones de datos
-  void _simulateGyroData() {
-    _onGyroXController.add(_generateRandomInt(-1000, 1000));
-    _onGyroYController.add(_generateRandomInt(-1000, 1000));
-    _onGyroZController.add(_generateRandomInt(-1000, 1000));
-  }
-
-  void _simulateAccelerometerData() {
-    _onAccelerometerXController.add(_generateRandomInt(-1000, 1000));
-    _onAccelerometerYController.add(_generateRandomInt(-1000, 1000));
-    _onAccelerometerZController.add(_generateRandomInt(-1000, 1000));
-  }
-
-  void _simulateMagnetometerData() {
-    _onMagnetometerXController.add(_generateRandomInt(-1000, 1000));
-    _onMagnetometerYController.add(_generateRandomInt(-1000, 1000));
-    _onMagnetometerZController.add(_generateRandomInt(-1000, 1000));
-  }
-
-  void _simulateBarometerData() {
-    _onBarometerController.add(_generateRandomInt(1013, 1010)); // hPa
-  }
-
-  void _simulateMotorData() {
-    int motorSpeed1 = (_throttle * 1).clamp(0, 100);
-    int motorSpeed2 = (_throttle * 2).clamp(0, 100);
-    _onMotor1SpeedController.add(motorSpeed1.toDouble());
-    _onMotor2SpeedController.add(motorSpeed2.toDouble());
-  }
-
-  void _simulateBattery() {
-    _onBarometerController.add(_generateRandomInt(0, 100)); // hPa
-  }
-
-  void _simulateSignal() {
-    _onBarometerController.add(_generateRandomInt(12, 60)); // hPa
-  }
-
-  double _generateRandomInt(double min, int max) {
-    return min +
-        (max - min) * (DateTime.now().millisecondsSinceEpoch % 100) ~/ 100;
-  }
-
   // Método para actualizar la propiedad y emitir el cambio
   void setConnected(bool value) {
     if (_isConnected != value) {
@@ -195,9 +188,13 @@ class MockPlaneClient implements IPlaneClient {
     }
   }
 
-  // Método de limpieza para cerrar el StreamController cuando no se use
+  // Método de limpieza para cerrar los StreamController cuando no se use
   void dispose() {
     _connectedStreamController.close();
+    _telemetryController.close();
+    _onConnectStreamController.close();
+    _onDisconnectStreamController.close();
+    _onConnectionFailedStreamController.close();
   }
 
   @override

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:paperwings/config/app_theme.dart';
+
 class PaperPlane3D extends StatefulWidget {
-  final double roll; // Inclinación en el eje Z
-  final double pitch; // Inclinación en el eje X
-  final double yaw; // Rotación en el eje Y
+  final double roll;
+  final double pitch;
+  final double yaw;
   final double pitchOffset;
   final double yawOffset;
   final double rollOffset;
 
-  // Constructor del widget con parámetros roll, pitch, yaw y offsets
   const PaperPlane3D({
     super.key,
     required this.roll,
@@ -32,7 +33,6 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
   @override
   void initState() {
     super.initState();
-    // Inicializamos los valores de rotación según roll y pitch
     _rotationX = widget.pitch;
     _rotationY = widget.yaw;
     _rotationZ = widget.roll;
@@ -41,16 +41,12 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
   @override
   void didUpdateWidget(PaperPlane3D oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Actualizamos las rotaciones si los valores de roll, pitch o yaw cambian
     if (oldWidget.roll != widget.roll ||
         oldWidget.pitch != widget.pitch ||
         oldWidget.yaw != widget.yaw) {
       setState(() {
-        // Convertir pitch a radianes y aplicar offset
         _rotationX = -widget.pitch * (math.pi / 180) + widget.pitchOffset;
-        // Convertir yaw a radianes y aplicar offset
         _rotationZ = (widget.yaw + widget.yawOffset) * (math.pi / 180);
-        // Convertir roll a radianes y aplicar offset
         _rotationY = (widget.roll + widget.rollOffset) * (math.pi / 180);
       });
     }
@@ -60,30 +56,35 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final size = constraints.maxHeight - 60;
         return Stack(
-          alignment: Alignment.center, // Centra los elementos
+          alignment: Alignment.center,
           children: [
+            // Horizonte de referencia (oscuro, estilo cabina)
             SizedBox(
-              height: constraints.maxHeight - 60,
-              width: constraints.maxHeight - 60,
+              height: size,
+              width: size,
+              child: CustomPaint(
+                painter: _BackdropPainter(roll: widget.roll, pitch: widget.pitch),
+              ),
+            ),
+            SizedBox(
+              height: size,
+              width: size,
               child: Transform(
                 alignment: Alignment.center,
                 transform: Matrix4.identity()
-                  ..rotateX(_rotationX) // Pitch (eje X)
-                  ..rotateY(_rotationY) // Rotación Y (libre)
-                  ..rotateZ(_rotationZ), // Roll (eje Z)
+                  ..rotateX(_rotationX)
+                  ..rotateY(_rotationY)
+                  ..rotateZ(_rotationZ),
                 child: CustomPaint(
-                  size: Size(
-                    constraints.maxWidth,
-                    constraints.maxHeight,
-                  ),
                   painter: PaperPlanePainter(
                     roll: widget.roll,
                     pitch: widget.pitch,
                   ),
                 ),
               ),
-            )
+            ),
           ],
         );
       },
@@ -91,10 +92,61 @@ class _PaperPlane3DState extends State<PaperPlane3D> {
   }
 }
 
-// Widget que dibuja el avión de papel
+/// Fondo oscuro con horizonte que acompaña al avión de papel.
+class _BackdropPainter extends CustomPainter {
+  final double roll;
+  final double pitch;
+
+  _BackdropPainter({required this.roll, required this.pitch});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final horizonY = center.dy + pitch * (size.height / 90);
+
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(roll * math.pi / 180);
+    canvas.translate(-center.dx, -center.dy);
+
+    final skyRect = Rect.fromLTRB(0, 0, size.width, horizonY);
+    canvas.drawRect(
+      skyRect,
+      Paint()
+        ..shader = const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFF1A2333), Color(0xFF2E4057)],
+        ).createShader(skyRect),
+    );
+    final groundRect = Rect.fromLTRB(0, horizonY, size.width, size.height);
+    canvas.drawRect(
+      groundRect,
+      Paint()
+        ..shader = const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFF3A3A44), Color(0xFF1C1C22)],
+        ).createShader(groundRect),
+    );
+    canvas.drawLine(
+      Offset(0, horizonY),
+      Offset(size.width, horizonY),
+      Paint()
+        ..color = AppTheme.instrumentMark.withValues(alpha: 0.6)
+        ..strokeWidth = 2,
+    );
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant _BackdropPainter oldDelegate) =>
+      oldDelegate.roll != roll || oldDelegate.pitch != pitch;
+}
+
 class PaperPlanePainter extends CustomPainter {
-  final double roll; // Ángulo de rotación lateral (en grados)
-  final double pitch; // Ángulo de cabeceo (en grados)
+  final double roll;
+  final double pitch;
 
   PaperPlanePainter({required this.roll, required this.pitch});
 
@@ -109,22 +161,17 @@ class PaperPlanePainter extends CustomPainter {
       ..strokeWidth = 2;
 
     final path = Path();
-    path.moveTo(size.width * 0.5, 0); // Punta del avión
-    path.lineTo(size.width, size.height); // Ala derecha
-    path.lineTo(size.width * 0.5, size.height * 0.7); // Cola
-    path.lineTo(0, size.height); // Ala izquierda
+    path.moveTo(size.width * 0.5, 0);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width * 0.5, size.height * 0.7);
+    path.lineTo(0, size.height);
     path.close();
 
-    // Dibujar la forma del avión de papel
     canvas.drawPath(path, paint);
-
-    // Dibujar una línea para darle más apariencia de avión
     canvas.drawLine(Offset(size.width * 0.5, 0),
         Offset(size.width * 0.5, size.height * 0.7), linePaint);
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

@@ -22,6 +22,15 @@ class AppTheme {
   static final Color mechanicsColor = Colors.teal.shade700;
   static final Color settingsColor = Colors.green.shade700;
 
+  // Colores de instrumentos de vuelo
+  static const Color instrumentFace = Color(0xFF0C0C10); // Cara del dial
+  static const Color instrumentMark = Color(0xFFD9D9DE); // Marcas/agujas
+  static const Color instrumentBezel = Color(0xFF3A3A40); // Bisel
+  static const Color sky = Color(0xFF2E4E8C); // Cielo (ADI)
+  static const Color skyHorizon = Color(0xFF7FA6D9); // Cielo cerca del horizonte
+  static const Color ground = Color(0xFF6B4A2F); // Tierra (ADI)
+  static const Color groundHorizon = Color(0xFFA97E55); // Tierra cerca del horizonte
+
   // Text Styles
   static const TextStyle heading1 = TextStyle(
     fontSize: 24,

@@ -23,6 +23,14 @@ import 'package:paperwings/repositories/recorder_repository.dart';
 import 'package:paperwings/config/app_theme.dart';
 import 'package:provider/provider.dart';
 
+// Permite seleccionar entre el cliente simulado y el real al lanzar:
+//   flutter run --dart-define=USE_MOCK=true   -> MockPlaneClient
+//   flutter run                              -> TcpPlaneClient
+const bool useMockClient = bool.fromEnvironment(
+  'USE_MOCK',
+  defaultValue: false,
+);
+
 void main() {
   runApp(const MyApp());
 }
@@ -43,8 +51,9 @@ class MyApp extends StatelessWidget {
           create: (context) => EventBus(),
         ),
         Provider<IPlaneClient>(
-          //create: (context) => MockPlaneClient(),
-          create: (context) => TcpPlaneClient(host: '192.168.4.1', port: 3333),
+          create: (context) => useMockClient
+              ? MockPlaneClient()
+              : TcpPlaneClient(),
         ),
         BlocProvider<SensorBloc>(
           create: (context) => SensorBloc(

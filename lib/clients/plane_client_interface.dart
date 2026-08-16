@@ -1,3 +1,5 @@
+import 'package:paperwings/models/telemetry.dart';
+
 abstract class IPlaneClient {
   // Estado
   Future<void> connect();
@@ -47,25 +49,8 @@ abstract class IPlaneClient {
   int get packetsOk;
   int get packetsWithError;
 
-  // Callbacks
-  Stream<double> get onGyroX;
-  Stream<double> get onGyroY;
-  Stream<double> get onGyroZ;
-  Stream<double> get onMagnetometerX;
-  Stream<double> get onMagnetometerY;
-  Stream<double> get onMagnetometerZ;
-  Stream<double> get onBarometer;
-  Stream<double> get onMotor1Speed;
-  Stream<double> get onMotor2Speed;
-  Stream<double> get onBatterySoc;
-  Stream<double> get onBatteryVol;
-  Stream<double> get onSignal;
-  Stream<double> get onAccelerometerX;
-  Stream<double> get onAccelerometerY;
-  Stream<double> get onAccelerometerZ;
-  Stream<double> get onPitch;
-  Stream<double> get onRoll;
-  Stream<double> get onYaw;
+  // Stream con la telemetría del avión
+  Stream<Telemetry> get telemetryStream;
 
   // Stream que emite los cambios de conexión
   Stream<bool> get connectedStream;

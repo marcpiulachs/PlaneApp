@@ -1,12 +1,15 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
+import 'package:paperwings/models/telemetry.dart';
 
 part 'motor_settings_event.dart';
 part 'motor_settings_state.dart';
 
 class MotorSettingsBloc extends Bloc<MotorSettingsEvent, MotorSettingsState> {
   final IPlaneClient client;
+  late final StreamSubscription<Telemetry> _telemetrySubscription;
   MotorSettingsBloc({required this.client})
       : super(const MotorSettingsState(
           isArmed: false,
@@ -15,11 +18,9 @@ class MotorSettingsBloc extends Bloc<MotorSettingsEvent, MotorSettingsState> {
           motor1Value: 0,
           motor2Value: 0,
         )) {
-    client.onMotor1Speed.listen((value) {
-      add(Motor1SpeedUpdated(value));
-    });
-    client.onMotor2Speed.listen((value) {
-      add(Motor2SpeedUpdated(value));
+    _telemetrySubscription = client.telemetryStream.listen((telemetry) {
+      add(Motor1SpeedUpdated(telemetry.motor1Speed));
+      add(Motor2SpeedUpdated(telemetry.motor2Speed));
     });
 
     on<ToggleArmedState>((event, emit) {
@@ -49,5 +50,11 @@ class MotorSettingsBloc extends Bloc<MotorSettingsEvent, MotorSettingsState> {
     on<Motor2SpeedUpdated>((event, emit) {
       emit(state.copyWith(motor2Value: event.value));
     });
+  }
+
+  @override
+  Future<void> close() {
+    _telemetrySubscription.cancel();
+    return super.close();
   }
 }

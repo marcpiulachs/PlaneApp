@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Paperwings (Real)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Paperwings (Mock)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "args": ["--dart-define=USE_MOCK=true"]
+    }
+  ]
+}

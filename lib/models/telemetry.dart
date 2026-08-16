@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class Telemetry {
   final double gyroX;
   final double gyroY;
@@ -5,6 +7,7 @@ class Telemetry {
   final double magX;
   final double magY;
   final double magZ;
+  final double barometer;
   final double motor1Speed;
   final double motor2Speed;
   final double batterySoc;
@@ -24,6 +27,7 @@ class Telemetry {
     this.magX = 0,
     this.magY = 0,
     this.magZ = 0,
+    this.barometer = 0,
     this.motor1Speed = 0,
     this.motor2Speed = 0,
     this.batterySoc = 0,
@@ -44,7 +48,9 @@ class Telemetry {
   }
 
   double get altitude {
-    return 0;
+    // Presión-altitud aproximada en metros (fórmula barométrica ISA).
+    if (barometer <= 0) return 0;
+    return 44330 * (1 - pow(barometer / 1013.25, 0.190284)).toDouble();
   }
 
   /// Tasa de giro en grados por segundo
@@ -64,6 +70,7 @@ class Telemetry {
     double? magX,
     double? magY,
     double? magZ,
+    double? barometer,
     double? motor1Speed,
     double? motor2Speed,
     double? batterySoc,
@@ -83,6 +90,7 @@ class Telemetry {
       magX: magX ?? this.magX,
       magY: magY ?? this.magY,
       magZ: magZ ?? this.magZ,
+      barometer: barometer ?? this.barometer,
       motor1Speed: motor1Speed ?? this.motor1Speed,
       motor2Speed: motor2Speed ?? this.motor2Speed,
       batterySoc: batterySoc ?? this.batterySoc,

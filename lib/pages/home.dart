@@ -142,15 +142,18 @@ class _MyHomePageState extends State<MyHomePage>
                       style: AppTheme.heading1,
                     ),
                     Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: const [
-                          Planes(),
-                          Fly(),
-                          RecordedFlights(),
-                          Mechanics(),
-                          Settings(),
-                        ],
+                      child: SafeArea(
+                        top: false,
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: const [
+                            Planes(),
+                            Fly(),
+                            RecordedFlights(),
+                            Mechanics(),
+                            Settings(),
+                          ],
+                        ),
                       ),
                     ),
                   ],

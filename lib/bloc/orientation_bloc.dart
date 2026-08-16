@@ -1,12 +1,15 @@
+import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
+import 'package:paperwings/models/telemetry.dart';
 
 part 'orientation_event.dart';
 part 'orientation_state.dart';
 
 class OrientationBloc extends Bloc<OrientationEvent, OrientationState> {
   final IPlaneClient client;
+  StreamSubscription<Telemetry>? _telemetrySubscription;
   OrientationBloc({required this.client}) : super(const OrientationState()) {
     on<OrientationStart>(_onStart);
     on<OrientationYawChanged>(_onYawChanged);
@@ -15,14 +18,10 @@ class OrientationBloc extends Bloc<OrientationEvent, OrientationState> {
   }
 
   void _onStart(OrientationStart event, Emitter<OrientationState> emit) {
-    client.onYaw.listen((yaw) {
-      add(OrientationYawChanged(yaw));
-    });
-    client.onPitch.listen((pitch) {
-      add(OrientationPitchChanged(pitch));
-    });
-    client.onRoll.listen((roll) {
-      add(OrientationRollChanged(roll));
+    _telemetrySubscription ??= client.telemetryStream.listen((telemetry) {
+      add(OrientationYawChanged(telemetry.yaw));
+      add(OrientationPitchChanged(telemetry.pitch));
+      add(OrientationRollChanged(telemetry.roll));
     });
   }
 
@@ -39,5 +38,11 @@ class OrientationBloc extends Bloc<OrientationEvent, OrientationState> {
   void _onRollChanged(
       OrientationRollChanged event, Emitter<OrientationState> emit) {
     emit(state.copyWith(roll: event.roll));
+  }
+
+  @override
+  Future<void> close() {
+    _telemetrySubscription?.cancel();
+    return super.close();
   }
 }

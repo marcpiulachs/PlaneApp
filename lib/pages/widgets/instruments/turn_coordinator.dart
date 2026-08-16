@@ -1,9 +1,11 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
 
-class TurnCoordinator extends StatefulWidget {
-  final double turnRate; // Rango: -1.0 (izquierda) a 1.0 (derecha)
-  final double slip; // Rango: -1.0 (izquierda) a 1.0 (derecha)
+import 'package:flutter/material.dart';
+import 'package:paperwings/pages/widgets/instruments/instrument_bezel.dart';
+
+class TurnCoordinator extends StatelessWidget {
+  final double turnRate; // -1.0 (izquierda) a 1.0 (derecha)
+  final double slip; // -1.0 (izquierda) a 1.0 (derecha)
 
   const TurnCoordinator({
     super.key,
@@ -12,298 +14,234 @@ class TurnCoordinator extends StatefulWidget {
   });
 
   @override
-  State<TurnCoordinator> createState() => _TurnCoordinatorState();
+  Widget build(BuildContext context) {
+    return InstrumentBezel(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final s = constraints.maxHeight;
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              // Arco de referencia del giro (0.5 = virada estándar)
+              Positioned(
+                top: s * 0.06,
+                child: SizedBox(
+                  width: s,
+                  height: s * 0.55,
+                  child: CustomPaint(
+                    painter: _ArcPainter(),
+                  ),
+                ),
+              ),
+              // Índice fijo superior
+              Positioned(
+                top: s * 0.06,
+                child: SizedBox(
+                  width: s,
+                  height: s * 0.55,
+                  child: CustomPaint(
+                    painter: _IndexTrianglePainter(),
+                  ),
+                ),
+              ),
+              // Avión que se inclina según la tasa de giro
+              Positioned(
+                top: s * 0.06,
+                child: SizedBox(
+                  width: s,
+                  height: s * 0.55,
+                  child: Transform.rotate(
+                    angle: -turnRate * (pi / 6),
+                    child: const Center(
+                      child: CustomPaint(
+                        size: Size.square(80),
+                        painter: MiniPlanePainter(),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // Bola de derrape
+              Positioned(
+                bottom: s * 0.20,
+                child: SizedBox(
+                  width: s * 0.62,
+                  height: s * 0.10,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: s * 0.62,
+                        height: s * 0.07,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(s * 0.035),
+                          color: Colors.white.withValues(alpha: 0.25),
+                        ),
+                      ),
+                      Positioned(
+                        left: (slip + 1) / 2 * (s * 0.62 - s * 0.08),
+                        child: Container(
+                          width: s * 0.08,
+                          height: s * 0.08,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Lecturas digitales
+              Positioned(
+                bottom: s * 0.04,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _Readout(label: 'TURN', value: turnRate),
+                    SizedBox(width: s * 0.10),
+                    _Readout(label: 'SLIP', value: slip),
+                  ],
+                ),
+              ),
+              const GlassReflection(),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }
 
-class _TurnCoordinatorState extends State<TurnCoordinator>
-    with SingleTickerProviderStateMixin {
+class _Readout extends StatelessWidget {
+  final String label;
+  final double value;
+
+  const _Readout({required this.label, required this.value});
+
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            // Fondo del indicador
-            Container(
-              height: constraints.maxHeight,
-              width: constraints.maxHeight,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.grey.shade900,
-                border: Border.all(color: Colors.black, width: 2),
-              ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.85),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: Colors.white24),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white54,
+              fontSize: 9,
+              fontWeight: FontWeight.bold,
             ),
-            // Avión central, marcas L/R y marcas de alineación
-            Positioned(
-              top: constraints.maxHeight * 0.18,
-              child: SizedBox(
-                width: constraints.maxHeight,
-                height: 100,
-                child: Stack(
-                  children: [
-                    // Avión
-                    Align(
-                      alignment: Alignment.center,
-                      child: Transform.rotate(
-                        angle: -widget.turnRate * pi / 4,
-                        child: CustomPaint(
-                          size: const Size(100, 100),
-                          painter: AirplanePainter(),
-                        ),
-                      ),
-                    ),
-
-                    // Alignment marks estilo instrumento real (izquierda)
-                    Positioned(
-                      left: 8,
-                      top: 54,
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 18,
-                            height: 3,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(height: 7),
-                          Text('L',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13)),
-                          const SizedBox(height: 7),
-                          Container(
-                            width: 18,
-                            height: 3,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Alignment marks estilo instrumento real (derecha)
-                    Positioned(
-                      right: 8,
-                      top: 54,
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 18,
-                            height: 3,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(height: 7),
-                          Text('R',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13)),
-                          const SizedBox(height: 7),
-                          Container(
-                            width: 18,
-                            height: 3,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          ),
+          Text(
+            value.toStringAsFixed(2),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              fontFeatures: [FontFeature.tabularFigures()],
             ),
-            // Bola que se mueve lateralmente para indicar deslizamiento
-            Positioned(
-              bottom: 30,
-              child: SizedBox(
-                width: 120,
-                height: 24,
-                child: Stack(
-                  children: [
-                    // Fondo y bola
-                    Container(
-                      width: 120,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white.withOpacity(0.3),
-                      ),
-                    ),
-                    // Bola
-                    Positioned(
-                      left: ((widget.slip + 1) / 2) * 100,
-                      top: 0,
-                      child: Container(
-                        width: 20,
-                        height: 20,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            // Pantallas digitales TURN y SLIP debajo del avión
-            Positioned(
-              top: constraints.maxHeight * 0.55,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 70,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.85),
-                      borderRadius: BorderRadius.circular(7),
-                      border: Border.all(color: Colors.white24, width: 1),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'TURN',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.turnRate.toStringAsFixed(2),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            Icon(Icons.sync_alt,
-                                color: Colors.orange, size: 16),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Container(
-                    width: 70,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.85),
-                      borderRadius: BorderRadius.circular(7),
-                      border: Border.all(color: Colors.white24, width: 1),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'SLIP',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.slip.toStringAsFixed(2),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            Icon(Icons.horizontal_rule,
-                                color: Colors.blue, size: 16),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 }
 
-class AirplanePainter extends CustomPainter {
+class _ArcPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
+    final center = Offset(size.width / 2, size.height * 0.95);
+    final radius = size.width * 0.62;
+    final rect = Rect.fromCircle(center: center, radius: radius);
+    final paint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.35)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+    // Arco superior de ~180°.
+    canvas.drawArc(rect, pi, pi, false, paint);
+
+    // Marcas L/R en los extremos
+    final leftPaint = Paint()
       ..color = Colors.white
-      ..style = PaintingStyle.fill;
+      ..strokeWidth = 3;
+    canvas.drawLine(
+      Offset(size.width * 0.16, size.height * 0.28),
+      Offset(size.width * 0.16, size.height * 0.42),
+      leftPaint,
+    );
+    canvas.drawLine(
+      Offset(size.width * 0.84, size.height * 0.28),
+      Offset(size.width * 0.84, size.height * 0.42),
+      leftPaint,
+    );
+  }
 
-    // Dibujar la bola en el centro (cuerpo del avión)
-    double radius = 10.0; // Radio de la bola
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), radius, paint);
+  @override
+  bool shouldRepaint(covariant _ArcPainter oldDelegate) => false;
+}
 
-    // Dibujar las alas
-    paint.color = Colors.white; // Color de las alas
-    double wingLength = 60.0; // Longitud de las alas
-    double wingHeight = 5.0; // Altura de las alas
+class _IndexTrianglePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, 0);
+    final path = Path()
+      ..moveTo(center.dx, size.height * 0.08)
+      ..lineTo(center.dx - 6, 0)
+      ..lineTo(center.dx + 6, 0)
+      ..close();
+    canvas.drawPath(path, Paint()..color = Colors.white);
+  }
 
-    // Alas izquierda
-    canvas.drawRect(
-      Rect.fromLTWH(size.width / 2 - wingLength,
-          size.height / 2 - wingHeight / 2, wingLength, wingHeight),
+  @override
+  bool shouldRepaint(covariant _IndexTrianglePainter oldDelegate) => false;
+}
+
+class MiniPlanePainter extends CustomPainter {
+  const MiniPlanePainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final paint = Paint()..color = Colors.white;
+
+    // Fuselaje (punto)
+    canvas.drawCircle(center, 7, paint);
+
+    // Alas
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: center,
+          width: size.width * 0.55,
+          height: 5,
+        ),
+        const Radius.circular(2),
+      ),
       paint,
     );
 
-    // Alas derecha
-    canvas.drawRect(
-      Rect.fromLTWH(size.width / 2, size.height / 2 - wingHeight / 2,
-          wingLength, wingHeight),
-      paint,
-    );
-
-    // Dibujar la cola (una línea vertical en el centro hacia arriba)
-    double tailHeight = 20.0; // Altura de la cola
-    canvas.drawRect(
-      Rect.fromLTWH(size.width / 2 - 2.5, size.height / 2 - radius - tailHeight,
-          5, tailHeight), // Ajustar la posición
-      paint,
-    );
-
-    // Dibujar la cola (una línea vertical en el centro hacia arriba)
-    //double tailHeight = 20.0; // Altura de la cola
-    double tailWidth = 5.0; // Ancho de la cola
-    canvas.drawRect(
-      Rect.fromLTWH(
-          size.width / 2 - tailWidth / 2,
-          size.height / 2 - radius - tailHeight,
-          tailWidth,
-          tailHeight), // Ajustar la posición
+    // Cola
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: Offset(center.dx, center.dy - 16),
+          width: 5,
+          height: 12,
+        ),
+        const Radius.circular(2),
+      ),
       paint,
     );
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false; // No necesita repintarse
-  }
+  bool shouldRepaint(covariant MiniPlanePainter oldDelegate) => false;
 }

@@ -1,9 +1,14 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:flutter/material.dart';
+import 'package:paperwings/config/app_theme.dart';
+import 'package:paperwings/pages/widgets/instruments/instrument_bezel.dart';
+
+/// Attitude Direction Indicator (ADI): horizonte artificial con escala de
+/// banqueo, pitch ladder y silueta de avión fija, como en un cockpit real.
 class AttitudeIndicator extends StatelessWidget {
-  final double roll; // Ángulo de rotación lateral (en grados)
-  final double pitch; // Ángulo de cabeceo (en grados)
+  final double roll;
+  final double pitch;
 
   const AttitudeIndicator({
     super.key,
@@ -13,217 +18,222 @@ class AttitudeIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Stack(
-          alignment: Alignment.center, // Centra los elementos
-          children: [
-            Container(
-              height: constraints.maxHeight,
-              width: constraints.maxHeight,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(width: 2.0, color: Colors.grey.shade900),
+    return InstrumentBezel(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              // Parte rotatoria: cielo, tierra, horizonte y pitch ladder.
+              CustomPaint(
+                painter: _HorizonPainter(roll: roll, pitch: pitch),
               ),
-              child: ClipOval(
-                child: CustomPaint(
-                  painter: _AttitudeIndicatorPainter(roll: roll, pitch: pitch),
-                ),
+              // Parte fija: escala de banqueo, índice y silueta del avión.
+              CustomPaint(
+                painter: _FixedPlanePainter(),
               ),
-            ),
-            // Línea blanca que permanece inmóvil en el centro
-            // Representación del avión con una línea, semicírculo y otra línea
-            Positioned(
-              child: CustomPaint(
-                size: Size(constraints.maxHeight, constraints.maxHeight),
-                painter: _PlanePainter(),
-              ),
-            ),
-          ],
-        );
-      },
+              const GlassReflection(),
+            ],
+          );
+        },
+      ),
     );
   }
 }
 
-class _AttitudeIndicatorPainter extends CustomPainter {
-  final double roll; // Ángulo de rotación lateral (en grados)
-  final double pitch; // Ángulo de cabeceo (en grados)
+class _HorizonPainter extends CustomPainter {
+  final double roll;
+  final double pitch;
 
-  _AttitudeIndicatorPainter({required this.roll, required this.pitch});
+  _HorizonPainter({required this.roll, required this.pitch});
 
   @override
   void paint(Canvas canvas, Size size) {
-    double radius = size.width / 2;
-    Offset center = Offset(radius, radius);
+    final center = Offset(size.width / 2, size.height / 2);
+    final horizonY = center.dy + pitch * (size.height / 90);
 
-    // Aplicar la rotación del horizonte según el roll (invertido para convención de aviación)
     canvas.save();
     canvas.translate(center.dx, center.dy);
     canvas.rotate(roll * math.pi / 180);
     canvas.translate(-center.dx, -center.dy);
 
-    // Dibujar el fondo (cielo arriba y tierra abajo) y la línea del horizonte desplazada según el pitch
-    _drawBackgroundAndHorizon(canvas, size, pitch);
+    // Cielo
+    final skyRect = Rect.fromLTRB(0, 0, size.width, horizonY);
+    canvas.drawRect(
+      skyRect,
+      Paint()
+        ..shader = const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppTheme.sky, AppTheme.skyHorizon],
+        ).createShader(skyRect),
+    );
+    // Tierra
+    final groundRect =
+        Rect.fromLTRB(0, horizonY, size.width, size.height);
+    canvas.drawRect(
+      groundRect,
+      Paint()
+        ..shader = const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppTheme.groundHorizon, AppTheme.ground],
+        ).createShader(groundRect),
+    );
+    // Línea del horizonte
+    canvas.drawLine(
+      Offset(0, horizonY),
+      Offset(size.width, horizonY),
+      Paint()
+        ..color = Colors.white
+        ..strokeWidth = 2,
+    );
 
-    // Restaurar el canvas para que la línea central no se vea afectada
+    // Pitch ladder (cada 10°)
+    final pitchScale = size.height / 90;
+    for (int deg = 10; deg <= 60; deg += 10) {
+      for (final sign in [1, -1]) {
+        final d = deg * sign;
+        final y = horizonY - d * pitchScale;
+        final lineWidth = size.width * (0.16 + d.abs() * 0.003);
+        canvas.drawLine(
+          Offset(center.dx - lineWidth, y),
+          Offset(center.dx + lineWidth, y),
+          Paint()
+            ..color = Colors.white
+            ..strokeWidth = 2,
+        );
+        // Etiqueta de grados a la izquierda
+        if (deg % 10 == 0) {
+          _drawLadderLabel(
+              canvas, center.dx - lineWidth - 22, y, '${deg * sign}');
+        }
+      }
+    }
+
     canvas.restore();
   }
 
-  void _drawBackgroundAndHorizon(Canvas canvas, Size size, double pitch) {
-    Paint skyPaint = Paint()..color = Colors.blue;
-    Paint groundPaint = Paint()..color = Colors.brown;
-    Paint horizonLine = Paint()
-      ..color = Colors.white
-      ..strokeWidth = 2;
-
-    double pitchOffset =
-        pitch * (size.height / 90); // Escalar pitch a la pantalla
-
-    // Dibujar cielo y tierra
-    Rect skyRect =
-        Rect.fromLTRB(0, 0, size.width, size.height / 2 + pitchOffset);
-    Rect groundRect = Rect.fromLTRB(
-        0, size.height / 2 + pitchOffset, size.width, size.height);
-
-    canvas.drawRect(skyRect, skyPaint);
-    canvas.drawRect(groundRect, groundPaint);
-
-    // Dibujar la línea del horizonte
-    canvas.drawLine(
-      Offset(0, size.height / 2 + pitchOffset),
-      Offset(size.width, size.height / 2 + pitchOffset),
-      horizonLine,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true; // Se repinta cada vez que cambian los valores de roll o pitch
-  }
-}
-
-class _PlanePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    double radius = size.width / 2;
-    Offset center = Offset(radius, radius);
-
-    Paint leftLinePaint = Paint()
-      ..color = Colors.orange
-      ..strokeWidth = 5;
-
-    Paint rightLinePaint = Paint()
-      ..color = Colors.orange
-      ..strokeWidth = 5;
-
-    Paint semiCirclePaint = Paint()
-      ..color = Colors.black
-      ..strokeWidth = 5
-      ..style = PaintingStyle.stroke;
-
-    Paint degreeLinePaint = Paint()
-      ..color = Colors.white
-      ..strokeWidth = 2;
-
-    // Dibujar la línea corta izquierda
-    canvas.drawLine(
-      Offset(center.dx - 40, center.dy),
-      Offset(center.dx - 10, center.dy),
-      leftLinePaint,
-    );
-
-// Dibujar el semicírculo en el centro (invertido)
-    Rect semiCircleRect = Rect.fromCircle(center: center, radius: 10);
-    canvas.drawArc(
-      semiCircleRect,
-      0, // Empezar desde la parte superior
-      math.pi, // Dibujar un semicírculo hacia abajo
-      false,
-      semiCirclePaint,
-    );
-
-    // Dibujar la línea corta derecha
-    canvas.drawLine(
-      Offset(center.dx + 10, center.dy),
-      Offset(center.dx + 40, center.dy),
-      rightLinePaint,
-    );
-
-    // Dibujar las líneas de grados (positivos y negativos)
-    _drawDegreeLines(canvas, size, center, degreeLinePaint);
-  }
-
-  void _drawDegreeLines(Canvas canvas, Size size, Offset center, Paint paint) {
-    double spacing =
-        20; // Espacio entre líneas, ajustado según el tamaño del indicador
-
-    // Lista de grados y longitudes correspondientes
-    List<Map<String, dynamic>> degreeLines = [
-      {'degrees': 5, 'length': 10.0},
-      {'degrees': 10, 'length': 15.0},
-      {'degrees': 15, 'length': 20.0},
-      {'degrees': 20, 'length': 25.0},
-    ];
-
-    // Dibujar líneas de referencia hacia arriba (grados positivos) y texto
-    for (var i = 0; i < degreeLines.length; i++) {
-      int degrees = degreeLines[i]['degrees'];
-      double lineLength = degreeLines[i]['length'];
-      double yOffset = center.dy - (i + 1) * spacing;
-
-      // Dibujar la línea
-      canvas.drawLine(
-        Offset(center.dx - lineLength, yOffset),
-        Offset(center.dx + lineLength, yOffset),
-        paint,
-      );
-
-      // Dibujar los números de grados al lado de las líneas
-      _drawDegreeText(canvas, center, degrees, yOffset, lineLength);
-    }
-
-    // Dibujar líneas de referencia hacia abajo (grados negativos) y texto
-    for (var i = 0; i < degreeLines.length; i++) {
-      int degrees = degreeLines[i]['degrees'];
-      double lineLength = degreeLines[i]['length'];
-      double yOffset = center.dy + (i + 1) * spacing;
-
-      // Dibujar la línea
-      canvas.drawLine(
-        Offset(center.dx - lineLength, yOffset),
-        Offset(center.dx + lineLength, yOffset),
-        paint,
-      );
-
-      // Dibujar los números de grados al lado de las líneas
-      _drawDegreeText(canvas, center, -degrees, yOffset, lineLength);
-    }
-  }
-
-  void _drawDegreeText(Canvas canvas, Offset center, int degrees,
-      double yOffset, double lineLength) {
-    TextPainter textPainter = TextPainter(
+  void _drawLadderLabel(Canvas canvas, double x, double y, String text) {
+    final tp = TextPainter(
       text: TextSpan(
-        text: '$degrees°',
+        text: text,
         style: const TextStyle(
           color: Colors.white,
           fontSize: 12,
+          fontWeight: FontWeight.bold,
+          shadows: [Shadow(color: Colors.black, blurRadius: 3)],
         ),
       ),
       textDirection: TextDirection.ltr,
     );
-
-    // Dibujar el texto a la izquierda de la línea
-    textPainter.layout();
-    textPainter.paint(canvas, Offset(center.dx - lineLength - 25, yOffset - 6));
-
-    // Dibujar el texto a la derecha de la línea
-    textPainter.paint(canvas, Offset(center.dx + lineLength + 5, yOffset - 6));
+    tp.layout();
+    tp.paint(canvas, Offset(x - tp.width / 2, y - tp.height / 2));
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false; // La representación del avión y líneas es fija
+  bool shouldRepaint(covariant _HorizonPainter oldDelegate) =>
+      oldDelegate.roll != roll || oldDelegate.pitch != pitch;
+}
+
+class _FixedPlanePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+
+    // Escala de banqueo en la parte superior (no rota con el horizonte).
+    _drawBankScale(canvas, center, size.width / 2);
+    // Índice fijo superior.
+    _drawTopIndex(canvas, center, size.width / 2);
+
+    // Silueta del avión (fuselaje + alas).
+    final paint = Paint()..color = Colors.white;
+    final w = size.width;
+
+    // Fuselaje
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(center: center, width: w * 0.10, height: w * 0.34),
+        const Radius.circular(4),
+      ),
+      paint,
+    );
+    // Alas
+    final wingPaint = Paint()..color = Colors.black;
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: center,
+          width: w * 0.56,
+          height: w * 0.07,
+        ),
+        const Radius.circular(3),
+      ),
+      wingPaint,
+    );
+    // Empenaje
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: Offset(center.dx, center.dy - w * 0.22),
+          width: w * 0.20,
+          height: w * 0.08,
+        ),
+        const Radius.circular(3),
+      ),
+      paint,
+    );
   }
+
+  void _drawBankScale(Canvas canvas, Offset center, double radius) {
+    final markPaint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 2;
+    final trianglePaint = Paint()..color = Colors.white;
+
+    for (final side in [1, -1]) {
+      for (final deg in [0, 10, 20, 30, 45, 60, 90]) {
+        if (deg == 0 && side == -1) continue;
+        final d = deg * side;
+        final angleDeg = d.toDouble();
+        // En la parte superior: -90..90 desde la vertical.
+        final inner = polarPoint(center, radius * 0.86, angleDeg);
+        final outer = polarPoint(center, radius * 0.98, angleDeg);
+
+        if (deg == 30 || deg == 60) {
+          // Triángulo
+          final tip = outer;
+          final base = polarPoint(center, radius * 0.86, angleDeg);
+          final perp = polarPoint(center, radius * 0.95, angleDeg + 90);
+          final path = Path()
+            ..moveTo(tip.dx, tip.dy)
+            ..lineTo(base.dx, base.dy)
+            ..lineTo(perp.dx, perp.dy)
+            ..close();
+          canvas.drawPath(path, trianglePaint);
+        } else {
+          final lineEnd = polarPoint(
+              center,
+              radius * (deg == 0 ? 0.90 : deg == 45 ? 0.94 : 0.98),
+              angleDeg);
+          canvas.drawLine(inner, lineEnd, markPaint);
+        }
+      }
+    }
+  }
+
+  void _drawTopIndex(Canvas canvas, Offset center, double radius) {
+    final tip = polarPoint(center, radius * 0.95, 0);
+    final left = polarPoint(center, radius * 0.84, 10);
+    final right = polarPoint(center, radius * 0.84, -10);
+    final path = Path()
+      ..moveTo(tip.dx, tip.dy)
+      ..lineTo(left.dx, left.dy)
+      ..lineTo(right.dx, right.dy)
+      ..close();
+    canvas.drawPath(path, Paint()..color = Colors.orange);
+  }
+
+  @override
+  bool shouldRepaint(covariant _FixedPlanePainter oldDelegate) => false;
 }

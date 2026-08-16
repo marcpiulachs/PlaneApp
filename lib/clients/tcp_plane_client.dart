@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:developer' as developer;
 import 'package:paperwings/clients/plane_client_interface.dart';
+import 'package:paperwings/models/telemetry.dart';
 
 // Definición de la clase Packet con el método toBytes()
 class Packet {
@@ -171,6 +172,13 @@ class TcpPlaneClient implements IPlaneClient {
   late Socket _socket;
   bool _isConnected = false;
 
+  // Controlador del stream de telemetría
+  final _telemetryController = StreamController<Telemetry>.broadcast();
+  Telemetry _latestTelemetry = Telemetry();
+
+  // Buffer que acumula bytes entre lecturas del socket
+  final List<int> _packetBuffer = [];
+
   // Contadores para estadísticas
   @override
   int packetsOk = 0;
@@ -190,68 +198,18 @@ class TcpPlaneClient implements IPlaneClient {
   final _onDisconnectStreamController = StreamController.broadcast();
   final _onConnectionFailedStreamController = StreamController.broadcast();
 
-  final _onGyroXController = StreamController<double>.broadcast();
-  final _onGyroYController = StreamController<double>.broadcast();
-  final _onGyroZController = StreamController<double>.broadcast();
-  final _onMagnetometerXController = StreamController<double>.broadcast();
-  final _onMagnetometerYController = StreamController<double>.broadcast();
-  final _onMagnetometerZController = StreamController<double>.broadcast();
-  final _onBarometerController = StreamController<double>.broadcast();
-  final _onMotor1SpeedController = StreamController<double>.broadcast();
-  final _onMotor2SpeedController = StreamController<double>.broadcast();
-  final _onBatterySocController = StreamController<double>.broadcast();
-  final _onBatteryVolController = StreamController<double>.broadcast();
-  final _onSignalController = StreamController<double>.broadcast();
-  final _onAccelerometerXController = StreamController<double>.broadcast();
-  final _onAccelerometerYController = StreamController<double>.broadcast();
-  final _onAccelerometerZController = StreamController<double>.broadcast();
-  final _onPitchController = StreamController<double>.broadcast();
-  final _onRollController = StreamController<double>.broadcast();
-  final _onYawController = StreamController<double>.broadcast();
-
-  // Streams para cada tipo de dato
+  // Stream con la telemetría del avión
   @override
-  Stream<double> get onGyroX => _onGyroXController.stream;
-  @override
-  Stream<double> get onGyroY => _onGyroYController.stream;
-  @override
-  Stream<double> get onGyroZ => _onGyroZController.stream;
-  @override
-  Stream<double> get onMagnetometerX => _onMagnetometerXController.stream;
-  @override
-  Stream<double> get onMagnetometerY => _onMagnetometerYController.stream;
-  @override
-  Stream<double> get onMagnetometerZ => _onMagnetometerZController.stream;
-  @override
-  Stream<double> get onBarometer => _onBarometerController.stream;
-  @override
-  Stream<double> get onMotor1Speed => _onMotor1SpeedController.stream;
-  @override
-  Stream<double> get onMotor2Speed => _onMotor2SpeedController.stream;
-  @override
-  Stream<double> get onBatterySoc => _onBatterySocController.stream;
-  @override
-  Stream<double> get onBatteryVol => _onBatteryVolController.stream;
-  @override
-  Stream<double> get onSignal => _onSignalController.stream;
-  @override
-  Stream<double> get onAccelerometerX => _onAccelerometerXController.stream;
-  @override
-  Stream<double> get onAccelerometerY => _onAccelerometerYController.stream;
-  @override
-  Stream<double> get onAccelerometerZ => _onAccelerometerZController.stream;
-  @override
-  Stream<double> get onPitch => _onPitchController.stream;
-  @override
-  Stream<double> get onRoll => _onRollController.stream;
-  @override
-  Stream<double> get onYaw => _onYawController.stream;
+  Stream<Telemetry> get telemetryStream => _telemetryController.stream;
 
   // Exponer el Stream público
   @override
   Stream<bool> get connectedStream => _connectedStreamController.stream;
 
-  TcpPlaneClient({required this.host, required this.port});
+  TcpPlaneClient({
+    this.host = '192.168.4.1',
+    this.port = 3333,
+  });
 
   @override
   bool get isConnected => _isConnected;
@@ -312,26 +270,25 @@ class TcpPlaneClient implements IPlaneClient {
 
   void _processReceivedData(Uint8List data) {
     int index = 0;
-    List<int> packetBuffer = [];
 
     // Bucle que recorre todos los bytes recibidos
     while (index < data.length) {
       // Obtener el byte actual
       int byte = data[index];
       // Detectar byte de inicio
-      if (packetBuffer.isEmpty && byte == Packet.startByte) {
+      if (_packetBuffer.isEmpty && byte == Packet.startByte) {
         // Si es el byte de inicio, agregarlo al buffer
-        packetBuffer.add(byte);
+        _packetBuffer.add(byte);
       }
       // Si se ha detectado el byte de inicio, seguimos agregando bytes
-      else if (packetBuffer.isNotEmpty) {
+      else if (_packetBuffer.isNotEmpty) {
         // Agregar el byte actual al buffer
-        packetBuffer.add(byte);
+        _packetBuffer.add(byte);
         // Detectar byte de fin y validar el paquete
-        if (packetBuffer.length == Packet.length) {
+        if (_packetBuffer.length == Packet.length) {
           if (byte == Packet.endByte) {
             // Convertir el buffer en un Uint8List y tratar de interpretar el paquete
-            Uint8List packetBytes = Uint8List.fromList(packetBuffer);
+            Uint8List packetBytes = Uint8List.fromList(_packetBuffer);
             // Load packet from bytes
             Packet? packet = Packet.fromBytes(packetBytes);
             if (packet != null) {
@@ -348,7 +305,7 @@ class TcpPlaneClient implements IPlaneClient {
           }
 
           // Reiniciar el buffer tras procesar el paquete (correcto o incorrecto)
-          packetBuffer.clear();
+          _packetBuffer.clear();
         }
       }
       // Avanzar al siguiente byte
@@ -357,65 +314,66 @@ class TcpPlaneClient implements IPlaneClient {
   }
 
   void _handleReceivedPacket(Packet packet) {
+    final telemetry = _latestTelemetry;
     switch (packet.function) {
       case Packet.GYRO_X:
-        _onGyroXController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(gyroX: packet.payload);
         break;
       case Packet.GYRO_Y:
-        _onGyroYController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(gyroY: packet.payload);
         break;
       case Packet.GYRO_Z:
-        _onGyroZController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(gyroZ: packet.payload);
         break;
       case Packet.MAGNETOMETER_X:
-        _onMagnetometerXController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(magX: packet.payload);
         break;
       case Packet.MAGNETOMETER_Y:
-        _onMagnetometerYController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(magY: packet.payload);
         break;
       case Packet.MAGNETOMETER_Z:
-        _onMagnetometerZController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(magZ: packet.payload);
         break;
       case Packet.BAROMETER:
-        _onBarometerController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(barometer: packet.payload);
         break;
       case Packet.MOTOR_1_SPEED:
-        _onMotor1SpeedController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(motor1Speed: packet.payload);
         break;
       case Packet.MOTOR_2_SPEED:
-        _onMotor2SpeedController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(motor2Speed: packet.payload);
         break;
       case Packet.BATTERY_VOL:
-        _onBatteryVolController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(batteryVol: packet.payload);
         break;
       case Packet.BATTERY_SOC:
-        _onBatterySocController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(batterySoc: packet.payload);
         break;
       case Packet.SIGNAL:
-        _onSignalController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(signal: packet.payload);
         break;
       case Packet.ACCEL_X:
-        _onAccelerometerXController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(accelX: packet.payload);
         break;
       case Packet.ACCEL_Y:
-        _onAccelerometerYController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(accelY: packet.payload);
         break;
       case Packet.ACCEL_Z:
-        _onAccelerometerZController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(accelZ: packet.payload);
         break;
       case Packet.PITCH:
-        _onPitchController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(pitch: packet.payload);
         break;
       case Packet.ROLL:
-        _onRollController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(roll: packet.payload);
         break;
       case Packet.YAW:
-        _onYawController.add(packet.payload);
+        _latestTelemetry = telemetry.copyWith(yaw: packet.payload);
         break;
       default:
-        developer.log('Unknown function: ${packet.function}');
-        break;
+        return; // No emitir si no es telemetría
     }
+    _telemetryController.add(_latestTelemetry);
   }
 
   Future<void> sendPacket(Packet packet) async {
@@ -608,8 +566,12 @@ class TcpPlaneClient implements IPlaneClient {
     }
   }
 
-  // Método de limpieza para cerrar el StreamController cuando no se use
+  // Método de limpieza para cerrar los StreamController cuando no se use
   void dispose() {
     _connectedStreamController.close();
+    _telemetryController.close();
+    _onConnectStreamController.close();
+    _onDisconnectStreamController.close();
+    _onConnectionFailedStreamController.close();
   }
 }
