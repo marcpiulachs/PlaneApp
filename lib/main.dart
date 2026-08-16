@@ -1,5 +1,6 @@
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/connect_bloc/connect_bloc.dart';
 import 'package:paperwings/bloc/flight_detail_bloc.dart';
@@ -32,6 +33,14 @@ const bool useMockClient = bool.fromEnvironment(
 );
 
 void main() {
+    SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarIconBrightness: Brightness.light,
+      systemNavigationBarContrastEnforced: false,
+    ),
+  );
   runApp(const MyApp());
 }
 
