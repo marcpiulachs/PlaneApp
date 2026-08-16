@@ -160,121 +160,59 @@ class _InstrumentsCarousel extends StatelessWidget {
               pitch: telemetry.pitch.toDouble(),
             ),
             // Botones de maniobra
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 80,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              context.read<FlyBloc>().add(ManeuverSelectedEvent(
-                                  ManeuverType.loop));
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12.0, horizontal: 16.0),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(Icons.loop, size: 32),
-                                SizedBox(height: 4),
-                                Text('LOOP'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: SizedBox(
-                          height: 80,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              context.read<FlyBloc>().add(ManeuverSelectedEvent(
-                                  ManeuverType.spin));
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12.0, horizontal: 16.0),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(Icons.sync, size: 32),
-                                SizedBox(height: 4),
-                                Text('SPIN'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 80,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              context.read<FlyBloc>().add(ManeuverSelectedEvent(
-                                  ManeuverType.land));
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12.0, horizontal: 16.0),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(Icons.flight_land, size: 32),
-                                SizedBox(height: 4),
-                                Text('LAND'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: SizedBox(
-                          height: 80,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              context.read<FlyBloc>().add(ManeuverSelectedEvent(
-                                  ManeuverType.takeoff));
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12.0, horizontal: 16.0),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(Icons.flight_takeoff, size: 32),
-                                SizedBox(height: 4),
-                                Text('TAKEOFF'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _CockpitButton(
+                      icon: Icons.loop,
+                      color: AppTheme.info,
+                      label: 'LOOP',
+                      onPressed: () {
+                        context.read<FlyBloc>().add(ManeuverSelectedEvent(
+                            ManeuverType.loop));
+                      },
+                    ),
+                    const SizedBox(width: 24),
+                    _CockpitButton(
+                      icon: Icons.sync,
+                      color: AppTheme.warning,
+                      label: 'SPIN',
+                      onPressed: () {
+                        context.read<FlyBloc>().add(ManeuverSelectedEvent(
+                            ManeuverType.spin));
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _CockpitButton(
+                      icon: Icons.flight_land,
+                      color: AppTheme.success,
+                      label: 'LAND',
+                      onPressed: () {
+                        context.read<FlyBloc>().add(ManeuverSelectedEvent(
+                            ManeuverType.land));
+                      },
+                    ),
+                    const SizedBox(width: 24),
+                    _CockpitButton(
+                      icon: Icons.flight_takeoff,
+                      color: AppTheme.settingsColor,
+                      label: 'TAKEOFF',
+                      onPressed: () {
+                        context.read<FlyBloc>().add(ManeuverSelectedEvent(
+                            ManeuverType.takeoff));
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
             AirspeedIndicator(
               speed: telemetry.motor1Speed,
@@ -385,63 +323,77 @@ class _CockpitButton extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.onPressed,
+    this.label,
   });
 
   final IconData icon;
   final Color color;
   final VoidCallback onPressed;
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed,
-      customBorder: const CircleBorder(),
-      child: Container(
-        width: 56,
-        height: 56,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.6),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF5A5A62),
-                AppTheme.instrumentBezel,
-                Color(0xFF1C1C20),
-              ],
-            ),
-            border: Border.all(color: Colors.black45, width: 1.5),
-          ),
-          padding: const EdgeInsets.all(3),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        InkWell(
+          onTap: onPressed,
+          customBorder: const CircleBorder(),
           child: Container(
+            width: 56,
+            height: 56,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color.lerp(color, Colors.white, 0.25)!,
-                  color,
-                  Color.lerp(color, Colors.black, 0.3)!,
-                ],
-              ),
-              border: Border.all(color: Colors.black, width: 1.5),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.6),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
-            child: Icon(icon, size: 24, color: Colors.white),
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF5A5A62),
+                    AppTheme.instrumentBezel,
+                    Color(0xFF1C1C20),
+                  ],
+                ),
+                border: Border.all(color: Colors.black45, width: 1.5),
+              ),
+              padding: const EdgeInsets.all(3),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color.lerp(color, Colors.white, 0.25)!,
+                      color,
+                      Color.lerp(color, Colors.black, 0.3)!,
+                    ],
+                  ),
+                  border: Border.all(color: Colors.black, width: 1.5),
+                ),
+                child: Icon(icon, size: 24, color: Colors.white),
+              ),
+            ),
           ),
         ),
-      ),
+        if (label != null) ...[
+          const SizedBox(height: 4),
+          Text(
+            label!,
+            style: AppTheme.bodySmall.copyWith(fontWeight: FontWeight.bold),
+          ),
+        ],
+      ],
     );
   }
 }

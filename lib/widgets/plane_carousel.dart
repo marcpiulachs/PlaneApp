@@ -47,15 +47,18 @@ class _PlaneCarouselWidgetState extends State<PlaneCarouselWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 10),
-                Image.asset(
-                  item.imageUrl,
-                  fit: BoxFit.cover,
-                  width: MediaQuery.of(context).size.width * 0.60,
+                Flexible(
+                  child: Image.asset(
+                    item.imageUrl,
+                    fit: BoxFit.contain,
+                    width: MediaQuery.of(context).size.width * 0.60,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         item.title,
