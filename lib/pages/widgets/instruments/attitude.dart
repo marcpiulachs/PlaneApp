@@ -21,15 +21,18 @@ class AttitudeIndicator extends StatelessWidget {
     return InstrumentBezel(
       child: LayoutBuilder(
         builder: (context, constraints) {
+          final size = constraints.maxHeight;
           return Stack(
-            fit: StackFit.expand,
+            alignment: Alignment.center,
             children: [
               // Parte rotatoria: cielo, tierra, horizonte y pitch ladder.
               CustomPaint(
+                size: Size(size, size),
                 painter: _HorizonPainter(roll: roll, pitch: pitch),
               ),
               // Parte fija: escala de banqueo, índice y silueta del avión.
               CustomPaint(
+                size: Size(size, size),
                 painter: _FixedPlanePainter(),
               ),
               const GlassReflection(),
@@ -146,42 +149,45 @@ class _FixedPlanePainter extends CustomPainter {
     // Índice fijo superior.
     _drawTopIndex(canvas, center, size.width / 2);
 
-    // Silueta del avión (fuselaje + alas).
-    final paint = Paint()..color = Colors.white;
+    // Silueta del avión (símbolo blanco delgado, como en un ADI real).
     final w = size.width;
+    final white = Paint()..color = Colors.white;
 
-    // Fuselaje
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromCenter(center: center, width: w * 0.10, height: w * 0.34),
-        const Radius.circular(4),
-      ),
-      paint,
-    );
-    // Alas
-    final wingPaint = Paint()..color = Colors.black;
+    // Fuselaje: barra vertical
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromCenter(
           center: center,
-          width: w * 0.56,
-          height: w * 0.07,
+          width: w * 0.05,
+          height: w * 0.30,
         ),
         const Radius.circular(3),
       ),
-      wingPaint,
+      white,
+    );
+    // Alas: barra horizontal delgada
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: center,
+          width: w * 0.50,
+          height: w * 0.028,
+        ),
+        const Radius.circular(2),
+      ),
+      white,
     );
     // Empenaje
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromCenter(
-          center: Offset(center.dx, center.dy - w * 0.22),
-          width: w * 0.20,
-          height: w * 0.08,
+          center: Offset(center.dx, center.dy - w * 0.20),
+          width: w * 0.16,
+          height: w * 0.028,
         ),
-        const Radius.circular(3),
+        const Radius.circular(2),
       ),
-      paint,
+      white,
     );
   }
 
@@ -198,17 +204,16 @@ class _FixedPlanePainter extends CustomPainter {
         final angleDeg = d.toDouble();
         // En la parte superior: -90..90 desde la vertical.
         final inner = polarPoint(center, radius * 0.86, angleDeg);
-        final outer = polarPoint(center, radius * 0.98, angleDeg);
 
         if (deg == 30 || deg == 60) {
-          // Triángulo
-          final tip = outer;
-          final base = polarPoint(center, radius * 0.86, angleDeg);
-          final perp = polarPoint(center, radius * 0.95, angleDeg + 90);
+          // Triángulo pequeño apuntando hacia el centro
+          final tip = polarPoint(center, radius * 0.84, angleDeg);
+          final baseL = polarPoint(center, radius * 0.98, angleDeg - 3);
+          final baseR = polarPoint(center, radius * 0.98, angleDeg + 3);
           final path = Path()
             ..moveTo(tip.dx, tip.dy)
-            ..lineTo(base.dx, base.dy)
-            ..lineTo(perp.dx, perp.dy)
+            ..lineTo(baseL.dx, baseL.dy)
+            ..lineTo(baseR.dx, baseR.dy)
             ..close();
           canvas.drawPath(path, trianglePaint);
         } else {

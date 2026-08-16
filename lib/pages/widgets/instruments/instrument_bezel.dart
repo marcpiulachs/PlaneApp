@@ -19,44 +19,52 @@ class InstrumentBezel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.6),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final side = math.min(constraints.maxWidth, constraints.maxHeight);
+        return Center(
+          child: SizedBox(
+            width: side,
+            height: side,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.6),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xFF5A5A62),
+                      AppTheme.instrumentBezel,
+                      Color(0xFF1C1C20),
+                    ],
+                  ),
+                  border: Border.all(color: Colors.black45, width: 1.5),
+                ),
+                padding: const EdgeInsets.all(3),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: faceColor,
+                    border: Border.all(color: Colors.black, width: 1.5),
+                  ),
+                  child: ClipOval(child: child),
+                ),
+              ),
             ),
-          ],
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF5A5A62),
-                AppTheme.instrumentBezel,
-                Color(0xFF1C1C20),
-              ],
-            ),
-            border: Border.all(color: Colors.black45, width: 1.5),
           ),
-          padding: const EdgeInsets.all(3),
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: faceColor,
-              border: Border.all(color: Colors.black, width: 1.5),
-            ),
-            child: ClipOval(child: child),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
