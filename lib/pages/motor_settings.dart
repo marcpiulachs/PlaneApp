@@ -194,7 +194,7 @@ class _SliderColumn extends StatelessWidget {
                         '${requested.toInt()}%',
                         style: TextStyle(
                           fontSize: circleSize * 0.18,
-                          color: Colors.white.withOpacity(0.6),
+                          color: AppTheme.whiteSoft,
                         ),
                       ),
                     ],

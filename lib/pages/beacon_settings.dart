@@ -83,41 +83,43 @@ class _BeaconSettingsState extends State<BeaconSettings> {
             Expanded(
               child: Padding(
                 padding: AppSpacing.listPadding,
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: options.length,
-                  itemBuilder: (context, index) {
-                    final optionName = options[index];
-                    return ListTile(
-                      leading: const IconCircle(icon: Icons.lightbulb),
-                      title: Text(
-                        optionName,
-                        style: AppTheme.bodyLarge,
-                      ),
-                      subtitle: Text(
-                        descriptions[index],
-                        style: AppTheme.bodyMedium,
-                      ),
-                      trailing: Radio<int>(
-                        value: index,
-                        groupValue: state.flightSettings.beacon,
-                        onChanged: (value) {
-                          if (value != null) {
-                            BlocProvider.of<PlaneSettingsBloc>(context).add(
-                              UpdateBeacon(value),
-                            );
-                          }
-                        },
-                        // Color del radio cuando está seleccionado
-                        activeColor: Colors.black,
-                      ),
-                      onTap: () {
-                        BlocProvider.of<PlaneSettingsBloc>(context).add(
-                          UpdateBeacon(index),
-                        );
-                      },
-                    );
+                child: RadioGroup<int>(
+                  groupValue: state.flightSettings.beacon,
+                  onChanged: (value) {
+                    if (value != null) {
+                      BlocProvider.of<PlaneSettingsBloc>(context).add(
+                        UpdateBeacon(value),
+                      );
+                    }
                   },
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: options.length,
+                    itemBuilder: (context, index) {
+                      final option = options[index];
+                      return ListTile(
+                        leading: IconCircle(icon: option.icon),
+                        title: Text(
+                          option.title,
+                          style: AppTheme.bodyLarge,
+                        ),
+                        subtitle: Text(
+                          option.description,
+                          style: AppTheme.bodyMedium,
+                        ),
+                        trailing: Radio<int>(
+                          value: index,
+                          // Color del radio cuando está seleccionado
+                          activeColor: Colors.black,
+                        ),
+                        onTap: () {
+                          BlocProvider.of<PlaneSettingsBloc>(context).add(
+                            UpdateBeacon(index),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),

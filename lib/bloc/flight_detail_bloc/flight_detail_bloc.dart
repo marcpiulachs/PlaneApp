@@ -1,31 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../models/recorded_item.dart';
-import '../repositories/recorder_repository.dart';
-
-// Events
-abstract class FlightDetailEvent {}
-
-class LoadFlightDetail extends FlightDetailEvent {
-  final String flightId;
-  LoadFlightDetail(this.flightId);
-}
-
-// States
-abstract class FlightDetailState {}
-
-class FlightDetailInitial extends FlightDetailState {}
-
-class FlightDetailLoading extends FlightDetailState {}
-
-class FlightDetailLoaded extends FlightDetailState {
-  final RecordedFlight flight;
-  FlightDetailLoaded(this.flight);
-}
-
-class FlightDetailError extends FlightDetailState {
-  final String message;
-  FlightDetailError(this.message);
-}
+import 'package:paperwings/bloc/flight_detail_bloc/flight_detail_event.dart';
+import 'package:paperwings/bloc/flight_detail_bloc/flight_detail_state.dart';
+import 'package:paperwings/repositories/recorder_repository.dart';
 
 class FlightDetailBloc extends Bloc<FlightDetailEvent, FlightDetailState> {
   final RecorderRepository repository;

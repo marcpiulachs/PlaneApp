@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paperwings/bloc/orientation_bloc.dart';
+import 'package:paperwings/bloc/orientation_bloc/orientation_bloc.dart';
+import 'package:paperwings/bloc/orientation_bloc/orientation_event.dart';
+import 'package:paperwings/bloc/orientation_bloc/orientation_state.dart';
 import 'package:paperwings/pages/widgets/instruments/paper_plane.dart';
 
 class SettingsOrientationPage extends StatelessWidget {

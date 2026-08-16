@@ -4,6 +4,7 @@ import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_bloc.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_event.dart';
 import 'package:paperwings/bloc/plane_settings_bloc/plane_settings_state.dart';
 import 'package:paperwings/config/app_theme.dart';
+import 'package:paperwings/models/settings_option.dart';
 import 'package:paperwings/widgets/icon_circle.dart';
 
 class OrientationSettings extends StatefulWidget {
@@ -16,22 +17,22 @@ class OrientationSettings extends StatefulWidget {
 }
 
 class _OrientationSettingsState extends State<OrientationSettings> {
-  final List<String> options = [
-    'Flat', // FLAT
-    'Rotated Right', // ROLL_RIGHT_90
-    'Rotated Left', // ROLL_LEFT_90
-  ];
-
-  final List<IconData> icons = [
-    Icons.arrow_upward, // FLAT (plano)
-    Icons.arrow_forward, // ROLL_RIGHT_90 (derecha)
-    Icons.arrow_back, // ROLL_LEFT_90 (izquierda)
-  ];
-
-  final List<String> descriptions = [
-    'PCB horizontal, components up',
-    'PCB vertical, components to the right',
-    'PCB vertical, components to the left',
+  final List<SettingsOption> options = [
+    SettingsOption(
+      title: 'Flat',
+      description: 'PCB horizontal, components up',
+      icon: Icons.arrow_upward,
+    ),
+    SettingsOption(
+      title: 'Rotated Right',
+      description: 'PCB vertical, components to the right',
+      icon: Icons.arrow_forward,
+    ),
+    SettingsOption(
+      title: 'Rotated Left',
+      description: 'PCB vertical, components to the left',
+      icon: Icons.arrow_back,
+    ),
   ];
   @override
   Widget build(BuildContext context) {
@@ -47,40 +48,42 @@ class _OrientationSettingsState extends State<OrientationSettings> {
             Expanded(
               child: Padding(
                 padding: AppSpacing.listPadding,
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: options.length,
-                  itemBuilder: (context, index) {
-                    final optionName = options[index];
-                    return ListTile(
-                      leading: IconCircle(icon: icons[index]),
-                      title: Text(
-                        optionName,
-                        style: AppTheme.bodyLarge,
-                      ),
-                      subtitle: Text(
-                        descriptions[index],
-                        style: AppTheme.bodyMedium,
-                      ),
-                      trailing: Radio<int>(
-                        value: index,
-                        groupValue: state.flightSettings.imuOrientation,
-                        onChanged: (value) {
-                          if (value != null) {
-                            BlocProvider.of<PlaneSettingsBloc>(context).add(
-                              UpdateImuOrientation(value),
-                            );
-                          }
-                        },
-                        activeColor: Colors.black,
-                      ),
-                      onTap: () {
-                        BlocProvider.of<PlaneSettingsBloc>(context).add(
-                          UpdateImuOrientation(index),
-                        );
-                      },
-                    );
+                child: RadioGroup<int>(
+                  groupValue: state.flightSettings.imuOrientation,
+                  onChanged: (value) {
+                    if (value != null) {
+                      BlocProvider.of<PlaneSettingsBloc>(context).add(
+                        UpdateImuOrientation(value),
+                      );
+                    }
                   },
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: options.length,
+                    itemBuilder: (context, index) {
+                      final option = options[index];
+                      return ListTile(
+                        leading: IconCircle(icon: option.icon),
+                        title: Text(
+                          option.title,
+                          style: AppTheme.bodyLarge,
+                        ),
+                        subtitle: Text(
+                          option.description,
+                          style: AppTheme.bodyMedium,
+                        ),
+                        trailing: Radio<int>(
+                          value: index,
+                          activeColor: Colors.black,
+                        ),
+                        onTap: () {
+                          BlocProvider.of<PlaneSettingsBloc>(context).add(
+                            UpdateImuOrientation(index),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),

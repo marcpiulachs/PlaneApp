@@ -10,7 +10,7 @@ class FlyInitialState extends FlyState {
   List<Object> get props => [];
 }
 
-class FlyLoadedState extends FlyState with EquatableMixin {
+class FlyLoadedState extends FlyState {
   final Telemetry telemetry;
   final int duration;
   final bool isArmed;

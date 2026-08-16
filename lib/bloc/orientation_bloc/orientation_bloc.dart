@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:paperwings/bloc/orientation_bloc/orientation_event.dart';
+import 'package:paperwings/bloc/orientation_bloc/orientation_state.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
 import 'package:paperwings/models/telemetry.dart';
-
-part 'orientation_event.dart';
-part 'orientation_state.dart';
 
 class OrientationBloc extends Bloc<OrientationEvent, OrientationState> {
   final IPlaneClient client;

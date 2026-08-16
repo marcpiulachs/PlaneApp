@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/config/app_theme.dart';
-import '../bloc/flight_detail_bloc.dart';
+import '../bloc/flight_detail_bloc/flight_detail_bloc.dart';
+import '../bloc/flight_detail_bloc/flight_detail_event.dart';
+import '../bloc/flight_detail_bloc/flight_detail_state.dart';
 import '../models/recorded_item.dart';
 import '../widgets/flight_status_card.dart';
 

@@ -25,6 +25,16 @@ class AppTheme {
   static const Color error = Colors.red;
   static const Color info = Colors.blue;
 
+  // Variantes semitransparentes (tokens)
+  static final Color primarySoft = primary.withValues(alpha: 0.2);
+  static final Color successSoft = success.withValues(alpha: 0.3);
+  static final Color warningSoft = warning.withValues(alpha: 0.3);
+  static final Color errorSoft = error.withValues(alpha: 0.3);
+  static final Color successLight = success.withValues(alpha: 0.7);
+  static final Color warningLight = warning.withValues(alpha: 0.7);
+  static final Color errorLight = error.withValues(alpha: 0.7);
+  static final Color whiteSoft = Colors.white.withValues(alpha: 0.6);
+
   // Colores para series de datos/charts
   static const Color chartPitch = Colors.red;
   static const Color chartRoll = Colors.deepPurple;
@@ -181,9 +191,9 @@ class AppTheme {
     ),
     sliderTheme: SliderThemeData(
       activeTrackColor: primary,
-      inactiveTrackColor: primary.withOpacity(0.3),
+      inactiveTrackColor: primary.withValues(alpha: 0.3),
       thumbColor: primary,
-      overlayColor: primary.withOpacity(0.1),
+      overlayColor: primary.withValues(alpha: 0.1),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

@@ -1,4 +1,4 @@
-part of 'orientation_bloc.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class OrientationEvent extends Equatable {
   const OrientationEvent();

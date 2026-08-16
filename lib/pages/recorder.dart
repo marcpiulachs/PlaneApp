@@ -70,7 +70,7 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: AppSpacing.spacingMd, vertical: 6),
                       decoration: BoxDecoration(
-                        color: AppTheme.primary.withOpacity(0.2),
+                        color: AppTheme.primarySoft,
                         borderRadius: BorderRadius.circular(AppRadius.radiusPill),
                         border: Border.all(color: Colors.white, width: 1),
                       ),
@@ -100,10 +100,10 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                           borderRadius: BorderRadius.circular(AppRadius.radiusLg),
                           side: BorderSide(
                             color: flight.hasCrash
-                                ? AppTheme.error.withOpacity(0.3)
+                                ? AppTheme.errorSoft
                                 : (flight.hasEmergency
-                                    ? AppTheme.warning.withOpacity(0.3)
-                                    : AppTheme.success.withOpacity(0.3)),
+                                    ? AppTheme.warningSoft
+                                    : AppTheme.successSoft),
                             width: 1,
                           ),
                         ),
@@ -130,18 +130,16 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                                       colors: flight.hasCrash
                                           ? [
                                               AppTheme.error,
-                                              AppTheme.error.withOpacity(0.7)
+                                              AppTheme.errorLight
                                             ]
                                           : (flight.hasEmergency
                                               ? [
                                                   AppTheme.warning,
-                                                  AppTheme.warning
-                                                      .withOpacity(0.7)
+                                                  AppTheme.warningLight
                                                 ]
                                               : [
                                                   AppTheme.success,
-                                                  AppTheme.success
-                                                      .withOpacity(0.7)
+                                                  AppTheme.successLight
                                                 ]),
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
@@ -150,11 +148,10 @@ class _RecordedFlightsState extends State<RecordedFlights> {
                                     boxShadow: [
                                       BoxShadow(
                                         color: (flight.hasCrash
-                                                ? AppTheme.error
+                                                ? AppTheme.errorSoft
                                                 : (flight.hasEmergency
-                                                    ? AppTheme.warning
-                                                    : AppTheme.success))
-                                            .withOpacity(0.3),
+                                                    ? AppTheme.warningSoft
+                                                    : AppTheme.successSoft)),
                                         blurRadius: 8,
                                         offset: const Offset(0, 2),
                                       ),

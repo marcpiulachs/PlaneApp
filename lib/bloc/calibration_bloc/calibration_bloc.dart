@@ -1,37 +1,8 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../clients/plane_client_interface.dart';
-
-abstract class CalibrationEvent {}
-
-class CalibrateImuEvent extends CalibrationEvent {}
-
-class CalibrateCompassEvent extends CalibrationEvent {}
-
-class CalibrationTickEvent extends CalibrationEvent {
-  final int secondsRemaining;
-  CalibrationTickEvent(this.secondsRemaining);
-}
-
-abstract class CalibrationState {}
-
-class CalibrationInitial extends CalibrationState {}
-
-class CalibrationInProgress extends CalibrationState {
-  final String message;
-  final int? secondsRemaining;
-  CalibrationInProgress(this.message, {this.secondsRemaining});
-}
-
-class CalibrationSuccess extends CalibrationState {
-  final String message;
-  CalibrationSuccess(this.message);
-}
-
-class CalibrationFailure extends CalibrationState {
-  final String error;
-  CalibrationFailure(this.error);
-}
+import 'package:paperwings/bloc/calibration_bloc/calibration_event.dart';
+import 'package:paperwings/bloc/calibration_bloc/calibration_state.dart';
+import 'package:paperwings/clients/plane_client_interface.dart';
 
 class CalibrationBloc extends Bloc<CalibrationEvent, CalibrationState> {
   final IPlaneClient client;
