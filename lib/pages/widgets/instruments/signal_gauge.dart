@@ -16,7 +16,7 @@ class SignalGauge extends StatelessWidget {
       value: signal,
       min: 0,
       max: 100,
-      unit: 'dBm',
+      unit: '%',
       title: 'SIGNAL',
       arcs: [
         (0.0, 0.30, AppTheme.error),

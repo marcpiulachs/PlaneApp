@@ -187,41 +187,44 @@ class AnalogGauge extends StatelessWidget {
                   minorPerMajor: minorPerMajor,
                 ),
               ),
-              // Lectura digital (debajo de la aguja)
+              // Lectura digital centrada en la parte inferior
               Positioned(
-                left: size * 0.40,
-                top: size * 0.58,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.55),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                        color: AppTheme.instrumentMark.withValues(alpha: 0.4)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        value.toStringAsFixed(1),
-                        style: TextStyle(
-                          fontSize: size * 0.13,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.instrumentMark,
-                          fontFeatures: const [FontFeature.tabularFigures()],
-                        ),
-                      ),
-                      if (unit.isNotEmpty)
+                left: 0,
+                right: 0,
+                top: size * 0.62,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                          color: AppTheme.instrumentMark.withValues(alpha: 0.4)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          unit,
+                          value.toStringAsFixed(1),
                           style: TextStyle(
-                            fontSize: size * 0.06,
-                            color: AppTheme.instrumentMark
-                                .withValues(alpha: 0.7),
+                            fontSize: size * 0.13,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.instrumentMark,
+                            fontFeatures: const [FontFeature.tabularFigures()],
                           ),
                         ),
-                    ],
+                        if (unit.isNotEmpty)
+                          Text(
+                            unit,
+                            style: TextStyle(
+                              fontSize: size * 0.06,
+                              color: AppTheme.instrumentMark
+                                  .withValues(alpha: 0.7),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),

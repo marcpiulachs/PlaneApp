@@ -24,7 +24,7 @@ class MockPlaneClient implements IPlaneClient {
   double _prevPitch = 0, _prevRoll = 0;
   double _altitudeM = 0;
   double _batterySoc = 100;
-  double _batteryVol = 8.4;
+  double _batteryVol = 4.2;
   double _signal = 48;
   int _tick = 0;
 
@@ -105,8 +105,8 @@ class MockPlaneClient implements IPlaneClient {
     // Batería: descarga con el consumo de los motores
     _batterySoc =
         max(0.0, _batterySoc - (0.2 + _throttle / 100) * dt);
-    _batteryVol = 7.0 +
-        (_batterySoc / 100) * 1.4 +
+    _batteryVol = 3.7 +
+        (_batterySoc / 100) * 0.5 +
         _rng.nextDouble() * 0.05;
 
     // Señal: paseo aleatorio que sube/baja
@@ -120,7 +120,7 @@ class MockPlaneClient implements IPlaneClient {
     // Giroscopios en grados/segundo
     final gyroX = (_roll - _prevRoll) / dt;
     final gyroY = (_pitch - _prevPitch) / dt;
-    final gyroZ = yawRate / 3 * 100; // 0..1 = deflexión completa del TC
+    final gyroZ = yawRate; // °/s reales de giro en el eje vertical
 
     // Magnetómetro coherente con el rumbo
     final magX = 1000 * cos(_yaw * pi / 180);

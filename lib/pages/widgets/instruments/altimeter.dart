@@ -32,40 +32,43 @@ class Altimeter extends StatelessWidget {
                 size: Size(size, size),
                 painter: _AltimeterDialPainter(),
               ),
-              // Lectura digital (debajo de las agujas)
+              // Lectura digital centrada en la parte inferior
               Positioned(
-                left: size * 0.36,
-                top: size * 0.58,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.55),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                        color: AppTheme.instrumentMark.withValues(alpha: 0.4)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        altFt.toStringAsFixed(0),
-                        style: TextStyle(
-                          fontSize: size * 0.14,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.instrumentMark,
-                          fontFeatures: const [FontFeature.tabularFigures()],
+                left: 0,
+                right: 0,
+                top: size * 0.62,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                          color: AppTheme.instrumentMark.withValues(alpha: 0.4)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          altFt.toStringAsFixed(0),
+                          style: TextStyle(
+                            fontSize: size * 0.14,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.instrumentMark,
+                            fontFeatures: const [FontFeature.tabularFigures()],
+                          ),
                         ),
-                      ),
-                      Text(
-                        'ft',
-                        style: TextStyle(
-                          fontSize: size * 0.06,
-                          color: AppTheme.instrumentMark
-                              .withValues(alpha: 0.7),
+                        Text(
+                          'ft',
+                          style: TextStyle(
+                            fontSize: size * 0.06,
+                            color: AppTheme.instrumentMark
+                                .withValues(alpha: 0.7),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

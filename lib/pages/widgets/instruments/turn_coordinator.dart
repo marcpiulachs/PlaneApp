@@ -1,8 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:paperwings/config/app_theme.dart';
 import 'package:paperwings/pages/widgets/instruments/instrument_bezel.dart';
 
+/// Turn Coordinator: tasa de giro (turnRate, -1..1) y derrape (slip, -1..1).
+/// El avión se inclina hasta ±30° a deflexión completa (30°/s de giro).
 class TurnCoordinator extends StatelessWidget {
   final double turnRate; // -1.0 (izquierda) a 1.0 (derecha)
   final double slip; // -1.0 (izquierda) a 1.0 (derecha)
@@ -15,6 +18,8 @@ class TurnCoordinator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rate = turnRate.clamp(-1.0, 1.0);
+    final slipValue = slip.clamp(-1.0, 1.0);
     return InstrumentBezel(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -22,76 +27,26 @@ class TurnCoordinator extends StatelessWidget {
           return Stack(
             alignment: Alignment.center,
             children: [
-              // Arco de referencia del giro (0.5 = virada estándar)
-              Positioned(
-                top: s * 0.06,
-                child: SizedBox(
-                  width: s,
-                  height: s * 0.55,
-                  child: CustomPaint(
-                    painter: _ArcPainter(),
-                  ),
-                ),
-              ),
-              // Índice fijo superior
-              Positioned(
-                top: s * 0.06,
-                child: SizedBox(
-                  width: s,
-                  height: s * 0.55,
-                  child: CustomPaint(
-                    painter: _IndexTrianglePainter(),
-                  ),
+              // Dial: arco superior que llena la cara del instrumento
+              SizedBox(
+                width: s,
+                height: s,
+                child: CustomPaint(
+                  painter: _TurnDialPainter(),
                 ),
               ),
               // Avión que se inclina según la tasa de giro
-              Positioned(
-                top: s * 0.06,
-                child: SizedBox(
-                  width: s,
-                  height: s * 0.55,
-                  child: Transform.rotate(
-                    angle: -turnRate * (pi / 6),
-                    child: const Center(
-                      child: CustomPaint(
-                        size: Size.square(80),
-                        painter: MiniPlanePainter(),
-                      ),
-                    ),
-                  ),
+              SizedBox(
+                width: s,
+                height: s,
+                child: CustomPaint(
+                  painter: _BankingPlanePainter(rate: rate),
                 ),
               ),
-              // Bola de derrape
+              // Inclinómetro (bola de derrape) con graduaciones
               Positioned(
                 bottom: s * 0.20,
-                child: SizedBox(
-                  width: s * 0.62,
-                  height: s * 0.10,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        width: s * 0.62,
-                        height: s * 0.07,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(s * 0.035),
-                          color: Colors.white.withValues(alpha: 0.25),
-                        ),
-                      ),
-                      Positioned(
-                        left: (slip + 1) / 2 * (s * 0.62 - s * 0.08),
-                        child: Container(
-                          width: s * 0.08,
-                          height: s * 0.08,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                child: _Inclinometer(size: s, slip: slipValue),
               ),
               // Lecturas digitales
               Positioned(
@@ -99,9 +54,9 @@ class TurnCoordinator extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _Readout(label: 'TURN', value: turnRate),
+                    _Readout(label: 'TURN', value: rate),
                     SizedBox(width: s * 0.10),
-                    _Readout(label: 'SLIP', value: slip),
+                    _Readout(label: 'SLIP', value: slipValue),
                   ],
                 ),
               ),
@@ -155,93 +110,191 @@ class _Readout extends StatelessWidget {
   }
 }
 
-class _ArcPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height * 0.95);
-    final radius = size.width * 0.62;
-    final rect = Rect.fromCircle(center: center, radius: radius);
-    final paint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.35)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3;
-    // Arco superior de ~180°.
-    canvas.drawArc(rect, pi, pi, false, paint);
-
-    // Marcas L/R en los extremos
-    final leftPaint = Paint()
-      ..color = Colors.white
-      ..strokeWidth = 3;
-    canvas.drawLine(
-      Offset(size.width * 0.16, size.height * 0.28),
-      Offset(size.width * 0.16, size.height * 0.42),
-      leftPaint,
-    );
-    canvas.drawLine(
-      Offset(size.width * 0.84, size.height * 0.28),
-      Offset(size.width * 0.84, size.height * 0.42),
-      leftPaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _ArcPainter oldDelegate) => false;
-}
-
-class _IndexTrianglePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, 0);
-    final path = Path()
-      ..moveTo(center.dx, size.height * 0.08)
-      ..lineTo(center.dx - 6, 0)
-      ..lineTo(center.dx + 6, 0)
-      ..close();
-    canvas.drawPath(path, Paint()..color = Colors.white);
-  }
-
-  @override
-  bool shouldRepaint(covariant _IndexTrianglePainter oldDelegate) => false;
-}
-
-class MiniPlanePainter extends CustomPainter {
-  const MiniPlanePainter();
-
+class _TurnDialPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final paint = Paint()..color = Colors.white;
+    final radius = size.width * 0.47;
+    final rect = Rect.fromCircle(center: center, radius: radius);
 
-    // Fuselaje (punto)
-    canvas.drawCircle(center, 7, paint);
-
-    // Alas
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromCenter(
-          center: center,
-          width: size.width * 0.55,
-          height: 5,
-        ),
-        const Radius.circular(2),
-      ),
-      paint,
+    // Arco superior (semicírculo).
+    canvas.drawArc(
+      rect,
+      pi,
+      pi,
+      false,
+      Paint()
+        ..color = Colors.white.withValues(alpha: 0.35)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 3,
     );
 
-    // Cola
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromCenter(
-          center: Offset(center.dx, center.dy - 16),
-          width: 5,
-          height: 12,
+    // Marcas de viraje cada 10°, destacando la estándar (±20° del centro).
+    for (int deg = -80; deg <= 80; deg += 10) {
+      final isStandard = deg % 20 == 0;
+      final paint = Paint()
+        ..color =
+            isStandard ? AppTheme.warning : Colors.white.withValues(alpha: 0.5)
+        ..strokeWidth = isStandard ? 3 : 1.5;
+      final outer = polarPoint(center, radius - 2, deg.toDouble());
+      final inner =
+          polarPoint(center, radius - (isStandard ? 16 : 10), deg.toDouble());
+      canvas.drawLine(outer, inner, paint);
+    }
+
+    // Índice fijo superior (doghouse).
+    final idxPaint = Paint()..color = Colors.white;
+    final idxPath = Path()
+      ..moveTo(center.dx - 7, center.dy - radius + 2)
+      ..lineTo(center.dx + 7, center.dy - radius + 2)
+      ..lineTo(center.dx, center.dy - radius - 8)
+      ..close();
+    canvas.drawPath(idxPath, idxPaint);
+
+    // Letras L / R en los extremos.
+    _drawLabel(canvas, center, radius - 20, -90, 'L');
+    _drawLabel(canvas, center, radius - 20, 90, 'R');
+  }
+
+  void _drawLabel(Canvas canvas, Offset center, double radius, double angleDeg,
+      String text) {
+    final pos = polarPoint(center, radius, angleDeg.toDouble());
+    final tp = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
         ),
-        const Radius.circular(2),
       ),
-      paint,
+      textDirection: TextDirection.ltr,
     );
+    tp.layout();
+    tp.paint(canvas, pos - Offset(tp.width / 2, tp.height / 2));
   }
 
   @override
-  bool shouldRepaint(covariant MiniPlanePainter oldDelegate) => false;
+  bool shouldRepaint(covariant _TurnDialPainter oldDelegate) => false;
+}
+
+class _BankingPlanePainter extends CustomPainter {
+  final double rate;
+
+  _BankingPlanePainter({required this.rate});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // El avión se dibuja en el centro del instrumento.
+    final center = Offset(size.width / 2, size.height / 2);
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(rate * (pi / 6));
+    final paint = Paint()..color = Colors.white;
+
+    // Alas (vista frontal).
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: Offset.zero,
+          width: size.width * 0.46,
+          height: 6,
+        ),
+        const Radius.circular(3),
+      ),
+      paint,
+    );
+
+    // Empenaje vertical / fuselaje visto desde atrás.
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: const Offset(0, 18),
+          width: 7,
+          height: 18,
+        ),
+        const Radius.circular(3),
+      ),
+      paint,
+    );
+
+    // Buje central.
+    canvas.drawCircle(Offset.zero, 4.5, paint);
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant _BankingPlanePainter oldDelegate) =>
+      oldDelegate.rate != rate;
+}
+
+class _Inclinometer extends StatelessWidget {
+  final double size;
+  final double slip;
+
+  const _Inclinometer({required this.size, required this.slip});
+
+  @override
+  Widget build(BuildContext context) {
+    final w = size * 0.62;
+    final ball = size * 0.08;
+    final travel = w - ball;
+    return SizedBox(
+      width: w,
+      height: size * 0.10,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: w,
+            height: size * 0.06,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(size * 0.03),
+              border: Border.all(color: Colors.white24),
+            ),
+          ),
+          CustomPaint(
+            size: Size(w, size * 0.10),
+            painter: _TubeTicksPainter(travel: travel),
+          ),
+          Positioned(
+            left: (slip + 1) / 2 * travel,
+            child: Container(
+              width: ball,
+              height: ball,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TubeTicksPainter extends CustomPainter {
+  final double travel;
+
+  _TubeTicksPainter({required this.travel});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cy = size.height / 2;
+    final centerX = size.width / 2;
+    final paint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.6)
+      ..strokeWidth = 1.5;
+    for (final t in [-0.25, 0.0, 0.25]) {
+      final x = centerX + t * travel;
+      final len = t == 0.0 ? 8.0 : 5.0;
+      canvas.drawLine(Offset(x, cy - len / 2), Offset(x, cy + len / 2), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _TubeTicksPainter oldDelegate) =>
+      oldDelegate.travel != travel;
 }

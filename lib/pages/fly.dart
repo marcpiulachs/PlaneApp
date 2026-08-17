@@ -250,8 +250,8 @@ class _InstrumentsCarousel extends StatelessWidget {
               pitch: telemetry.pitch.toDouble(),
             ),
             TurnCoordinator(
-              // 0: sin giro, 1: giro completo derecha
-              turnRate: telemetry.turnRate / 100,
+              // 1.0 = deflexión completa del TC (30°/s)
+              turnRate: (telemetry.turnRate / 30).clamp(-1.0, 1.0),
               // 0: sin deslizamiento, valores negativos/positivos indican deslizamiento
               slip: telemetry.slip,
             ),

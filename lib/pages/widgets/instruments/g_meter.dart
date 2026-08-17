@@ -21,10 +21,11 @@ class GMeter extends StatelessWidget {
       max: 2,
       unit: 'G',
       title: 'G-FORCE',
-      needleColor: AppTheme.warning,
+      needleColor: AppTheme.success,
       arcs: [
-        (0.40, 0.60, AppTheme.success),
-        (0.60, 1.0, AppTheme.warning),
+        (0.0, 0.60, AppTheme.error), // < 0.4 g
+        (0.60, 0.90, AppTheme.success), // 0.4..1.6 g: vuelo normal
+        (0.90, 1.0, AppTheme.warning), // > 1.6 g
       ],
     );
   }

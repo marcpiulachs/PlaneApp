@@ -15,7 +15,7 @@ class Voltmeter extends StatelessWidget {
     return AnalogGauge(
       value: batteryVolts,
       min: 0,
-      max: 15,
+      max: 5,
       unit: 'V',
       title: 'VOLTS',
       arcs: [

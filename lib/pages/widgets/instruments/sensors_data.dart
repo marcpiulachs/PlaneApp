@@ -141,7 +141,7 @@ class _SensorsDataState extends State<SensorsData> {
             const SizedBox(height: 6),
             _row('X', '${t.accelX.toStringAsPrecision(2)} g'),
             _row('Y', '${t.accelY.toStringAsPrecision(2)} g'),
-            _row('Z', '${t.accelZ.toStringAsPrecision(2)} g'),
+            _row('Z', '${(t.accelZ / 500).toStringAsPrecision(2)} g'),
           ]);
         break;
       case 3:

@@ -59,7 +59,15 @@ class CompassWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              if (child != null) child!,
+              if (child != null)
+                SizedBox(
+                  width: size * 0.34,
+                  height: size * 0.34,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: child!,
+                  ),
+                ),
               // Lubber line fija (rumbo actual)
               Positioned(
                 top: 4,
@@ -87,7 +95,7 @@ class CompassWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        heading.toString().padLeft(3, '0'),
+                        heading.round().toString().padLeft(3, '0'),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -155,13 +163,11 @@ class CompassCardPainter extends CustomPainter {
       final end = polarPoint(center, radius, i.toDouble());
       canvas.drawLine(start, end, paint);
     }
-
     // Etiquetas cada 30°.
     for (int i = 0; i < 360; i += 30) {
       final isCardinal = i % 90 == 0;
-      final label = isCardinal
-          ? getLabel(i)
-          : (showDegrees ? i.toString() : null);
+      final label =
+          isCardinal ? getLabel(i) : (showDegrees ? i.toString() : null);
       if (label == null) continue;
       final pos = polarPoint(center, radius - 36, i.toDouble());
       final tp = TextPainter(

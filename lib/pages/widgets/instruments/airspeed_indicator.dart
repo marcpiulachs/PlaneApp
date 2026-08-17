@@ -37,40 +37,43 @@ class AirspeedIndicator extends StatelessWidget {
                   maxSpeed: maxSpeed,
                 ),
               ),
-              // Lectura digital (debajo de la aguja para que no la tape)
+              // Lectura digital centrada en la parte inferior
               Positioned(
-                left: size * 0.40,
-                top: size * 0.56,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.55),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                        color: AppTheme.instrumentMark.withValues(alpha: 0.4)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        speed.toStringAsFixed(0),
-                        style: TextStyle(
-                          fontSize: size * 0.13,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.instrumentMark,
-                          fontFeatures: const [FontFeature.tabularFigures()],
+                left: 0,
+                right: 0,
+                top: size * 0.62,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                          color: AppTheme.instrumentMark.withValues(alpha: 0.4)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          speed.toStringAsFixed(0),
+                          style: TextStyle(
+                            fontSize: size * 0.13,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.instrumentMark,
+                            fontFeatures: const [FontFeature.tabularFigures()],
+                          ),
                         ),
-                      ),
-                      Text(
-                        unit,
-                        style: TextStyle(
-                          fontSize: size * 0.06,
-                          color: AppTheme.instrumentMark
-                              .withValues(alpha: 0.7),
+                        Text(
+                          unit,
+                          style: TextStyle(
+                            fontSize: size * 0.06,
+                            color: AppTheme.instrumentMark
+                                .withValues(alpha: 0.7),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

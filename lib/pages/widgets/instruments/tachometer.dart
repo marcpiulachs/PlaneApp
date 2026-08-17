@@ -31,40 +31,43 @@ class Tachometer extends StatelessWidget {
                 size: Size(size, size),
                 painter: const _TachDialPainter(),
               ),
-              // Lectura digital (debajo de las agujas)
+              // Lectura digital centrada en la parte inferior
               Positioned(
-                left: size * 0.38,
-                top: size * 0.56,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.55),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                        color: AppTheme.instrumentMark.withValues(alpha: 0.4)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${percent.toStringAsFixed(0)}%',
-                        style: TextStyle(
-                          fontSize: size * 0.13,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.instrumentMark,
-                          fontFeatures: const [FontFeature.tabularFigures()],
+                left: 0,
+                right: 0,
+                top: size * 0.62,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                          color: AppTheme.instrumentMark.withValues(alpha: 0.4)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${percent.toStringAsFixed(0)}%',
+                          style: TextStyle(
+                            fontSize: size * 0.13,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.instrumentMark,
+                            fontFeatures: const [FontFeature.tabularFigures()],
+                          ),
                         ),
-                      ),
-                      Text(
-                        'M1 ${motor1.toStringAsFixed(0)} · M2 ${motor2.toStringAsFixed(0)}',
-                        style: TextStyle(
-                          fontSize: size * 0.05,
-                          color: AppTheme.instrumentMark
-                              .withValues(alpha: 0.7),
+                        Text(
+                          'M1 ${motor1.toStringAsFixed(0)} · M2 ${motor2.toStringAsFixed(0)}',
+                          style: TextStyle(
+                            fontSize: size * 0.05,
+                            color: AppTheme.instrumentMark
+                                .withValues(alpha: 0.7),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

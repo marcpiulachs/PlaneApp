@@ -55,43 +55,46 @@ class _VariometerState extends State<Variometer> {
           return Stack(
             alignment: Alignment.center,
             children: [
-              // Lectura digital (debajo del dial para que no tape la aguja)
+              // Lectura digital centrada en la parte inferior
               Positioned(
-                left: size * 0.40,
-                top: size * 0.58,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.55),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                        color: AppTheme.instrumentMark.withValues(alpha: 0.4)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        (_vsiFtMin >= 0 ? '+' : '') +
-                            _vsiFtMin.round().toString(),
-                        style: TextStyle(
-                          fontSize: size * 0.13,
-                          fontWeight: FontWeight.bold,
-                          color: _vsiFtMin >= 0
-                              ? AppTheme.success
-                              : AppTheme.error,
-                          fontFeatures: const [FontFeature.tabularFigures()],
+                left: 0,
+                right: 0,
+                top: size * 0.62,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                          color: AppTheme.instrumentMark.withValues(alpha: 0.4)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          (_vsiFtMin >= 0 ? '+' : '') +
+                              _vsiFtMin.round().toString(),
+                          style: TextStyle(
+                            fontSize: size * 0.13,
+                            fontWeight: FontWeight.bold,
+                            color: _vsiFtMin >= 0
+                                ? AppTheme.success
+                                : AppTheme.error,
+                            fontFeatures: const [FontFeature.tabularFigures()],
+                          ),
                         ),
-                      ),
-                      Text(
-                        'ft/min',
-                        style: TextStyle(
-                          fontSize: size * 0.06,
-                          color: AppTheme.instrumentMark
-                              .withValues(alpha: 0.7),
+                        Text(
+                          'ft/min',
+                          style: TextStyle(
+                            fontSize: size * 0.06,
+                            color: AppTheme.instrumentMark
+                                .withValues(alpha: 0.7),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -127,11 +130,9 @@ class _VsiDialPainter extends CustomPainter {
 
   static const double _max = 2000;
 
+  // Escala simétrica: 0 ft/min arriba, subida a la derecha, bajada a la izquierda.
   double _angleFor(double rate) {
-    if (rate >= 0) {
-      return -135 + (rate / _max) * 135; // 0..+2000: hacia arriba
-    }
-    return -135 + (rate / _max) * 45; // 0..-2000: hacia abajo
+    return (rate / _max) * 135; // -2000 -> -135°, 0 -> 0°, +2000 -> +135°
   }
 
   @override
