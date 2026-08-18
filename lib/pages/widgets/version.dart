@@ -20,22 +20,26 @@ class Versions extends StatelessWidget {
       children: [
         Text(
           'App version',
-          style: AppTheme.heading3.copyWith(color: Colors.black),
+          style: AppTheme.heading3,
         ),
         const SizedBox(height: 8),
         Text(
           appVersion.toString(),
-          style: AppTheme.heading1.copyWith(fontSize: 25),
+          style: AppTheme.heading1.copyWith(
+            color: Colors.black,
+          ),
         ),
         const SizedBox(height: 16),
         Text(
           'Firmware version',
-          style: AppTheme.heading3.copyWith(color: Colors.black),
+          style: AppTheme.heading3,
         ),
         const SizedBox(height: 8),
         Text(
           devVersion.toString(),
-          style: AppTheme.heading1.copyWith(fontSize: 25),
+          style: AppTheme.heading1.copyWith(
+            color: Colors.black,
+          ),
         )
       ],
     );

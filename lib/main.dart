@@ -16,6 +16,7 @@ import 'package:paperwings/bloc/recordings_bloc/recordings_bloc.dart';
 import 'package:paperwings/bloc/sensor_bloc/sensor_bloc.dart';
 import 'package:paperwings/bloc/calibration_bloc/calibration_bloc.dart';
 import 'package:paperwings/repositories/plane_repository.dart';
+import 'package:paperwings/clients/ble/ble_plane_client.dart';
 import 'package:paperwings/clients/mock_plane_client.dart';
 import 'package:paperwings/clients/tcp_plane_client.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
@@ -24,11 +25,18 @@ import 'package:paperwings/repositories/recorder_repository.dart';
 import 'package:paperwings/config/app_theme.dart';
 import 'package:provider/provider.dart';
 
-// Permite seleccionar entre el cliente simulado y el real al lanzar:
+// Permite seleccionar entre el cliente simulado, el real (TCP) y el
+// Bluetooth al lanzar:
 //   flutter run --dart-define=USE_MOCK=true   -> MockPlaneClient
+//   flutter run --dart-define=USE_BLE=true    -> BlePlaneClient
 //   flutter run                              -> TcpPlaneClient
 const bool useMockClient = bool.fromEnvironment(
   'USE_MOCK',
+  defaultValue: false,
+);
+
+const bool useBleClient = bool.fromEnvironment(
+  'USE_BLE',
   defaultValue: false,
 );
 
@@ -60,9 +68,11 @@ class MyApp extends StatelessWidget {
           create: (context) => EventBus(),
         ),
         Provider<IPlaneClient>(
-          create: (context) => useMockClient
-              ? MockPlaneClient()
-              : TcpPlaneClient(),
+          create: (context) {
+            if (useMockClient) return MockPlaneClient();
+            if (useBleClient) return BlePlaneClient();
+            return TcpPlaneClient();
+          },
         ),
         BlocProvider<SensorBloc>(
           create: (context) => SensorBloc(
