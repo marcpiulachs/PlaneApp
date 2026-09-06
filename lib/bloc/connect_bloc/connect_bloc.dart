@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/connect_bloc/connect_event.dart';
 import 'package:paperwings/bloc/connect_bloc/connect_state.dart';
-import 'package:paperwings/clients/plane_client_interface.dart';
+import 'package:paperwings/clients/client_manager.dart';
 
 class ConnectBloc extends Bloc<ConnectEvent, ConnectState> {
-  final IPlaneClient client;
+  final ClientManager client;
 
   ConnectBloc({required this.client}) : super(ConnectInitial()) {
     // Suscripción a los callbacks del cliente
@@ -21,6 +21,9 @@ class ConnectBloc extends Bloc<ConnectEvent, ConnectState> {
     on<PlaneClientConnect>((event, emit) async {
       emit(ConnectPlaneConnecting());
       await Future.delayed(const Duration(seconds: 1));
+      // Crea (o reutiliza) el cliente del transporte seleccionado en la
+      // pantalla de conexión y conecta con él.
+      await client.use(event.transport);
       await client.connect();
     });
 

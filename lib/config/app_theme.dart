@@ -11,7 +11,7 @@ class AppTheme {
 
   // Superficies consolidadas
   static const Color cardColor = surfaceDark; // Tarjetas (sustituye a grey[850])
-  static const Color buttonColor = surfaceDarker; // Botones (sustituye a Colors.black)
+  static const Color buttonColor = Colors.black; // Botones
 
   // Texto
   static const Color textPrimary = Colors.white;

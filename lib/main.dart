@@ -16,20 +16,25 @@ import 'package:paperwings/bloc/recordings_bloc/recordings_bloc.dart';
 import 'package:paperwings/bloc/sensor_bloc/sensor_bloc.dart';
 import 'package:paperwings/bloc/calibration_bloc/calibration_bloc.dart';
 import 'package:paperwings/repositories/plane_repository.dart';
-import 'package:paperwings/clients/ble/ble_plane_client.dart';
-import 'package:paperwings/clients/mock_plane_client.dart';
-import 'package:paperwings/clients/tcp_plane_client.dart';
+import 'package:paperwings/clients/client_manager.dart';
 import 'package:paperwings/clients/plane_client_interface.dart';
+import 'package:paperwings/clients/plane_transport.dart';
 import 'package:paperwings/pages/home.dart';
 import 'package:paperwings/repositories/recorder_repository.dart';
 import 'package:paperwings/config/app_theme.dart';
 import 'package:provider/provider.dart';
 
-// Permite seleccionar entre el cliente simulado, el real (TCP) y el
-// Bluetooth al lanzar:
-//   flutter run --dart-define=USE_MOCK=true   -> MockPlaneClient
-//   flutter run --dart-define=USE_BLE=true    -> BlePlaneClient
-//   flutter run                              -> TcpPlaneClient
+// Permite seleccionar el transporte inicial al lanzar:
+//   flutter run --dart-define=USE_WIFI=true   -> transporte inicial WiFi
+//   flutter run --dart-define=USE_MOCK=true   -> transporte inicial Mock
+//   flutter run --dart-define=USE_BLE=true    -> transporte inicial BLE
+//   flutter run                              -> transporte inicial WiFi
+// En runtime se puede cambiar desde la pantalla de conexión.
+const bool useWifiClient = bool.fromEnvironment(
+  'USE_WIFI',
+  defaultValue: false,
+);
+
 const bool useMockClient = bool.fromEnvironment(
   'USE_MOCK',
   defaultValue: false,
@@ -39,6 +44,12 @@ const bool useBleClient = bool.fromEnvironment(
   'USE_BLE',
   defaultValue: false,
 );
+
+PlaneTransport get _initialTransport {
+  if (useMockClient) return PlaneTransport.mock;
+  if (useBleClient) return PlaneTransport.ble;
+  return PlaneTransport.wifi;
+}
 
 void main() {
     SystemChrome.setSystemUIOverlayStyle(
@@ -67,12 +78,11 @@ class MyApp extends StatelessWidget {
         Provider<EventBus>(
           create: (context) => EventBus(),
         ),
+        Provider<ClientManager>(
+          create: (context) => ClientManager(initialTransport: _initialTransport),
+        ),
         Provider<IPlaneClient>(
-          create: (context) {
-            if (useMockClient) return MockPlaneClient();
-            if (useBleClient) return BlePlaneClient();
-            return TcpPlaneClient();
-          },
+          create: (context) => context.read<ClientManager>(),
         ),
         BlocProvider<SensorBloc>(
           create: (context) => SensorBloc(
@@ -111,7 +121,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ConnectBloc>(
           create: (context) => ConnectBloc(
-            client: context.read<IPlaneClient>(),
+            client: context.read<ClientManager>(),
           ),
         ),
         BlocProvider(

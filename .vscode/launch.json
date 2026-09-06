@@ -2,10 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Paperwings (TCP)",
+      "name": "Paperwings (WiFi)",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "debug"
+      "flutterMode": "debug",
+      "args": [
+        "--dart-define=USE_WIFI=true"
+      ]
     },
     {
       "name": "Paperwings (Bluetooth)",

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:paperwings/bloc/connect_bloc/connect_bloc.dart';
 import 'package:paperwings/bloc/connect_bloc/connect_event.dart';
 import 'package:paperwings/bloc/connect_bloc/connect_state.dart';
+import 'package:paperwings/clients/plane_transport.dart';
 import 'package:paperwings/widgets/connecting.dart';
 import 'package:paperwings/widgets/disconected.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,8 +24,10 @@ class _ConnectState extends State<Connect> {
           return const Connecting();
         } else if (state is ConnectPlaneDisconnected) {
           return Disconnected(
-            onConnect: () {
-              context.read<ConnectBloc>().add(PlaneClientConnect());
+            onConnect: (PlaneTransport transport) {
+              context
+                  .read<ConnectBloc>()
+                  .add(PlaneClientConnect(transport));
             },
           );
         } else if (state is ConnectInitial) {
