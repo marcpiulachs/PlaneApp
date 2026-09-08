@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paperwings/bloc/calibration_bloc/calibration_event.dart';
 import 'package:paperwings/bloc/calibration_bloc/calibration_state.dart';
@@ -6,7 +5,6 @@ import 'package:paperwings/clients/plane_client_interface.dart';
 
 class CalibrationBloc extends Bloc<CalibrationEvent, CalibrationState> {
   final IPlaneClient client;
-  Timer? _timer;
 
   CalibrationBloc(this.client) : super(CalibrationInitial()) {
     on<CalibrateImuEvent>((event, emit) async {
@@ -23,43 +21,14 @@ class CalibrationBloc extends Bloc<CalibrationEvent, CalibrationState> {
     });
 
     on<CalibrateCompassEvent>((event, emit) async {
-      int secondsRemaining = 10;
-      emit(CalibrationInProgress('Mueve el avión en todas direcciones...',
-          secondsRemaining: secondsRemaining));
-
+      emit(CalibrationInProgress('Mueve el avión en todas direcciones...'));
       try {
         await client.sendCalibrateMAG();
-
-        _timer?.cancel();
-        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-          secondsRemaining--;
-          if (secondsRemaining > 0) {
-            add(CalibrationTickEvent(secondsRemaining));
-          } else {
-            timer.cancel();
-            add(CalibrationTickEvent(0));
-          }
-        });
+        await Future.delayed(const Duration(seconds: 10));
+        emit(CalibrationSuccess('Calibración de magnetómetro completada.'));
       } catch (e) {
-        _timer?.cancel();
         emit(CalibrationFailure('Error en calibración de magnetómetro'));
       }
     });
-
-    on<CalibrationTickEvent>((event, emit) async {
-      if (event.secondsRemaining > 0) {
-        emit(CalibrationInProgress('Mueve el avión en todas direcciones...',
-            secondsRemaining: event.secondsRemaining));
-      } else {
-        _timer?.cancel();
-        emit(CalibrationSuccess('Calibración de magnetómetro completada.'));
-      }
-    });
-  }
-
-  @override
-  Future<void> close() {
-    _timer?.cancel();
-    return super.close();
   }
 }

@@ -4,8 +4,7 @@ class CalibrationInitial extends CalibrationState {}
 
 class CalibrationInProgress extends CalibrationState {
   final String message;
-  final int? secondsRemaining;
-  CalibrationInProgress(this.message, {this.secondsRemaining});
+  CalibrationInProgress(this.message);
 }
 
 class CalibrationSuccess extends CalibrationState {
