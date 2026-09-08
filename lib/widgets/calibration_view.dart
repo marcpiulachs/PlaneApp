@@ -43,21 +43,27 @@ class _Calibrating extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(spec.icon, size: 60, color: AppTheme.textSecondary),
-            const SizedBox(height: AppSpacing.spacingLg),
+            SizedBox(
+              width: 120,
+              height: 120,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const SizedBox.expand(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 6,
+                      color: Colors.white,
+                    ),
+                  ),
+                  IconCircle(icon: spec.icon, size: 72),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.spacingXl),
             Text(
               message,
               style: AppTheme.heading3,
               textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppSpacing.spacingXl),
-            const SizedBox(
-              width: 60,
-              height: 60,
-              child: CircularProgressIndicator(
-                strokeWidth: 6,
-                color: Colors.white,
-              ),
             ),
           ],
         ),
@@ -79,46 +85,20 @@ class _CalibrationForm extends StatelessWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSpacing.spacingLg),
+            padding: const EdgeInsets.all(AppSpacing.spacingXl),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  children: [
-                    Icon(spec.icon,
-                        color: AppTheme.textSecondary, size: 28),
-                    const SizedBox(width: AppSpacing.spacingMd),
-                    Expanded(
-                      child: Text(spec.title, style: AppTheme.heading3),
-                    ),
-                  ],
-                ),
+                Center(child: IconCircle(icon: spec.icon, size: 72)),
                 const SizedBox(height: AppSpacing.spacingLg),
-                const ListTile(
-                  leading: IconCircle(icon: Icons.menu_book),
-                  title:
-                      Text('Instrucciones', style: AppTheme.bodyLarge),
-                  contentPadding: EdgeInsets.zero,
+                Text(
+                  spec.title,
+                  style: AppTheme.heading3,
+                  textAlign: TextAlign.center,
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: AppSpacing.spacingXl),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (final instruction in spec.instructions)
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: AppSpacing.spacingSm),
-                          child: InstructionItem(
-                            text: instruction.text,
-                            isWarning: instruction.isWarning,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSpacing.spacingXl),
+                _InstructionsSection(instructions: spec.instructions),
+                const SizedBox(height: AppSpacing.spacingLg),
                 if (state is CalibrationSuccess)
                   _Result(
                     icon: const Icon(Icons.check_circle,
@@ -149,6 +129,39 @@ class _CalibrationForm extends StatelessWidget {
   }
 }
 
+class _InstructionsSection extends StatelessWidget {
+  final List<CalibrationInstruction> instructions;
+
+  const _InstructionsSection({required this.instructions});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Row(
+          children: [
+            Icon(Icons.menu_book,
+                color: AppTheme.textSecondary, size: 20),
+            SizedBox(width: AppSpacing.spacingMd),
+            Text('Instrucciones', style: AppTheme.labelLarge),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.spacingLg),
+        for (final instruction in instructions)
+          Padding(
+            padding:
+                const EdgeInsets.only(bottom: AppSpacing.spacingSm),
+            child: InstructionItem(
+              text: instruction.text,
+              isWarning: instruction.isWarning,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class _Result extends StatelessWidget {
   final Widget icon;
   final String message;
@@ -162,16 +175,23 @@ class _Result extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        icon,
-        const SizedBox(height: AppSpacing.spacingLg),
-        Text(
-          message,
-          style: style,
-          textAlign: TextAlign.center,
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.spacingLg),
+      decoration: BoxDecoration(
+        color: AppTheme.cardColor,
+        borderRadius: BorderRadius.circular(AppRadius.radiusMd),
+      ),
+      child: Column(
+        children: [
+          icon,
+          const SizedBox(height: AppSpacing.spacingLg),
+          Text(
+            message,
+            style: style,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

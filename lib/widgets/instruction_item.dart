@@ -18,7 +18,7 @@ class InstructionItem extends StatelessWidget {
       children: [
         Icon(
           isWarning ? Icons.warning : Icons.check_circle,
-          color: isWarning ? AppTheme.warning : Colors.black,
+          color: isWarning ? AppTheme.warning : Colors.white,
           size: 20,
         ),
         const SizedBox(width: 12),
